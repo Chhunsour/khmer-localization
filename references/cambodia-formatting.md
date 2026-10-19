@@ -260,3 +260,113 @@ When configuring i18n libraries (e.g. `i18next`, `react-intl`, `vue-i18n`), Khme
 2. Default hierarchy:
    $$\text{User Preference} \rightarrow \text{Browser Navigator Language} \rightarrow \text{Khmer (km)} \rightarrow \text{English (en) Fallback}$$
 3. When a Khmer translation key is missing during development, fall back gracefully to the English string rather than crashing or showing raw empty keys (`undefined`).
+
+---
+
+## 4. Cambodian Calendar, Dates, and Time Formatting
+
+### 4.1 Solar Calendar & Month Names
+Standard digital products in Cambodia use the **Gregorian solar calendar**, with month names translated into Khmer.
+
+| Month | Khmer Name | Standard Abbreviation | Days |
+| :--- | :--- | :--- | :--- |
+| **January** | មករា (*Makara*) | មករា | 31 |
+| **February** | កុម្ភៈ (*Kumpheak*) | កុម្ភៈ | 28/29 |
+| **March** | មីនា (*Meena*) | មីនា | 31 |
+| **April** | មេសា (*Mesa*) | មេសា | 30 |
+| **May** | ឧសភា (*Ousaphea*) | ឧសភា | 31 |
+| **June** | មិថុនា (*Mithona*) | មិថុនា | 30 |
+| **July** | កក្កដា (*Kakada*) | កក្កដា | 31 |
+| **August** | សីហា (*Seiha*) | សីហា | 31 |
+| **September** | កញ្ញា (*Kanh Nha*) | កញ្ញា | 30 |
+| **October** | តុលា (*Tola*) | តុលា | 31 |
+| **November** | វិច្ឆិកា (*Vichika*) | វិច្ឆិកា | 30 |
+| **December** | ធ្នូ (*Thnou*) | ធ្នូ | 31 |
+
+### 4.2 Days of the Week
+
+| Day | Khmer Name | Common Short Form |
+| :--- | :--- | :--- |
+| **Monday** | ច័ន្ទ (*Chan*) | ច |
+| **Tuesday** | អង្គារ (*Angkea*) | អ |
+| **Wednesday** | ពុធ (*Puth*) | ព |
+| **Thursday** | ព្រហស្បតិ៍ (*Prohoah*) | ព្រ |
+| **Friday** | សុក្រ (*Sok*) | សុ |
+| **Saturday** | សៅរ៍ (*Sao*) | ស |
+| **Sunday** | អាទិត្យ (*Atdit*) | អា |
+
+### 4.3 Buddhist Era (BE — ពុទ្ធសករាជ / ព.ស.)
+Cambodia observes both the Christian Era (CE/AD) and the **Buddhist Era (BE)**:
+- **Conversion Formula:**
+  $$\text{Year (BE)} = \text{Year (CE)} + 543$$
+  *(Example: $2026\text{ CE} + 543 = 2569\text{ BE}$)*
+- **Usage Rules in Digital Products:**
+  - **Commercial, Fintech, & E-commerce UI:** Standard Gregorian year ($2026$) with Latin or Khmer numerals is standard.
+  - **Official Legal, Government, & Traditional Documents:** Buddhist Era is displayed prominently:
+    `ថ្ងៃទី១៩ ខែតុលា ឆ្នាំ២០២៦ (ព.ស. ២៥៦៩)`
+
+### 4.4 Date Formatting Standards
+- **Short Numeric Format:** `DD/MM/YYYY` (Day precedes month; e.g. `19/10/2026`). Never use US-style `MM/DD/YYYY`.
+- **Long Localized Format:** `ថ្ងៃទីD ខែ[Month] ឆ្នាំYYYY` (e.g. `ថ្ងៃទី១៩ ខែតុលា ឆ្នាំ២០២៦` or `ថ្ងៃទី 19 ខែតុលា ឆ្នាំ 2026`).
+
+### 4.5 Time Conventions & Day Periods
+Cambodia operates in Indochina Time (**ICT — UTC+07:00**), with no Daylight Saving Time (DST).
+
+- **12-Hour Period Qualifiers:**
+  - **ព្រឹក (*Pruk*):** Morning / AM ($00:00 - 11:59$)
+  - **រសៀល (*Rosiel*):** Early Afternoon ($12:00 - 16:59$)
+  - **ល្ងាច (*Lngeach*):** Late Afternoon / Evening ($17:00 - 18:59$)
+  - **យប់ (*Yob*):** Night ($19:00 - 23:59$)
+- **Display Examples:**
+  - `ម៉ោង ៨:៣០ ព្រឹក` (8:30 AM)
+  - `ម៉ោង ២:១៥ រសៀល` (2:15 PM)
+  - `ម៉ោង ៦:៤៥ ល្ងាច` (6:45 PM)
+  - `ម៉ោង ៩:០០ យប់` (9:00 PM)
+
+### 4.6 Relative Time Formatting
+In notifications, social feeds, and transaction records:
+
+```typescript
+export function formatKhmerRelativeTime(diffSeconds: number): string {
+  if (diffSeconds < 60) return "មុននេះបន្តិច"; // Just now
+  const mins = Math.floor(diffSeconds / 60);
+  if (mins < 60) return `${mins} នាទីមុន`; // X minutes ago
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return `${hours} ម៉ោងមុន`; // X hours ago
+  const days = Math.floor(hours / 24);
+  if (days === 1) return "ម្សិលមិញ"; // Yesterday
+  if (days < 7) return `${days} ថ្ងៃមុន`; // X days ago
+  return `${Math.floor(days / 7)} សប្តាហ៍មុន`; // X weeks ago
+}
+```
+
+---
+
+## 5. National Payment Standards: Bakong & KHQR
+
+### 5.1 The Bakong & KHQR Ecosystem
+**Bakong** is the national payment and financial switch developed by the **National Bank of Cambodia (NBC)**. Its universal QR code standard, **KHQR** (compliant with EMVCo QR specifications), is the universal payment rail across all commercial banks, microfinance institutions (MFIs), and payment service providers in Cambodia.
+
+### 5.2 Key Internationalization & UX Rules for KHQR Displays
+1. **Explicit Currency Display:**
+   - KHQR codes are currency-specific: an invoice QR is issued in either **KHR (Code 116)** or **USD (Code 840)**.
+   - Always display the currency code and symbol prominently alongside the merchant QR:
+     - **For KHR:** `25,000 ៛` (whole-riel format).
+     - **For USD:** `$6.25` (2 decimal places).
+2. **Account Identifier Formats:**
+   - Account numbers in Bakong are typically formatted as:
+     - An **E.164 phone number** (e.g. `+855 12 345 678` or `012 345 678`).
+     - A **Bakong Account ID** in the format `account_name@bank_domain` (e.g. `sokha_chhorn@acleda`).
+3. **Bilingual Payment Receipt Microcopy:**
+
+| English Term | Khmer UI Term | Usage |
+| :--- | :--- | :--- |
+| **Scan to Pay** | ស្កេនដើម្បីទូទាត់ | Call-to-action under QR code |
+| **Merchant Name** | ឈ្មោះអាជីវករ | Header above QR code |
+| **Account Name** | ឈ្មោះគណនី | Beneficiary account holder |
+| **Amount** | ចំនួនទឹកប្រាក់ | Transaction billing amount |
+| **Transaction ID** | លេខកូដប្រតិបត្តិការ | Audit tracking code |
+| **Payment Status: Success** | ស្ថានភាព៖ ជោគជ័យ | Completed receipt badge |
+| **Payment Status: Pending** | ស្ថានភាព៖ កំពុងដំណើរការ | In-flight authorization badge |
+| **Payment Status: Failed** | ស្ថានភាព៖ មិនជោគជ័យ | Terminal decline badge |
+

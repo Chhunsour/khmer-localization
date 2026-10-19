@@ -301,3 +301,216 @@ export function truncateTitleSafe(title: string, maxGraphemes: number = 15): str
 - Never cuts a subscript consonant from its Coeng.
 - Never orphans dependent vowels or diacritics.
 - Completely prevents the dotted circle rendering defect.
+
+---
+
+## Example 7: Date, Time & Buddhist Era Formatting
+
+### Problem
+A banking and legal document portal displayed raw ISO timestamps (`2026-10-19T08:30:00Z`) or US-formatted dates (`10/19/2026`), and failed to support the official Cambodian Buddhist Era (BE) format required on official receipts.
+
+### Before (Raw ISO String or US Format)
+```tsx
+// Broken: US date formatting and raw UTC timestamps
+export function ReceiptHeader({ timestamp }: { timestamp: string }) {
+  const date = new Date(timestamp);
+  return (
+    <div className="receipt-header">
+      <p>Date: {date.toLocaleDateString("en-US")}</p> {/* 10/19/2026 */}
+      <p>Time: {date.toLocaleTimeString()}</p>
+    </div>
+  );
+}
+```
+
+### After (Locale-Aware Gregorian & Buddhist Era Display)
+```tsx
+// Clean: Localized Cambodian date, time, and optional Buddhist Era
+export interface FormattedDateOptions {
+  includeBuddhistEra?: boolean;
+  numberingSystem?: "latn" | "khmr";
+}
+
+export function formatKhmerDate(
+  date: Date,
+  options: FormattedDateOptions = {}
+): string {
+  const { includeBuddhistEra = false, numberingSystem = "latn" } = options;
+
+  // Standard Cambodian long date format
+  const formatter = new Intl.DateTimeFormat(`km-KH-u-nu-${numberingSystem}`, {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  const formattedDate = formatter.format(date); // e.g. "19 តុលា 2026"
+
+  if (!includeBuddhistEra) {
+    return `ថ្ងៃទី ${formattedDate}`;
+  }
+
+  // Buddhist Era (BE) = Christian Era (CE) + 543
+  const buddhistYear = date.getFullYear() + 543;
+  return `ថ្ងៃទី ${formattedDate} (ព.ស. ${buddhistYear})`;
+}
+
+export function ReceiptHeader({ timestamp }: { timestamp: string }) {
+  const date = new Date(timestamp);
+
+  return (
+    <div className="receipt-header text-sm text-gray-700">
+      <p className="font-medium">{formatKhmerDate(date, { includeBuddhistEra: true })}</p>
+    </div>
+  );
+}
+```
+**Why this is better:**
+- Correctly formats month names in Khmer (e.g. `តុលា` for October).
+- Follows the Cambodian day-first standard (`DD/MM/YYYY` or `ថ្ងៃទី...`).
+- Seamlessly calculates the official Buddhist Era ($2026 + 543 = 2569\text{ BE}$).
+
+---
+
+## Example 8: React Hook Form + Zod Schema for Cambodian Phone Input
+
+### Problem
+A user registration form used standard generic string validation or a US phone regex, failing to validate Cambodian phone numbers or confusing syntax validation with account verification.
+
+### Before (Naive String Validation)
+```typescript
+import { z } from "zod";
+
+// Broken: Rejects Cambodian numbers, no normalization
+const signupSchema = z.object({
+  fullName: z.string().min(2),
+  phone: z.string().regex(/^\d{10}$/, "Invalid phone number"), // US-centric
+});
+```
+
+### After (Zod Refinement with E.164 Normalization)
+```typescript
+import { z } from "zod";
+import { normalizeCambodianPhone } from "@/utils/cambodiaPhone";
+
+export const cambodianPhoneSchema = z
+  .string()
+  .min(1, "សូមបំពេញលេខទូរស័ព្ទ")
+  .transform((val) => normalizeCambodianPhone(val))
+  .refine((res) => res.isValidSyntax, {
+    message: "សូមបញ្ចូលលេខទូរស័ព្ទដែលត្រឹមត្រូវ (ឧ. 012 345 678 ឬ +855 12 345 678)",
+  });
+
+export const registrationSchema = z.object({
+  fullName: z.string().min(2, "សូមបញ្ចូលឈ្មោះពេញរបស់អ្នក"),
+  phone: cambodianPhoneSchema,
+});
+
+export type RegistrationFormData = z.infer<typeof registrationSchema>;
+```
+**Why this is better:**
+- Integrates seamlessly with `react-hook-form` and standard validation pipelines.
+- Normalizes spaces, dashes, brackets, `+855`, and Khmer digits (`០-៩`) automatically.
+- Validates both 8-digit and 9-digit NSN mobile structures under TRC / ITU-T E.164.
+
+---
+
+## Example 9: Next.js + Tailwind CSS Localization & Typography Setup
+
+### Problem
+An AI coding agent set up a new Next.js project with Tailwind CSS, but omitted Khmer font definitions and line-height tokens, resulting in distorted fallback typography and clipped diacritics.
+
+### After (Production Next.js & Tailwind Configuration)
+
+`tailwind.config.ts`:
+```typescript
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
+  theme: {
+    extend: {
+      fontFamily: {
+        khmer: ["var(--font-khmer)", "Kantumruy Pro", "Noto Sans Khmer", "sans-serif"],
+      },
+      lineHeight: {
+        "khmer-tight": "1.5",
+        "khmer-normal": "1.7",
+        "khmer-relaxed": "1.85",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
+```
+
+`app/layout.tsx`:
+```tsx
+import { Kantumruy_Pro } from "next/font/google";
+import "./globals.css";
+
+const kantumruyPro = Kantumruy_Pro({
+  subsets: ["khmer", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-khmer",
+  display: "swap",
+});
+
+export default function RootLayout({
+  children,
+  params: { locale = "km" },
+}: {
+  children: React.ReactNode;
+  params: { locale?: string };
+}) {
+  return (
+    <html lang={locale} className={kantumruyPro.variable}>
+      <body className="font-khmer leading-khmer-normal text-gray-900 bg-white antialiased">
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+**Why this is better:**
+- Loads `Kantumruy Pro` with Google Fonts variable optimization.
+- Sets global `leading-khmer-normal` (line-height 1.7) to guarantee clearance for ascenders and subscript consonants.
+- Exposes responsive Tailwind utility classes (`font-khmer`, `leading-khmer-relaxed`).
+
+---
+
+## Example 10: Automatic Word-Break Insertion for Khmer Web Layouts
+
+### Problem
+A blog and news publishing site displayed Khmer articles without zero-width spaces. On mobile screens (375px wide), words failed to wrap or broke arbitrarily across syllables, creating ugly jagged borders.
+
+### After (Safe Word-Break Injection Component)
+```tsx
+import React, { useMemo } from "react";
+import { insertKhmerWordBreaks } from "@/utils/khmerText";
+
+interface KhmerParagraphProps {
+  content: string;
+  className?: string;
+}
+
+export function KhmerParagraph({ content, className = "" }: KhmerParagraphProps) {
+  // Memoize word segmentation to maintain high performance
+  const formattedText = useMemo(() => {
+    return insertKhmerWordBreaks(content);
+  }, [content]);
+
+  return (
+    <p
+      className={`font-khmer leading-khmer-relaxed break-words text-gray-800 ${className}`}
+      style={{ overflowWrap: "break-word" }}
+    >
+      {formattedText}
+    </p>
+  );
+}
+```
+**Why this is better:**
+- Employs `Intl.Segmenter` to insert `\u200B` at natural word boundaries without altering visible text.
+- Pairs with CSS `break-words` and `overflowWrap: break-word` for complete layout safety on all mobile viewports.

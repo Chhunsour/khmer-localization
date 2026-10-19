@@ -35,6 +35,41 @@ Modern Cambodian tech apps use a respectful yet direct tone. The polite particle
 - **Repetition (Lek Too - ៗ `U+17D7`):** Duplicates the preceding word (e.g., `ញឹកញាប់ៗ` = frequently; `ផ្សេងៗ` = various).
 - **Question Mark (?):** Widely adopted in modern web and mobile apps for interrogative prompts (e.g., `ភ្លេចពាក្យសម្ងាត់?` — Forgot password?).
 
+### 1.5 Language Registers & AI Anti-Hallucination Guardrails
+
+Large language models (LLMs) frequently hallucinate vocabulary from incompatible social registers or produce wooden transliterations. Understanding Khmer linguistic registers is critical:
+
+| Register | Sociolinguistic Context | Applicability in Software UI |
+| :--- | :--- | :--- |
+| **Modern Digital Tech (Target)** | Neutral, respectful, clear, active vocabulary used across apps like Bakong, ABA Mobile, and PassApp. | **Standard for 100% of commercial software.** |
+| **General Conversational** | Everyday spoken dialogue. Uses colloquial abbreviations and spoken particles. | Avoid in UI; acceptable in informal chat or character dialogue. |
+| **Monk Language (*Sanghasap* / សង្ឃសព្ទ)** | Specialized sacred vocabulary used exclusively when addressing or referring to Buddhist monks. | **Forbidden in tech UI** (e.g. do NOT use `និមន្ត` or `ឆាន់`). |
+| **Royal Language (*Reachasap* / រាជសព្ទ)** | High-honorific vocabulary reserved strictly for the King and Royal Family. | **Forbidden in tech UI** (e.g. do NOT use `យាង`, `សោយ`, `ព្រះរាជទាន`). |
+
+#### Common AI Hallucinations vs. Standard Tech UI Terms
+
+| English Concept | Common AI Hallucination / Bad Translation | Standard Modern Tech UI | Problem with Hallucination |
+| :--- | :--- | :--- | :--- |
+| **Sign In / Log In** | ចុះហត្ថលេខាលើ | **ចូល** / **ចូលគណនី** | Literal translation: "putting a pen signature on paper". |
+| **Sign Up / Register** | ការចុះបញ្ជីឈ្មោះចូល | **ចុះឈ្មោះ** | Clunky bureaucratic noun phrase instead of clean verb. |
+| **Submit** | បញ្ជូនទៅកាន់ម៉ាស៊ីនបម្រើ | **ដាក់ស្នើ** / **បញ្ជូន** | Verbose machine translation ("dispatch towards server machine"). |
+| **Save** | សេវ / ធ្វើការសន្សំ | **រក្សាទុក** | "សេវ" is raw phonetic slang; "សន្សំ" means saving cash in a piggybank! |
+| **Delete** | ឌីលីត / សម្លាប់ | **លុប** / **លុបចេញ** | "ឌីលីត" is phonetic slang; "សម្លាប់" means to kill! |
+| **Confirm** | ខនហ្វឺម | **បញ្ជាក់** | Phonetic English borrowing when precise Khmer term exists. |
+| **Cancel** | បោះបង់ចោល | **បោះបង់** | "ចោល" adds unnecessary visual clutter to compact modal buttons. |
+| **Dropdown Menu** | ទម្លាក់ចុះ | **បញ្ជីជ្រើសរើស** | Literal physics translation ("falling downwards"). |
+| **Hard Reset** | កំណត់ឡើងវិញយ៉ាងលំបាក | **កំណត់ឡើងវិញទាំងអស់** | Mistranslates "hard" as "difficult" rather than complete/factory reset. |
+| **Welcome** | យាងមកកាន់ | **សូមស្វាគមន៍** | "យាង" is royal vocabulary (*Reachasap*); inappropriate for standard users. |
+
+### 1.6 Numerals in Digital Khmer: Latin (`0-9`) vs. Khmer (`០-៩`)
+
+Cambodia uses both Hindu-Arabic (Latin) numerals and Khmer numerals:
+1. **Commercial & Financial UI (Default: Latin `0-9`):**
+   - In banking apps (Bakong, ABA), e-commerce checkouts, form inputs, OTP fields, phone numbers, and prices, **Latin numerals (`0-9`) are standard**.
+   - Reasons: Prevents input validation failures in backend databases, avoids confusion between Khmer zero (`០`) and Khmer consonant `ង` (`\u1784`) on low-resolution displays, and matches payment terminal keypad layouts.
+2. **Traditional, Legal, & Decorative Headings (Khmer `០-៩`):**
+   - Use Khmer numerals for formal document headers, legal policy versioning, chapter numbers (e.g., `ជំពូកទី ១`), and national holiday notices.
+
 ---
 
 ## 2. Navigation Labels

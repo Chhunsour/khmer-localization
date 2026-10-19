@@ -12,6 +12,7 @@ Does NOT modify or overwrite files.
 """
 
 import argparse
+import json
 import os
 import sys
 import unicodedata
@@ -501,6 +502,78 @@ def format_text_report(results: List[FileResult], verbose: bool = False, show_st
     return "\n".join(output), total_errors, total_warnings
 
 
+def format_json_report(
+    results: List[FileResult],
+    strict: bool = False,
+) -> Tuple[str, int, int]:
+    """Format check results as structured JSON for CI and AI agent consumption."""
+    total_files = len(results)
+    files_with_khmer = sum(1 for r in results if r.has_khmer)
+    total_khmer_chars = sum(r.stats.total_khmer_chars for r in results)
+    total_zwsps = sum(r.stats.zero_width_spaces for r in results)
+    total_errors = sum(r.error_count for r in results)
+    total_warnings = sum(r.warning_count for r in results)
+
+    if total_errors > 0 or (strict and total_warnings > 0):
+        status = "FAIL"
+    elif total_warnings > 0:
+        status = "WARN"
+    else:
+        status = "PASS"
+
+    data = {
+        "summary": {
+            "status": status,
+            "total_files": total_files,
+            "files_with_khmer": files_with_khmer,
+            "total_khmer_chars": total_khmer_chars,
+            "zero_width_spaces": total_zwsps,
+            "total_errors": total_errors,
+            "total_warnings": total_warnings,
+        },
+        "files": [],
+    }
+
+    for r in results:
+        file_status = "FAIL" if r.error_count > 0 else ("WARN" if r.warning_count > 0 else "PASS")
+        file_entry = {
+            "path": str(r.path),
+            "status": file_status,
+            "has_khmer": r.has_khmer,
+            "encoding_error": r.encoding_error,
+            "total_errors": r.error_count,
+            "total_warnings": r.warning_count,
+            "stats": {
+                "total_khmer_chars": r.stats.total_khmer_chars,
+                "consonants": r.stats.consonants,
+                "independent_vowels": r.stats.independent_vowels,
+                "dependent_vowels": r.stats.dependent_vowels,
+                "coeng_subscripts": r.stats.coeng_subscripts,
+                "diacritics": r.stats.diacritics,
+                "digits": r.stats.digits,
+                "symbols_and_punct": r.stats.symbols_and_punct,
+                "riel_symbols": r.stats.riel_symbols,
+                "zero_width_spaces": r.stats.zero_width_spaces,
+            },
+            "issues": [
+                {
+                    "level": issue.level,
+                    "category": issue.category,
+                    "line_number": issue.line_number,
+                    "column_number": issue.column_number,
+                    "code_point": issue.code_point,
+                    "character_name": issue.character_name,
+                    "message": issue.message,
+                    "line_snippet": issue.line_snippet,
+                }
+                for issue in r.issues
+            ],
+        }
+        data["files"].append(file_entry)
+
+    return json.dumps(data, indent=2, ensure_ascii=False), total_errors, total_warnings
+
+
 def build_cli_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="check_khmer_unicode.py",
@@ -525,6 +598,11 @@ def build_cli_parser() -> argparse.ArgumentParser:
         help="Treat warnings as errors (exit status 1 on warnings).",
     )
     parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output structured JSON results for CI pipelines and automated agents.",
+    )
+    parser.add_argument(
         "--ext",
         dest="extensions",
         help="Comma-separated list of file extensions to scan (e.g. '.json,.ts,.tsx').",
@@ -544,7 +622,7 @@ def build_cli_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--no-stats",
         action="store_true",
-        help="Omit the summary statistics section.",
+        help="Omit the summary statistics section in text output.",
     )
     return parser
 
@@ -571,14 +649,20 @@ def main() -> int:
             return 2
         all_results.extend(checker.scan_path(path))
 
-    report, total_errors, total_warnings = format_text_report(
-        all_results,
-        verbose=args.verbose,
-        show_stats=not args.no_stats and not args.quiet,
-    )
-
-    if not args.quiet or total_errors > 0 or (args.strict and total_warnings > 0):
+    if args.json:
+        report, total_errors, total_warnings = format_json_report(
+            all_results,
+            strict=args.strict,
+        )
         print(report)
+    else:
+        report, total_errors, total_warnings = format_text_report(
+            all_results,
+            verbose=args.verbose,
+            show_stats=not args.no_stats and not args.quiet,
+        )
+        if not args.quiet or total_errors > 0 or (args.strict and total_warnings > 0):
+            print(report)
 
     if total_errors > 0:
         return 1

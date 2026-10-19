@@ -173,3 +173,156 @@ body, html {
 1. **Line Height:** Never use `line-height: 1.0` or `line-height: 1.2` for Khmer text. Use `line-height: 1.6` to `1.8` minimum.
 2. **Button Padding:** Provide at least `8px` to `12px` vertical padding (`py-2` or `py-3` in Tailwind CSS) so top diacritics and bottom coengs are not clipped by button borders.
 3. **Container Overflow:** Avoid fixed `height` with `overflow: hidden` on text containers; use `min-height` with flex or grid layout.
+---
+
+## 6. Word Breaking, Line Wrapping, and Zero-Width Space Insertion
+
+### 6.1 The Khmer Line-Breaking Problem
+Unlike Latin scripts, Khmer text does not use spaces between words within a phrase or clause. 
+When a web browser renders long continuous Khmer strings (e.g. `សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រង`), layout engines without native dictionary-based Khmer word-breakers:
+1. Either refuse to break lines, causing horizontal text overflow that bursts parent containers.
+2. Or break arbitrarily inside a word or right through a syllable, splitting consonants from subscripts.
+
+### 6.2 Zero-Width Space (`\u200B` / ZWSP) Insertion
+Inserting the invisible Zero-Width Space (`U+200B`) between Khmer words acts as a soft break opportunity for layout engines without introducing visible whitespace.
+
+In modern browsers and Node.js, `Intl.Segmenter` with `{ granularity: 'word' }` segments Khmer words using built-in ICU dictionaries:
+
+```typescript
+/**
+ * Inserts Zero-Width Spaces (U+200B) at Khmer word boundaries to ensure
+ * clean, graceful line wrapping on narrow mobile screens.
+ */
+export function insertKhmerWordBreaks(text: string): string {
+  if (!text) return "";
+
+  // Check if Intl.Segmenter is supported
+  if (typeof Intl !== "undefined" && "Segmenter" in Intl) {
+    const segmenter = new Intl.Segmenter("km", { granularity: "word" });
+    const segments = Array.from(segmenter.segment(text));
+    
+    let result = "";
+    for (let i = 0; i < segments.length; i++) {
+      const seg = segments[i];
+      result += seg.segment;
+      
+      // If this segment is a Khmer word and next segment is also a Khmer word,
+      // insert a ZWSP (\u200B) between them
+      if (
+        seg.isWordLike &&
+        /[\u1780-\u17FF]/.test(seg.segment) &&
+        i + 1 < segments.length &&
+        segments[i + 1].isWordLike &&
+        /[\u1780-\u17FF]/.test(segments[i + 1].segment)
+      ) {
+        result += "\u200B";
+      }
+    }
+    return result;
+  }
+
+  return text; // Graceful fallback
+}
+```
+
+### 6.3 CSS Defensive Wrapping Rules
+In addition to ZWSP, apply these modern CSS rules to all text containers displaying Khmer:
+
+```css
+.khmer-content {
+  /* Allow wrapping when long compound words lack ZWSP */
+  overflow-wrap: break-word;
+  word-break: normal;
+  line-break: auto;
+  hyphens: manual;
+}
+```
+
+---
+
+## 7. Frontend Framework Recipes
+
+### 7.1 Tailwind CSS Configuration (`tailwind.config.ts`)
+
+```typescript
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  theme: {
+    extend: {
+      fontFamily: {
+        khmer: [
+          "var(--font-khmer)",
+          "Kantumruy Pro",
+          "Noto Sans Khmer",
+          "Khmer Sangam MN",
+          "Leelawadee UI",
+          "sans-serif",
+        ],
+      },
+      lineHeight: {
+        "khmer-tight": "1.5",     // Headings only
+        "khmer-normal": "1.7",    // Body default
+        "khmer-relaxed": "1.85",  // Long-form articles and descriptions
+      },
+      minHeight: {
+        "touch-target": "44px",   // Mobile tap clearance
+      },
+    },
+  },
+};
+export default config;
+```
+
+### 7.2 Next.js App Router (`app/layout.tsx`)
+
+```tsx
+import { Kantumruy_Pro } from "next/font/google";
+import "./globals.css";
+
+const kantumruy = Kantumruy_Pro({
+  subsets: ["khmer", "latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-khmer",
+  display: "swap",
+});
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="km" className={kantumruy.variable}>
+      <body className="font-khmer leading-khmer-normal antialiased">
+        {children}
+      </body>
+    </html>
+  );
+}
+```
+
+### 7.3 React Native / Expo (`StyleSheet`)
+On Android, React Native's default text rendering clips top diacritics and bottom subscripts unless font padding is disabled and adequate line height is set:
+
+```typescript
+import { StyleSheet, Platform } from "react-native";
+
+export const khmerStyles = StyleSheet.create({
+  text: {
+    fontFamily: Platform.select({
+      ios: "Khmer Sangam MN",
+      android: "NotoSansKhmer-Regular",
+      default: "System",
+    }),
+    fontSize: 16,
+    lineHeight: 28, // 1.75x font size for vertical diacritic clearance
+    // Critical Android fix: prevents cutting off subscripts and top vowels
+    includeFontPadding: false,
+    textAlignVertical: "center",
+  },
+  button: {
+    minHeight: 48,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
+```

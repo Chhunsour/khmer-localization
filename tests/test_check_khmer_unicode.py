@@ -290,6 +290,40 @@ class TestCommandLineInterface(unittest.TestCase):
         self.assertEqual(proc.returncode, 2)
         self.assertIn("Target path does not exist", proc.stderr)
 
+    def test_cli_json_output(self):
+        """CLI with --json should return structured JSON parseable by automated agents."""
+        file_path = self.test_dir / "data.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write('{"title": "កម្ពុជា"}')
+
+        proc = self._run_cli(["--json", str(file_path)])
+        self.assertEqual(proc.returncode, 0)
+        import json
+        data = json.loads(proc.stdout)
+        self.assertEqual(data["summary"]["status"], "PASS")
+        self.assertEqual(data["summary"]["total_files"], 1)
+        self.assertEqual(data["summary"]["files_with_khmer"], 1)
+        self.assertEqual(data["files"][0]["status"], "PASS")
+        self.assertEqual(data["files"][0]["total_errors"], 0)
+        self.assertGreater(data["files"][0]["stats"]["total_khmer_chars"], 0)
+
+    def test_cli_json_output_with_errors(self):
+        """CLI with --json and errors should output valid JSON with error details and exit status 1."""
+        file_path = self.test_dir / "corrupt.json"
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write('{"text": "កម្ពុជា \uFFFD"}')
+
+        proc = self._run_cli(["--json", str(file_path)])
+        self.assertEqual(proc.returncode, 1)
+        import json
+        data = json.loads(proc.stdout)
+        self.assertEqual(data["summary"]["status"], "FAIL")
+        self.assertEqual(data["summary"]["total_errors"], 1)
+        self.assertEqual(data["files"][0]["status"], "FAIL")
+        self.assertEqual(len(data["files"][0]["issues"]), 1)
+        self.assertEqual(data["files"][0]["issues"][0]["category"], "DATA_CORRUPTION")
+
 
 if __name__ == "__main__":
     unittest.main()
+
