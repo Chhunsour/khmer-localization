@@ -15,7 +15,7 @@ Thank you for your interest in contributing to the **`khmer-localization`** Agen
 ## Development & Testing Workflow
 
 ### Requirements
-- **Python 3.8+** (standard library only; no virtualenv or pip dependencies required).
+- **Python 3.10+** (standard library only; no virtualenv or pip dependencies required).
 - Standard text editor with UTF-8 encoding support.
 
 ### Running Tests

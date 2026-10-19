@@ -32,13 +32,12 @@ Khmer syllables are formed around a base consonant. Subscript consonants (ជើ
 $$\text{Subscript Consonant} = \text{U+17D2 (Coeng)} + \text{Base Consonant}$$
 
 **Example Syllable Composition (`កម្ពុជា` — Cambodia):**
-1. `ក` (`U+1780` - Consonant Ka)
-2. `ម` (`U+1798` - Consonant Mo)
-3. `្` (`U+17D2` - Sign Coeng)
-4. `ព` (`U+179ព` - Consonant Po) $\rightarrow$ forms subscript **្ព** under **ម**
-5. `ុ` (`U+17BB` - Dependent Vowel U)
-6. `ជ` (`U+1787` - Consonant Jo)
-7. `ា` (`U+17B6` - Dependent Vowel Aa)
+1. Consonant Ka: `U+1780` (`ក`)
+2. Consonant Mo: `U+1798` (`ម`)
+3. Subscript sequence: Coeng `U+17D2` + Consonant Po `U+1796` (`ព`) $\rightarrow$ forms subscript **កម្ព**
+4. Dependent Vowel U: `U+17BB` $\rightarrow$ forms **កម្ពុ**
+5. Consonant Jo: `U+1787` (`ជ`)
+6. Dependent Vowel Aa: `U+17B6` $\rightarrow$ forms **កម្ពុជា**
 
 > [!CRITICAL]
 > Never separate `U+17D2` from the consonant that follows it. Splitting this sequence destroys OpenType ligatures and produces broken rendering.
@@ -142,7 +141,7 @@ Standard regex `\b` relies on ASCII word characters (`\w`). It treats Khmer scri
 
 ## 5. CSS Typography & Font Engineering
 
-Khmer glyphs have vertical ascenders (top diacritics like Nikahit `ំ` or Samyok Sannya `័`) and deep descenders (subscript consonants like Coeng `្ក` or `្ភ` and bottom vowels `ុ`, `ូ`). If CSS line height or overflow properties are too tight, browsers will clip these marks.
+Khmer glyphs have vertical ascenders (top diacritics like Nikahit `U+17C6`, e.g. `កំ`, or Samyok Sannya `U+17D0`, e.g. `ក័`) and deep descenders (subscript consonants with Coeng `U+17D2`, e.g. `ក្ក` or `ក្ភ`, and bottom vowels, e.g. `កុ`, `កូ`). If CSS line height or overflow properties are too tight, browsers will clip these marks.
 
 ### 5.1 Recommended CSS Font Stack
 Modern digital applications should define a resilient fallback stack:

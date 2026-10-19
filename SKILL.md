@@ -62,22 +62,26 @@ Khmer syllables rely on base consonants, subscript consonants (generated via Coe
 
 ### Step 5 — Handle Cambodian Phone Numbers
 1. **Three-Stage Pipeline:**
-   - **Normalization:** Strip spaces, hyphens, brackets; convert Khmer numerals (`០-៩`) to ASCII digits; normalize `+855`, `00855`, or domestic trunk `0`.
-   - **Syntax Validation:** Verify National Significant Number (NSN) length (8 or 9 digits after country code `+855`, or 9 to 10 digits domestically including leading `0`).
-   - **Verification:** Understand that regex validation only checks syntax. Never claim a phone number is "active" or "verified" without an SMS OTP or carrier API check.
-2. **Prefix Mutability:** Mobile prefixes (e.g. `012`, `096`, `088`) are regulated by the Telecommunication Regulator of Cambodia (TRC) and are subject to regulatory updates. Do not hardcode brittle single-carrier assumptions.
-3. Consult the [Cambodia Regional Formatting Reference](./references/cambodia-formatting.md) for implementation utilities and official TRC prefix allocations.
+   - **Normalization (Stable Algorithm):** Strip spaces, hyphens, brackets, and dots; convert Khmer numerals (`០-៩`) to ASCII digits (`0-9`); normalize `+855`, `00855`, `855`, or domestic trunk `0`; and extract the National Significant Number (NSN).
+   - **Syntax & Length Validation:** Verify NSN length under ITU-T Recommendation E.164 and Telecommunication Regulator of Cambodia (TRC) standards:
+     - **8 digits NSN:** Standard mobile numbers (9 digits domestic with `0`, e.g. `012 345 678` -> `+855 12 345 678`).
+     - **9 digits NSN:** Extended mobile numbers marked with `*` in the TRC plan (10 digits domestic with `0`, e.g. `096 123 4567` -> `+855 96 123 4567`).
+   - **Verification Boundary (Liveness/Ownership):** Format validation checks structure and length only. Never claim a phone number is "active" or "verified" without an SMS OTP or carrier network check.
+2. **Decouple Normalization from Prefix Lookups:** Carrier prefix allocations (e.g. `012`, `096`, `088`) change with TRC regulatory updates, mergers, and Mobile Number Portability (MNP). Do not reject valid 8- or 9-digit numbers simply because a prefix table is unlisted.
+3. Consult the [Cambodia Regional Formatting Reference](./references/cambodia-formatting.md) for direct TRC sources (verified October 2026) and normalization utilities.
 
 ---
 
 ### Step 6 — Format USD and KHR Currencies
 Cambodia operates a dual-currency system:
 1. **Use Platform-Native Formatting:** Format with `Intl.NumberFormat` rather than manual string concatenation.
-2. **Respect Currency Rules:**
-   - **Cambodian Riel (KHR / `៛`):** Format with **0 decimal places** (`25,000 ៛` or `KHR 25,000`). Riel has no sub-units/cents in circulation.
-   - **United States Dollar (USD / `$`):** Format with **2 decimal places** (`$25.00`).
+2. **Explicitly Configure Fractional Digits:**
+   - **Intl Default Pitfall:** In standard ECMAScript / ICU implementations, KHR defaults to **2 decimal places (`25,000.00៛`)** per ISO 4217 minor units.
+   - **Explicit Whole-Riel Display:** For consumer retail and banking, whole-riel prices without `.00` are expected. Developers **MUST explicitly pass `{ minimumFractionDigits: 0, maximumFractionDigits: 0 }`** to format whole riel (`25,000៛`).
+   - **Fractional Riel & Rounding:** When prorated billing or conversion produces fractional riel, explicitly define rounding rules (half-expand / `Math.round`).
+   - **United States Dollar (USD / `$`):** Format with **2 decimal places** (`minimumFractionDigits: 2, maximumFractionDigits: 2`).
 3. **Default to Latin Numerals in Commercial UI:** While Khmer numerals (`០-៩`) are culturally valuable, standard Cambodian digital banking and retail apps default to Latin numerals (`0-9`) for numeric amounts to ensure legibility and avoid financial input errors.
-4. **Never Confuse Formatting with Conversion:** Never perform silent, hardcoded currency conversions (e.g. multiplying by 4000). Conversion must always require an explicit, verified exchange rate from an official source (such as the National Bank of Cambodia).
+4. **Never Confuse Formatting with Conversion:** Never perform silent, hardcoded currency conversions (e.g. multiplying by 4000). Conversion must always require an explicit, verified exchange rate from an official source (such as the National Bank of Cambodia - NBC).
 
 ---
 

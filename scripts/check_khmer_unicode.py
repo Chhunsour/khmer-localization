@@ -7,7 +7,7 @@ workflows. Inspects source and translation files for UTF-8 integrity, corrupted
 characters (e.g. U+FFFD), suspicious control characters, orphaned combining marks,
 and reports Khmer typography statistics.
 
-Standard Library only: Compatible with Python 3.8+.
+Standard Library only: Compatible with Python 3.10+.
 Does NOT modify or overwrite files.
 """
 
@@ -153,7 +153,8 @@ def is_suspicious_control_char(char: str) -> bool:
 
 @dataclass
 class Issue:
-    level: str  # "ERROR" or "WARNING"
+    level: str       # "ERROR" or "WARNING"
+    category: str    # "BYTE_ENCODING", "DATA_CORRUPTION", "SUSPICIOUS_CONTROL", "VISUAL_RENDERING", "DEPRECATED_CHAR", "BIDI_OVERRIDE"
     line_number: int
     column_number: int
     message: str
@@ -225,7 +226,7 @@ class KhmerUnicodeChecker:
             content = raw_bytes.decode("utf-8")
         except UnicodeDecodeError as e:
             result.encoding_error = (
-                f"Invalid UTF-8 encoding at byte {e.start}: {e.reason}. "
+                f"Invalid UTF-8 byte sequence at byte {e.start}: {e.reason}. "
                 "Ensure the file is saved as UTF-8 without lossy conversions."
             )
             return result
@@ -245,16 +246,17 @@ class KhmerUnicodeChecker:
             code_hex = f"U+{code:04X}"
             char_name = unicodedata.name(char, "UNKNOWN CHARACTER")
 
-            # Check 1: Replacement character (U+FFFD) - ALWAYS AN ERROR
+            # Check 1: Replacement character (U+FFFD) - ALWAYS AN ERROR (DATA_CORRUPTION)
             if char == REPLACEMENT_CHAR:
                 result.issues.append(
                     Issue(
                         level="ERROR",
+                        category="DATA_CORRUPTION",
                         line_number=line_number,
                         column_number=col_idx,
                         message=(
                             "Unicode Replacement Character detected (U+FFFD). "
-                            "This indicates corrupt text or lossy character encoding conversion."
+                            "This indicates corrupted text or lossy character encoding conversion."
                         ),
                         code_point=code_hex,
                         character_name=char_name,
@@ -262,11 +264,12 @@ class KhmerUnicodeChecker:
                     )
                 )
 
-            # Check 2: Suspicious control characters - ALWAYS AN ERROR
+            # Check 2: Suspicious control characters - ALWAYS AN ERROR (SUSPICIOUS_CONTROL)
             elif is_suspicious_control_char(char):
                 result.issues.append(
                     Issue(
                         level="ERROR",
+                        category="SUSPICIOUS_CONTROL",
                         line_number=line_number,
                         column_number=col_idx,
                         message=(
@@ -279,13 +282,14 @@ class KhmerUnicodeChecker:
                     )
                 )
 
-            # Check 3: Literal Dotted Circle (U+25CC) - WARNING
+            # Check 3: Literal Dotted Circle (U+25CC) - WARNING (VISUAL_RENDERING)
             # In UI translations, it often indicates a broken sequence was copy-pasted.
             # In documentation or font tests, it may be used intentionally.
             elif char == DOTTED_CIRCLE:
                 result.issues.append(
                     Issue(
                         level="WARNING",
+                        category="VISUAL_RENDERING",
                         line_number=line_number,
                         column_number=col_idx,
                         message=(
@@ -299,21 +303,32 @@ class KhmerUnicodeChecker:
                     )
                 )
 
-            # Check 4: Orphaned Combining Marks - WARNING
-            # Combining marks attach to a base character. If preceded by whitespace or quotes without a base,
-            # rendering engines will display a broken dotted circle (◌). In documentation, it may be intentional.
+            # Check 4: Orphaned Combining Marks - WARNING (VISUAL_RENDERING)
+            # In Khmer, combining marks (dependent vowels, coeng, diacritics) must attach to a valid
+            # base consonant or independent vowel, or follow another legally attached combining mark.
+            # If preceded by whitespace, ZWSP (\u200B), punctuation, digits, or start of line, it is orphaned.
             elif self.check_orphaned_marks and is_khmer_combining_mark(char):
                 prev_char = line[col_idx - 2] if col_idx > 1 else None
-                if prev_char is None or prev_char in (" ", "\t", "\n", "\r", '"', "'", ">", "<", "{", "}", "[", "("):
+                is_orphaned = False
+                if prev_char is None:
+                    is_orphaned = True
+                elif prev_char == ZWSP:
+                    # Combining mark cannot cross a Zero-Width Space word boundary
+                    is_orphaned = True
+                elif not (is_khmer_base(prev_char) or is_khmer_combining_mark(prev_char)):
+                    is_orphaned = True
+
+                if is_orphaned:
                     result.issues.append(
                         Issue(
                             level="WARNING",
+                            category="VISUAL_RENDERING",
                             line_number=line_number,
                             column_number=col_idx,
                             message=(
                                 f"Orphaned Khmer combining mark detected: {char_name} ({code_hex}). "
-                                "Combining marks usually attach to a Khmer base consonant; "
-                                "rendering engines will display a dotted circle (◌) unless rendered in a font test or table."
+                                "Combining marks must attach to a Khmer base consonant or vowel; "
+                                "rendering engines will display a broken dotted circle (U+25CC)."
                             ),
                             code_point=code_hex,
                             character_name=char_name,
@@ -321,14 +336,15 @@ class KhmerUnicodeChecker:
                         )
                     )
 
-            # Check 5: Trailing Coeng - WARNING
+            # Check 5: Trailing Coeng - WARNING (VISUAL_RENDERING)
             # U+17D2 (Coeng) must be immediately followed by a subscript consonant or sign.
             if self.check_trailing_coeng and char == KHMER_COENG:
                 next_char = line[col_idx] if col_idx < line_len else None
-                if next_char is None or next_char in (" ", "\t", "\n", "\r", '"', "'", ",", ".", ";", ":"):
+                if next_char is None or next_char in (" ", "\t", "\n", "\r", '"', "'", ",", ".", ";", ":", ZWSP):
                     result.issues.append(
                         Issue(
                             level="WARNING",
+                            category="VISUAL_RENDERING",
                             line_number=line_number,
                             column_number=col_idx,
                             message=(
@@ -341,12 +357,13 @@ class KhmerUnicodeChecker:
                         )
                     )
 
-            # Check 6: Suspicious Bidirectional Overrides - WARNING
+            # Check 6: Suspicious Bidirectional Overrides - WARNING (BIDI_OVERRIDE)
             elif self.check_bidi_overrides and char in BIDI_OVERRIDES:
                 desc = BIDI_OVERRIDES[char]
                 result.issues.append(
                     Issue(
                         level="WARNING",
+                        category="BIDI_OVERRIDE",
                         line_number=line_number,
                         column_number=col_idx,
                         message=(
@@ -359,11 +376,12 @@ class KhmerUnicodeChecker:
                     )
                 )
 
-            # Check 7: Deprecated Khmer characters - WARNING
+            # Check 7: Deprecated Khmer characters - WARNING (DEPRECATED_CHAR)
             elif self.check_deprecated_chars and char in DEPRECATED_KHMER_CONSONANTS:
                 result.issues.append(
                     Issue(
                         level="WARNING",
+                        category="DEPRECATED_CHAR",
                         line_number=line_number,
                         column_number=col_idx,
                         message=(
@@ -447,13 +465,13 @@ def format_text_report(results: List[FileResult], verbose: bool = False, show_st
         if r.encoding_error:
             has_reported_file = True
             output.append(f"\n[FAIL] {r.path}")
-            output.append(f"  ERROR: {r.encoding_error}")
+            output.append(f"  ERROR [BYTE_ENCODING]: {r.encoding_error}")
         elif r.issues:
             has_reported_file = True
             status = "FAIL" if r.error_count > 0 else "WARN"
             output.append(f"\n[{status}] {r.path}")
             for issue in r.issues:
-                prefix = "  ERROR" if issue.level == "ERROR" else "  WARNING"
+                prefix = f"  ERROR [{issue.category}]" if issue.level == "ERROR" else f"  WARNING [{issue.category}]"
                 cp_info = f" [{issue.code_point}]" if issue.code_point else ""
                 output.append(f"{prefix} (line {issue.line_number}, col {issue.column_number}){cp_info}: {issue.message}")
                 if issue.line_snippet:
@@ -475,6 +493,7 @@ def format_text_report(results: List[FileResult], verbose: bool = False, show_st
         output.append(f"Total Errors              : {total_errors}")
         output.append(f"Total Warnings            : {total_warnings}")
         output.append("-" * 72)
+        output.append("Categories: [BYTE_ENCODING] [DATA_CORRUPTION] [SUSPICIOUS_CONTROL] [VISUAL_RENDERING]")
         output.append("Note: This tool verifies UTF-8 integrity and character-level Unicode")
         output.append("validity. It does not evaluate grammar, spelling, or font rendering.")
         output.append("=" * 72)

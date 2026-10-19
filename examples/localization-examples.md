@@ -126,97 +126,110 @@ export function CartSummary({ count }: { count: number }) {
 ## Example 3: Cambodian Phone Number Input & Validation
 
 ### Problem
-A signup form used a rigid US phone regex (`/^\d{10}$/`) that rejected all Cambodian phone numbers, or claimed the number was "verified" without sending an SMS OTP.
+A signup form used a rigid US phone regex (`/^\d{10}$/`) that rejected all Cambodian phone numbers, coupled validation to a brittle hardcoded carrier prefix list, or falsely claimed the number was "verified" without sending an SMS OTP.
 
-### Before (US-Centric Regex & False Claims)
+### Before (US-Centric Regex, Brittle Prefixes, & False Claims)
 ```typescript
-// Broken: Rejects Cambodian numbers and makes false liveness claims
+// Broken: Rejects Cambodian numbers, couples to fixed prefixes, and makes false liveness claims
 function validatePhone(input: string) {
-  const usPhoneRegex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-  if (usPhoneRegex.test(input)) {
-    return { valid: true, message: "Phone number is active and verified!" };
+  // Brittle: hardcoded 3-prefix list fails on valid 9-digit NSNs like 096
+  const hardcodedPrefixRegex = /^0(12|15|88)\d{6}$/;
+  if (hardcodedPrefixRegex.test(input)) {
+    return { valid: true, message: "Phone number is active and verified!" }; // False claim!
   }
-  return { valid: false, message: "Must be a 10-digit number" };
+  return { valid: false, message: "Invalid phone number" };
 }
 ```
 
-### After (Robust Cambodian E.164 Normalization & Validation)
+### After (Decoupled E.164 Normalization & Explicit OTP Boundary)
 ```typescript
-import { parseCambodianPhone, PhoneNormalizationResult } from "@/utils/cambodiaPhone";
+import { normalizeCambodianPhone, PhoneNormalizationResult } from "@/utils/cambodiaPhone";
 
 export function handlePhoneInput(rawInput: string): PhoneNormalizationResult {
-  const parsed = parseCambodianPhone(rawInput);
+  // Normalization handles 8-digit and 9-digit NSNs, +855, and Khmer numerals (០-៩)
+  const result = normalizeCambodianPhone(rawInput);
 
-  if (!parsed.isValidSyntax) {
+  if (!result.isValidSyntax) {
     return {
-      ...parsed,
+      ...result,
       error: "សូមបញ្ចូលលេខទូរស័ព្ទដែលត្រឹមត្រូវ (ឧ. 012 345 678 ឬ +855 12 345 678)",
     };
   }
 
-  // Pass normalized E.164 format to the backend OTP service
-  return parsed;
+  // Pass normalized E.164 (+855...) to backend SMS OTP service.
+  // Note: result.isActiveSim remains false until OTP verification succeeds.
+  return result;
 }
 ```
 **Why this is better:**
-- Accepts both domestic dialing formats (`012 345 678`) and international formats (`+855 12 345 678`).
-- Cleans whitespace, dashes, and converts Khmer numerals (`០-៩`) if typed.
-- Does NOT claim the number is active; leaves ownership verification to SMS OTP.
+- Decouples normalization from volatile operator prefix lists.
+- Supports both standard 8-digit NSNs (`012 345 678`) and extended 9-digit NSNs (`096 123 4567`).
+- Normalizes international (`+855`), domestic (`0`), and Khmer numerals (`០-៩`).
+- Never claims the number is active based on syntax alone; explicitly preserves the OTP verification boundary.
 
 ---
 
 ## Example 4: Dual Currency Formatting (USD and KHR)
 
 ### Problem
-An e-commerce app hardcoded a dollar symbol `$`, formatted Cambodian Riel with two decimal zeros (`10,000.00 ៛`), or silently converted USD to KHR with an assumed exchange rate of `4000`.
+A developer called `new Intl.NumberFormat('km-KH', { style: 'currency', currency: 'KHR' })` expecting whole-riel prices, but the browser formatted whole numbers with two decimal zeros (`1,000.00៛`) due to ISO 4217 minor units. Another component silently converted USD to KHR assuming a fixed 4,000 rate.
 
-### Before (Hardcoded Formats & Silent Conversion)
+### Before (Runtime Default Decimal Pitfall & Silent Conversion)
 ```typescript
-// Broken: Forces decimals on KHR and silently fabricates conversion rate
+// Broken: Intl defaults KHR to 2 decimals (1000.00៛); silently assumes fixed exchange rate
 function formatPrice(amount: number, currency: "USD" | "KHR") {
   if (currency === "USD") {
-    return `$${amount.toFixed(2)}`;
+    return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(amount);
   } else {
-    // Bad: KHR has no fractional cents!
-    // Worse: Silently assumes 1 USD = 4000 KHR without user rate
-    const khrAmount = amount * 4000;
-    return `${khrAmount.toFixed(2)} ៛`; 
+    // Pitfall: In Node/V8/Chromium, Intl.NumberFormat defaults KHR to 2 fraction digits!
+    // Yields "25,000.00៛", which is contrary to consumer whole-riel display.
+    return new Intl.NumberFormat("km-KH", { style: "currency", currency: "KHR" }).format(amount);
   }
 }
 ```
 
-### After (Platform-Native `Intl.NumberFormat` & Explicit Conversion)
+### After (Explicit Whole-Riel Configuration & Native Formatting)
 ```typescript
+export interface FormatOptions {
+  locale?: "km-KH" | "en-US";
+  wholeRiel?: boolean; // Default true: explicitly enforces whole riel
+}
+
 /**
  * Format USD and KHR using native platform standards.
- * Never performs silent conversion.
+ * Explicitly configures 0 decimals for whole-riel prices.
+ * Never performs silent conversion without a verified exchange rate.
  */
 export function formatCurrency(
   amount: number,
   currency: "USD" | "KHR",
-  locale: "km-KH" | "en-US" = "km-KH"
+  options: FormatOptions = {}
 ): string {
+  const { locale = "km-KH", wholeRiel = true } = options;
+
   if (currency === "KHR") {
+    // MUST configure fraction digits explicitly: KHR defaults to 2 decimals in Intl!
     return new Intl.NumberFormat(locale, {
       style: "currency",
       currency: "KHR",
-      maximumFractionDigits: 0, // KHR does not use decimal sub-units
-      minimumFractionDigits: 0,
+      minimumFractionDigits: wholeRiel ? 0 : 2,
+      maximumFractionDigits: wholeRiel ? 0 : 2,
     }).format(amount);
   }
 
-  return new Intl.NumberFormat(locale, {
+  return new Intl.NumberFormat(locale === "km-KH" ? "en-US" : locale, {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 2,
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(amount);
 }
 ```
 **Why this is better:**
-- KHR displays cleanly without fake cents (`25,000 ៛`, not `25,000.00 ៛`).
-- Zero risk of financial discrepancy caused by hardcoded conversion rates.
-- Adopts platform locale conventions automatically.
+- Avoids the ICU ISO 4217 minor-unit pitfall where KHR formats with `.00` by default.
+- Formats whole riel cleanly (`25,000៛`), while supporting fractional riel if accounting requires it.
+- Correctly formats zero (`0៛`), negative values (`-25,000៛`), and large amounts (`1,234,567,890៛`).
+- Zero risk of financial discrepancy caused by fabricated exchange rates.
 
 ---
 

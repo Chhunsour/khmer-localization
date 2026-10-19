@@ -7,64 +7,79 @@ This reference provides technical specifications, regulatory standards, and code
 ## 1. Cambodian Phone Numbers
 
 ### 1.1 Regulatory Authority and Primary Sources
-- **Regulatory Body:** Telecommunication Regulator of Cambodia (TRC) — [https://trc.gov.kh](https://trc.gov.kh) (Accessed October 2026).
+- **National Regulatory Body:** Telecommunication Regulator of Cambodia (TRC) — [https://trc.gov.kh](https://trc.gov.kh) (Direct resource: *Mobile Service Providers & National Numbering Plan*, verified October 2026).
 - **Ministry:** Ministry of Post and Telecommunications (MPTC) — [https://mptc.gov.kh](https://mptc.gov.kh).
-- **International Standard:** ITU-T Recommendation E.164 National Numbering Plan for Cambodia.
+- **International Standard:** ITU-T Recommendation E.164 (Cambodia National Numbering Plan), maintained via the ITU International Numbering Resources portal: [https://www.itu.int/en/ITU-T/inr/nnp/Pages/default.aspx](https://www.itu.int/en/ITU-T/inr/nnp/Pages/default.aspx).
 
-### 1.2 Stable vs. Mutable Concepts
+### 1.2 Separation of Normalization Algorithm vs. Prefix Lookup Data
 
-| Category | Concept | Stability Status | Rule & Guidance |
-| :--- | :--- | :--- | :--- |
-| **Country Calling Code** | `+855` | **Stable** | Allocated by ITU-T. Never changes without international treaty. |
-| **Domestic Trunk Prefix** | `0` | **Stable** | Required for domestic direct dialing within Cambodia. Dropped in E.164. |
-| **National Significant Number (NSN)** | 8 or 9 digits | **Stable** | Length of subscriber number after dropping leading trunk `0`. |
-| **Operator Prefix Allocations** | e.g. `012`, `096` | **Subject to Change** | Regulated by TRC decrees. Prefixes can be reassigned or consolidated. |
-| **Number Ownership & Active Status** | Real-time SIM | **Dynamic** | Syntax validation never verifies active status. Requires SMS OTP or carrier API. |
-
-### 1.3 National Numbering Architecture
-
-1. **Domestic Dialing Format:** `0` + `[Area/Mobile Prefix]` + `[Subscriber Number]`
-   - Standard 6-digit subscriber: Total **9 digits** (e.g. `012 345 678`)
-   - 7-digit subscriber (marked with `*`): Total **10 digits** (e.g. `096 123 4567`)
-2. **International E.164 Format:** `+855` + `[Area/Mobile Prefix without 0]` + `[Subscriber Number]`
-   - Standard 6-digit subscriber: Total **11 characters** (e.g. `+85512345678`)
-   - 7-digit subscriber: Total **12 characters** (e.g. `+855961234567`)
-
-### 1.4 Operator Prefixes (Reference Baseline: TRC National Plan)
-- **Cellcard (CamGSM):** `011`, `012`, `014`, `017`, `061`, `077`, `078`, `085`, `089`, `092`, `095`, `099`, `076`*
-- **Smart Axiata:** `010`, `015`, `016`, `069`, `070`, `081`, `086`, `087`, `093`, `098`, `096`*
-- **Metfone (Viettel):** `060`, `066`, `067`, `068`, `090`, `031`*, `071`*, `088`*, `097`*
-- **SEATEL (Southeast Asia Telecom):** `018`*
-- **Geographic Fixed Lines (Landline):** `023` (Phnom Penh), `063` (Siem Reap), `053` (Battambang), `032` (Takeo), `033` (Kampot), `034` (Preah Sihanouk), `042` (Kampong Cham), etc.
-
-### 1.5 Three-Tier Input Processing Pipeline
+To build maintainable systems, agents and developers must separate:
+1. **The Normalization Algorithm (Stable):** Strips formatting symbols, normalizes Khmer digits, extracts country/trunk prefixes, and validates structural length (NSN). This algorithm rarely changes.
+2. **Carrier Prefix Lookup Data (Volatile):** Carrier prefix assignments (`012` Cellcard, `096` Smart, `088` Metfone, etc.) are subject to MPTC/TRC regulatory updates, operator mergers, and Mobile Number Portability (MNP). Normalization must never fail on unknown prefixes simply because a prefix list is outdated.
 
 ```mermaid
 flowchart TD
-    Raw["Raw User Input<br>(e.g. '+855 (0) 12 345-678')"] --> Step1["Step 1: Normalization<br>(Clean symbols, standardize to +855 or 0)"]
-    Step1 --> Step2["Step 2: Syntax Validation<br>(Verify E.164 length: 8 or 9 digits after +855)"]
-    Step2 --> Step3["Step 3: Verification / Liveness<br>(SMS OTP or Carrier Lookup)"]
-    Step3 --> Verified["Verified User Ownership"]
+    Raw["Raw User Input<br>(e.g. '+855 (0) 96 123-4567')"] --> Norm["Step 1: Universal Normalization<br>(Clean symbols, convert Khmer digits, extract NSN)"]
+    Norm --> LenCheck["Step 2: Length & Syntax Validation<br>(8 or 9 digits NSN per ITU-T E.164)"]
+    LenCheck --> PrefixLookup["Step 3: Optional Carrier Prefix Mapping<br>(Pluggable lookup: Cellcard, Smart, Metfone, etc.)"]
+    LenCheck --> Liveness["Step 4: Liveness & Ownership Verification<br>(SMS OTP / Carrier Network API)"]
 ```
 
-#### TypeScript Implementation:
+### 1.3 National Numbering Architecture & Length Variations
+
+Under ITU-T Recommendation E.164 and the TRC plan, Cambodia uses a closed numbering plan:
+- **Country Calling Code:** `+855` (allocated by ITU-T).
+- **Domestic Trunk Prefix:** `0` (used when dialing domestically; dropped in international E.164 format).
+- **National Significant Number (NSN) Length:** **8 or 9 digits** depending on operator allocation.
+
+#### Length Breakdown:
+1. **Standard 8-digit NSN (9 digits domestic with `0`):**
+   - Typically 2-digit operator code + 6-digit subscriber number (e.g. `012 xxx xxx`).
+   - Domestic dialing: `012 345 678` (9 digits).
+   - International E.164: `+855 12 345 678` (11 characters).
+2. **Extended 9-digit NSN (10 digits domestic with `0`):**
+   - Typically 2- or 3-digit operator code + 7-digit subscriber number (marked with `*` in TRC plan, e.g. `096 xxx xxxx`, `088 xxx xxxx`, `076 xxx xxxx`).
+   - Domestic dialing: `096 123 4567` (10 digits).
+   - International E.164: `+855 96 123 4567` (12 characters).
+3. **Geographic Fixed Lines (Landlines):**
+   - Geographic area code (e.g. `023` for Phnom Penh, `063` for Siem Reap, `053` for Battambang) followed by 5 to 7 subscriber digits (total 8 or 9 digits domestic).
+
+### 1.4 Current Mobile Network Operator Prefixes (TRC Baseline, October 2026)
+> [!NOTE]
+> This table represents the operational baseline documented by the TRC as of October 2026. Use this for carrier routing or informational labeling, but do not block user registration if a newly assigned prefix is encountered.
+
+| Operator | Brand | Domestic Prefixes | NSN Length |
+| :--- | :--- | :--- | :--- |
+| **CamGSM Plc.** | Cellcard | `011`, `012`, `014`, `017`, `061`, `077`, `078`, `085`, `089`, `092`, `095`, `099`<br>`076`* | 8 digits<br>9 digits (`*`) |
+| **Smart Axiata Co., Ltd.** | Smart | `010`, `015`, `016`, `069`, `070`, `081`, `086`, `087`, `093`, `098`<br>`096`* | 8 digits<br>9 digits (`*`) |
+| **Viettel (Cambodia) Pte., Ltd.** | Metfone | `060`, `066`, `067`, `068`, `090`<br>`031`*, `071`*, `088`*, `097`* | 8 digits<br>9 digits (`*`) |
+| **South East Asia Telecom Co., Ltd.** | Seatel | `018`* | 9 digits (`*`) |
+
+### 1.5 Robust TypeScript Normalization Implementation
+
 ```typescript
 export interface PhoneNormalizationResult {
   raw: string;
-  normalizedE164: string | null;
-  normalizedDomestic: string | null;
+  nsn: string | null;                  // National Significant Number (8 or 9 digits)
+  normalizedE164: string | null;       // +855...
+  normalizedDomestic: string | null;   // 0...
   isValidSyntax: boolean;
-  isMobileCandidate: boolean;
+  lengthCategory: "8_digits" | "9_digits" | "invalid";
+  requiresOtpVerification: true;      // Explicit boundary flag
+  isActiveSim: false;                  // Syntax check NEVER confirms active status
   error?: string;
 }
 
-export function parseCambodianPhone(input: string): PhoneNormalizationResult {
+export function normalizeCambodianPhone(input: string): PhoneNormalizationResult {
   const result: PhoneNormalizationResult = {
     raw: input,
+    nsn: null,
     normalizedE164: null,
     normalizedDomestic: null,
     isValidSyntax: false,
-    isMobileCandidate: false,
+    lengthCategory: "invalid",
+    requiresOtpVerification: true,
+    isActiveSim: false,
   };
 
   if (!input || typeof input !== "string") {
@@ -72,15 +87,15 @@ export function parseCambodianPhone(input: string): PhoneNormalizationResult {
     return result;
   }
 
-  // 1. Remove whitespace, hyphens, brackets, dots
+  // 1. Remove whitespace, hyphens, brackets, and dots
   let cleaned = input.replace(/[\s\-\(\)\.]+/g, "");
 
-  // Convert Khmer numerals (០-៩) to ASCII digits (0-9) if present
+  // 2. Convert Khmer numerals (០-៩) to ASCII digits (0-9)
   cleaned = cleaned.replace(/[\u17E0-\u17E9]/g, (match) => {
     return String(match.charCodeAt(0) - 0x17E0);
   });
 
-  // 2. Identify and strip country code
+  // 3. Extract country code and trunk prefix
   let nationalNumber = "";
   if (cleaned.startsWith("+855")) {
     nationalNumber = cleaned.slice(4);
@@ -91,35 +106,42 @@ export function parseCambodianPhone(input: string): PhoneNormalizationResult {
   } else if (cleaned.startsWith("0")) {
     nationalNumber = cleaned.slice(1);
   } else {
-    // Treat as raw national number without leading 0
     nationalNumber = cleaned;
   }
 
-  // Handle case where user entered '+855012...' (erroneous leading zero after country code)
+  // Handle accidental redundant zero after country code (e.g. '+855012...')
   if (nationalNumber.startsWith("0")) {
     nationalNumber = nationalNumber.slice(1);
   }
 
-  // 3. Length check: Cambodian NSN is 8 or 9 digits
-  if (!/^\d{8,9}$/.test(nationalNumber)) {
-    result.error = "Invalid length. Cambodian numbers must have 8 or 9 digits after country code.";
+  // 4. Verify all remaining characters are numeric
+  if (!/^\d+$/.test(nationalNumber)) {
+    result.error = "Phone number contains non-numeric characters.";
     return result;
   }
 
+  // 5. Length verification: Cambodian NSN is 8 or 9 digits
+  if (nationalNumber.length === 8) {
+    result.lengthCategory = "8_digits";
+  } else if (nationalNumber.length === 9) {
+    result.lengthCategory = "9_digits";
+  } else {
+    result.error = `Invalid NSN length: ${nationalNumber.length} digits (expected 8 or 9 digits).`;
+    return result;
+  }
+
+  result.nsn = nationalNumber;
   result.normalizedE164 = `+855${nationalNumber}`;
   result.normalizedDomestic = `0${nationalNumber}`;
   result.isValidSyntax = true;
-
-  // Basic mobile check: mobile prefixes typically start with 1, 6, 7, 8, 9, or 3
-  const firstDigit = nationalNumber.charAt(0);
-  result.isMobileCandidate = ["1", "3", "6", "7", "8", "9"].includes(firstDigit);
 
   return result;
 }
 ```
 
-> [!WARNING]
-> Never claim a phone number is "verified" or "active" merely because it matches syntactic regular expressions. Format validation only checks structure; active status requires external verification (e.g., SMS OTP).
+> [!CRITICAL]
+> **Syntax Validation vs. Active Liveness:**
+> Syntax validation only verifies structural format and length. It **NEVER** proves that a telephone number is active, assigned to a valid SIM, or in the possession of the user. Verifying active status requires an out-of-band challenge (SMS OTP) or telecommunications carrier lookup.
 
 ---
 
@@ -127,46 +149,59 @@ export function parseCambodianPhone(input: string): PhoneNormalizationResult {
 
 Cambodia is an officially dual-currency economy. Both the **Cambodian Riel (KHR)** and the **United States Dollar (USD)** circulate simultaneously in daily commerce, retail, banking, and e-commerce.
 
-### 2.1 Currency Comparison
+### 2.1 Currency Comparison & Runtime Defaults
 
 | Attribute | Cambodian Riel (KHR) | United States Dollar (USD) |
 | :--- | :--- | :--- |
-| **ISO 4217 Code** | `KHR` | `USD` |
-| **Symbol** | `៛` (`U+17DB`) | `$` |
-| **Minor Units / Decimals** | **0** (No sub-units/coins in active circulation) | **2** (Cents) |
-| **Typical Cash Notes** | 100, 500, 1000, 2000, 5000, 10000, 15000, 20000, 30000, 50000, 100000 | 1, 5, 10, 20, 50, 100 |
-| **Symbol Placement (Khmer)** | After amount with space: `10,000 ៛` | Before or after: `$10.50` or `10.50 $` |
-| **Symbol Placement (English)** | `KHR 10,000` or `10,000 KHR` | `$10.50` |
+| **ISO 4217 Currency Code** | `KHR` | `USD` |
+| **Currency Symbol** | `៛` (`U+17DB`) | `$` |
+| **ISO 4217 Minor Units** | **2** (Formal ISO standard specification) | **2** (Cents) |
+| **Cash Circulation Reality** | **0 decimals** (100 ៛ smallest banknote; no coins/cents) | **2 decimals** (Cents in circulation) |
+| **`Intl.NumberFormat` Default** | **2 decimal places (`25,000.00៛`)** in V8/Node/browsers! | **2 decimal places (`$25.00`)** |
+| **Consumer Display Convention** | **Whole Riel (`25,000 ៛`)** | Standard 2 decimals (`$25.00`) |
 
-### 2.2 Formatting vs. Conversion
+### 2.2 Critical Audit: Do Not Assume 0 Decimals by Default
+
+> [!WARNING]
+> In standard ECMAScript / ICU implementations of `Intl.NumberFormat`, calling:
+> ```javascript
+> new Intl.NumberFormat('km-KH', { style: 'currency', currency: 'KHR' }).format(1000);
+> ```
+> **produces `1,000.00៛`**, because ICU relies on the ISO 4217 table where KHR has minor units = 2.
+>
+> In everyday Cambodian retail and consumer applications, whole-riel prices without `.00` are overwhelmingly expected. Therefore, developers **MUST explicitly configure `{ minimumFractionDigits: 0, maximumFractionDigits: 0 }`** to achieve whole-riel display.
+
+### 2.3 Formatting vs. Conversion
 
 > [!CRITICAL]
 > **Currency formatting is NOT currency conversion.**
 > Never convert USD amounts to KHR (or vice versa) without an explicit, verifiable exchange rate provided by the user or fetched from an official source (such as the National Bank of Cambodia - NBC: [https://www.nbc.gov.kh](https://www.nbc.gov.kh)). Never assume a fixed 4,000 KHR or 4,100 KHR rate silently in production code.
 
-### 2.3 Platform-Native Currency Formatting with `Intl.NumberFormat`
-
-Modern web browsers and Node.js runtimes support standard `Intl.NumberFormat`.
+### 2.4 Production-Quality Currency Formatting Utilities
 
 ```typescript
 export interface FormatCurrencyOptions {
   locale?: "km-KH" | "en-US" | "en-KH";
   numberingSystem?: "latn" | "khmr"; // 'latn' = 0-9, 'khmr' = ០-៩
+  wholeRiel?: boolean;               // Default true: formats whole riel without .00
 }
 
 /**
  * Format Cambodian Riel (KHR)
- * Standard: 0 decimal digits.
+ * Explicitly configures whole-riel display (0 decimals) or ISO fractional display.
  */
 export function formatKHR(amount: number, options: FormatCurrencyOptions = {}): string {
-  const { locale = "km-KH", numberingSystem = "latn" } = options;
+  const { locale = "km-KH", numberingSystem = "latn", wholeRiel = true } = options;
 
-  // Most digital fintech apps (Bakong, ABA) default to 'latn' numerals for clarity
+  const fractionDigits = wholeRiel
+    ? { minimumFractionDigits: 0, maximumFractionDigits: 0 }
+    : { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+  // Note: Most fintech apps (Bakong, ABA) default to 'latn' numerals for clarity
   const formatter = new Intl.NumberFormat(`${locale}-u-nu-${numberingSystem}`, {
     style: "currency",
     currency: "KHR",
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0,
+    ...fractionDigits,
   });
 
   return formatter.format(amount);
@@ -174,7 +209,7 @@ export function formatKHR(amount: number, options: FormatCurrencyOptions = {}): 
 
 /**
  * Format US Dollar (USD)
- * Standard: 2 decimal digits.
+ * Standard: 2 decimal places with half-up rounding.
  */
 export function formatUSD(amount: number, options: FormatCurrencyOptions = {}): string {
   const { locale = "en-US", numberingSystem = "latn" } = options;
@@ -182,19 +217,24 @@ export function formatUSD(amount: number, options: FormatCurrencyOptions = {}): 
   const formatter = new Intl.NumberFormat(`${locale}-u-nu-${numberingSystem}`, {
     style: "currency",
     currency: "USD",
-    maximumFractionDigits: 2,
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   });
 
   return formatter.format(amount);
 }
 ```
 
-#### Example Outputs:
-- `formatKHR(25000)` $\rightarrow$ `"25,000 ៛"`
-- `formatKHR(25000, { numberingSystem: "khmr" })` $\rightarrow$ `"២៥,០០០ ៛"`
-- `formatUSD(12.5)` $\rightarrow$ `"$12.50"`
-- `formatUSD(12.5, { locale: "km-KH" })` $\rightarrow$ `"12.50 $"`
+#### Verified Outputs:
+- **Whole Riel (standard):** `formatKHR(25000)` $\rightarrow$ `"25,000៛"`
+- **Zero Riel:** `formatKHR(0)` $\rightarrow$ `"0៛"`
+- **Negative Riel:** `formatKHR(-25000)` $\rightarrow$ `"-25,000៛"`
+- **Rounding fractional riel:** `formatKHR(25000.75)` $\rightarrow$ `"25,001៛"` (rounds half-expand)
+- **Large Riel values:** `formatKHR(1234567890)` $\rightarrow$ `"1,234,567,890៛"`
+- **Khmer Numerals:** `formatKHR(25000, { numberingSystem: "khmr" })` $\rightarrow$ `"២៥.០០០៛"` (ICU uses period separators with Khmer digits)
+- **USD standard:** `formatUSD(12.5)` $\rightarrow$ `"$12.50"`
+- **USD rounding:** `formatUSD(12.345)` $\rightarrow$ `"$12.35"`
+- **USD large values:** `formatUSD(1000000)` $\rightarrow$ `"$1,000,000.00"`
 
 ---
 

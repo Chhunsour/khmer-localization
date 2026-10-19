@@ -6,12 +6,13 @@ Tests verify:
 - Legitimate typography characters (ZWSP, punctuation, riel symbol)
 - English-only text
 - Mixed Khmer and English text
-- Replacement character (U+FFFD) detection (ERROR)
-- Suspicious control characters (ERROR)
-- Invalid UTF-8 bytes (ERROR)
-- Literal dotted circle (U+25CC) detection (WARNING)
-- Orphaned combining marks (WARNING)
-- Trailing coeng warning (WARNING)
+- Replacement character (U+FFFD) detection (ERROR [DATA_CORRUPTION])
+- Suspicious control characters (ERROR [SUSPICIOUS_CONTROL])
+- Invalid UTF-8 bytes (ERROR [BYTE_ENCODING])
+- Literal dotted circle (U+25CC) detection (WARNING [VISUAL_RENDERING])
+- Orphaned combining marks (WARNING [VISUAL_RENDERING])
+- Orphaned combining marks after ZWSP and Latin characters
+- Trailing coeng warning (WARNING [VISUAL_RENDERING])
 - Multi-file scanning & CLI exit codes
 """
 
@@ -124,7 +125,7 @@ class TestKhmerUnicodeChecker(unittest.TestCase):
         self.assertEqual(result.stats.riel_symbols, 1)
 
     def test_replacement_character_detected(self):
-        """Unicode Replacement Character U+FFFD must be detected as an ERROR."""
+        """Unicode Replacement Character U+FFFD must be detected as an ERROR under DATA_CORRUPTION."""
         content = 'greeting = "សួស្តី \uFFFD"'
         file_path = self._create_file("corrupted.py", content)
         result = self.checker.check_file(file_path)
@@ -132,32 +133,59 @@ class TestKhmerUnicodeChecker(unittest.TestCase):
         self.assertEqual(result.error_count, 1)
         self.assertTrue(any("Replacement Character" in i.message for i in result.issues))
         self.assertEqual(result.issues[0].level, "ERROR")
+        self.assertEqual(result.issues[0].category, "DATA_CORRUPTION")
 
     def test_suspicious_control_characters_detected(self):
-        """Raw control characters like NULL byte or C0 codes must be detected as ERRORs."""
+        """Raw control characters like NULL byte or C0 codes must be detected as ERRORs under SUSPICIOUS_CONTROL."""
         content = 'key = "កម្ពុជា\x00\x07"'
         file_path = self._create_file("control_chars.txt", content)
         result = self.checker.check_file(file_path)
 
         self.assertGreaterEqual(result.error_count, 2)
         errors = [i for i in result.issues if i.level == "ERROR"]
+        self.assertTrue(all(err.category == "SUSPICIOUS_CONTROL" for err in errors))
         self.assertTrue(any("control character" in err.message.lower() for err in errors))
 
     def test_literal_dotted_circle_detected(self):
-        """Literal dotted circle U+25CC should trigger a WARNING."""
-        content = 'label: "ក\u25CC្ដ"'
+        """Literal dotted circle U+25CC should trigger a WARNING under VISUAL_RENDERING."""
+        content = 'label: "អត្ថបទ\u25CC"'
         file_path = self._create_file("dotted_circle.yaml", content)
         result = self.checker.check_file(file_path)
 
         self.assertEqual(result.error_count, 0)
         self.assertEqual(result.warning_count, 1)
         warnings = [i for i in result.issues if i.level == "WARNING"]
+        self.assertEqual(warnings[0].category, "VISUAL_RENDERING")
         self.assertTrue(any("Dotted Circle" in w.message for w in warnings))
 
     def test_orphaned_combining_mark_detected(self):
         """A Khmer combining mark without a preceding base consonant triggers a WARNING."""
         content = 'label = " ា"'
         file_path = self._create_file("orphaned_vowel.txt", content)
+        result = self.checker.check_file(file_path)
+
+        self.assertEqual(result.error_count, 0)
+        self.assertGreaterEqual(result.warning_count, 1)
+        warnings = [i for i in result.issues if i.level == "WARNING"]
+        self.assertEqual(warnings[0].category, "VISUAL_RENDERING")
+        self.assertTrue(any("Orphaned" in w.message for w in warnings))
+
+    def test_orphaned_combining_mark_after_zwsp(self):
+        """A combining mark cannot follow a ZWSP word boundary; it must trigger an orphaned mark warning."""
+        # \u200B followed by vowel \u17B6
+        content = 'label = "សូម\u200B\u17B6"'
+        file_path = self._create_file("vowel_after_zwsp.txt", content)
+        result = self.checker.check_file(file_path)
+
+        self.assertEqual(result.error_count, 0)
+        self.assertGreaterEqual(result.warning_count, 1)
+        warnings = [i for i in result.issues if i.level == "WARNING"]
+        self.assertTrue(any("Orphaned" in w.message for w in warnings))
+
+    def test_orphaned_combining_mark_after_latin_char(self):
+        """A Khmer combining mark cannot attach to an ASCII/Latin character."""
+        content = 'label = "hello\u17B6"'
+        file_path = self._create_file("vowel_after_latin.txt", content)
         result = self.checker.check_file(file_path)
 
         self.assertEqual(result.error_count, 0)
@@ -174,6 +202,7 @@ class TestKhmerUnicodeChecker(unittest.TestCase):
         self.assertEqual(result.error_count, 0)
         self.assertEqual(result.warning_count, 1)
         warnings = [i for i in result.issues if i.level == "WARNING"]
+        self.assertEqual(warnings[0].category, "VISUAL_RENDERING")
         self.assertTrue(any("Trailing Khmer Coeng" in w.message for w in warnings))
 
     def test_invalid_utf8_binary_bytes(self):
@@ -184,6 +213,7 @@ class TestKhmerUnicodeChecker(unittest.TestCase):
 
         self.assertIsNotNone(result.encoding_error)
         self.assertEqual(result.error_count, 1)
+        self.assertIn("Invalid UTF-8 byte sequence", result.encoding_error)
 
     def test_multi_file_directory_scan(self):
         """Scanning a directory should process multiple files and aggregate statistics."""
