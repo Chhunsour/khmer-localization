@@ -65,5 +65,14 @@
     "prefixes": [
       "018"
     ]
+  },
+  {
+    "name": "Xinwei Telecom",
+    "brand": "CooTel",
+    "mcc_mnc": "456-04",
+    "network": "Wireless Broadband",
+    "prefixes": [
+      "038"
+    ]
   }
 ]
