@@ -20,7 +20,9 @@ U+17B6 .. U+17C5 : Dependent Vowel Signs (ស្រៈនិស្ស័យ, ill
 U+17C6 .. U+17D1 : Diacritics and Signs (illustrated with base ក/ប: កំ, កះ, កៈ, ប៉, ប៊, ក់, ករ៍, ក៍, ក៎, ក៏, ក័, ក៑)
 U+17D2          : Khmer Sign Coeng (ជើង - Subscript consonant prefix, e.g. ក្ក, ក្ខ)
 U+17D3          : Bathamasat (illustrated with base: ក៓ - Lunar calendar / divination sign)
-U+17D4 .. U+17D6 : Punctuation (Khan ៕, Bariyoosan ៚, Colon ៖)
+U+17D4          : Khan (។ - Standard sentence terminator)
+U+17D5          : Bariyoosan (៕ - Paragraph, chapter, or document terminator)
+U+17D6          : Camnuc Pii Kuuh (៖ - Colon / introductory mark)
 U+17D7          : Lek Too (ៗ - Repetition mark)
 U+17D8 .. U+17DA : Punctuation (Beyyal ៘, Phnaek Muan ៙, Koomuut ៚)
 U+17DB          : Khmer Currency Symbol Riel (៛)
@@ -41,6 +43,35 @@ $$\text{Subscript Consonant} = \text{U+17D2 (Coeng)} + \text{Base Consonant}$$
 
 > [!CRITICAL]
 > Never separate `U+17D2` from the consonant that follows it. Splitting this sequence destroys OpenType ligatures and produces broken rendering.
+
+### 1.3 Khmer Typographical Punctuation & Usage Rules
+
+Khmer utilizes dedicated punctuation marks that differ in spacing and semantics from Western punctuation:
+
+1. **Khan (`។` / `U+17D4`):**
+   - The primary sentence terminator in Khmer prose.
+   - **Spacing rule:** Preceded by no space; followed by a regular space before the next sentence.
+   - Example: `សូមបញ្ចូលលេខសម្ងាត់របស់អ្នក។ បន្ទាប់មកចុចបន្ត`
+
+2. **Bariyoosan (`៕` / `U+17D5`):**
+   - Marks the complete conclusion of a text, chapter, document, or official decree.
+   - Example: `...ដោយក្តីគោរពដ៏ខ្ពង់ខ្ពស់។ ភ្នំពេញ ថ្ងៃទី២០ ខែតុលា ឆ្នាំ២០២៦៕`
+
+3. **Camnuc Pii Kuuh / Colon (`៖` / `U+17D6`):**
+   - Introduces lists, quotations, or definitions. Preceded by no space; followed by a space.
+   - Example: `ព័ត៌មានលម្អិត៖ ឈ្មោះ, អ៊ីមែល, និងលេខទូរស័ព្ទ`
+
+4. **Lek Too / Repetition Mark (`ៗ` / `U+17D7`):**
+   - Reduplicates the preceding word or phrase. In UI copy, indicates frequency, multiplicity, or emphasis.
+   - **Spacing rule:** Preceded by a space; followed by a space.
+   - Example: `ញឹកញាប់` can be written `ញឹក ៗ` (frequently); `រាល់ ៗ ថ្ងៃ` (every day).
+
+5. **Beyyal / Et Cetera (`៘` / `U+17D8`):**
+   - Abbreviation sign for "and so forth" or "etc."
+   - Example: `កម្ពុជា ថៃ វៀតណាម ៘`
+
+> [!TIP]
+> A complete machine-readable dataset of Khmer punctuation and symbols is available at [`data/khmer_symbols.json`](../data/khmer_symbols.json).
 
 ---
 
