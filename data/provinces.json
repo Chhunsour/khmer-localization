@@ -5,5 +5,12 @@
     "name_km": "រាជធានីភ្នំពេញ",
     "type": "Autonomous Municipality",
     "districts": 14
+  },
+  {
+    "code": "KH-1",
+    "name_en": "Banteay Meanchey",
+    "name_km": "ខេត្តបន្ទាយមានជ័យ",
+    "type": "Province",
+    "districts": 9
   }
 ]
