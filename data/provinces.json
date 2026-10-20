@@ -47,5 +47,12 @@
     "name_km": "ខេត្តកំពង់ធំ",
     "type": "Province",
     "districts": 9
+  },
+  {
+    "code": "KH-7",
+    "name_en": "Kampot",
+    "name_km": "ខេត្តកំពត",
+    "type": "Province",
+    "districts": 9
   }
 ]
