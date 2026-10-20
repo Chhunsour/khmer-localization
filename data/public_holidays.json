@@ -61,5 +61,12 @@
     "month": 10,
     "day": 1,
     "type": "Religious"
+  },
+  {
+    "name_en": "King Father Norodom Sihanouk Memorial Day",
+    "name_km": "ទិវាប្រារព្ធពិធីគោរពព្រះវិញ្ញាណក្ខន្ធ ព្រះករុណា ព្រះបរមរតនកោដ្ឋ",
+    "month": 10,
+    "day": 15,
+    "type": "Memorial"
   }
 ]
