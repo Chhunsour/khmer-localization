@@ -131,5 +131,12 @@
     "name_km": "ខេត្តស្ទឹងត្រែង",
     "type": "Province",
     "districts": 6
+  },
+  {
+    "code": "KH-20",
+    "name_en": "Svay Rieng",
+    "name_km": "ខេត្តស្វាយរៀង",
+    "type": "Province",
+    "districts": 8
   }
 ]
