@@ -38,5 +38,13 @@
     "year": 2015,
     "color": "Brown",
     "front": "King Father Norodom Sihanouk, Spean Praptos"
+  },
+  {
+    "denomination": 10000,
+    "currency": "KHR",
+    "name_km": "១០,០០០ រៀល",
+    "year": 2015,
+    "color": "Blue",
+    "front": "King Norodom Sihamoni, Neak Pean Temple"
   }
 ]
