@@ -54,5 +54,12 @@
     "month": 5,
     "day": 14,
     "type": "Royal"
+  },
+  {
+    "name_en": "Pchum Ben Ancestor Festival",
+    "name_km": "ពិធីបុណ្យភ្ជុំបិណ្ឌ",
+    "month": 10,
+    "day": 1,
+    "type": "Religious"
   }
 ]
