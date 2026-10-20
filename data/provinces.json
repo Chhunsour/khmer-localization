@@ -68,5 +68,12 @@
     "name_km": "ខេត្តកោះកុង",
     "type": "Province",
     "districts": 7
+  },
+  {
+    "code": "KH-10",
+    "name_en": "Kratie",
+    "name_km": "ខេត្តក្រចេះ",
+    "type": "Province",
+    "districts": 7
   }
 ]
