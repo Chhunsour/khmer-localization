@@ -1,0 +1,66 @@
+[
+  {
+    "codepoint": "U+17D4",
+    "character": "។",
+    "name_km": "ខណ្ឌ",
+    "name_en": "Khan",
+    "type": "Punctuation",
+    "description": "Standard sentence terminator equivalent to a Latin period or full stop."
+  },
+  {
+    "codepoint": "U+17D5",
+    "character": "៕",
+    "name_km": "បរិយោសាន",
+    "name_en": "Bariyoosan",
+    "type": "Punctuation",
+    "description": "Terminal punctuation mark marking the complete end of a paragraph, story, chapter, or official text."
+  },
+  {
+    "codepoint": "U+17D6",
+    "character": "៖",
+    "name_km": "ចំណុចពីរគូស",
+    "name_en": "Camnuc Pii Kuuh (Colon)",
+    "type": "Punctuation",
+    "description": "Colon-like punctuation mark introducing an explanation, direct quotation, or enumerated list."
+  },
+  {
+    "codepoint": "U+17D7",
+    "character": "ៗ",
+    "name_km": "លេខទោ",
+    "name_en": "Lek Too (Repetition)",
+    "type": "Typographical Mark",
+    "description": "Reduplication mark indicating that the immediately preceding word or syllable is to be spoken or read twice."
+  },
+  {
+    "codepoint": "U+17D8",
+    "character": "៘",
+    "name_km": "បេយ្យាល",
+    "name_en": "Beyyal (Et Cetera)",
+    "type": "Abbreviation",
+    "description": "Abbreviation mark indicating omission of subsequent items in a list, equivalent to Latin 'etc.'."
+  },
+  {
+    "codepoint": "U+17D9",
+    "character": "៙",
+    "name_km": "ភ្នែកមាន់",
+    "name_en": "Phnaek Muan",
+    "type": "Classical Symbol",
+    "description": "Rooster's eye introductory mark used in classical, religious, or poetic literature."
+  },
+  {
+    "codepoint": "U+17DA",
+    "character": "៚",
+    "name_km": "គោមូត្រ",
+    "name_en": "Koomoot",
+    "type": "Classical Symbol",
+    "description": "Decorative closing sign placed at the very conclusion of a sacred or classical work."
+  },
+  {
+    "codepoint": "U+17DB",
+    "character": "៛",
+    "name_km": "សញ្ញារៀល",
+    "name_en": "Khmer Riel Currency Sign",
+    "type": "Currency Symbol",
+    "description": "Official national currency symbol of Cambodia for amounts denominated in Cambodian Riel (KHR)."
+  }
+]
