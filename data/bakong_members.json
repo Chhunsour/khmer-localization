@@ -46,5 +46,11 @@
     "name_en": "Chip Mong Commercial Bank Plc.",
     "name_km": "ធនាគារ ជីប ម៉ុង ភីអិលស៊ី",
     "type": "Commercial Bank"
+  },
+  {
+    "code": "FTB",
+    "name_en": "Foreign Trade Bank of Cambodia",
+    "name_km": "ធនាគារ ពាណិជ្ជកម្មក្រៅប្រទេស នៃកម្ពុជា",
+    "type": "Commercial Bank"
   }
 ]
