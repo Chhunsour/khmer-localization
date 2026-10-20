@@ -12,5 +12,12 @@
     "name_km": "ខេត្តបន្ទាយមានជ័យ",
     "type": "Province",
     "districts": 9
+  },
+  {
+    "code": "KH-2",
+    "name_en": "Battambang",
+    "name_km": "ខេត្តបាត់ដំបង",
+    "type": "Province",
+    "districts": 14
   }
 ]
