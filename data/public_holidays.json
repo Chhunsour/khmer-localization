@@ -68,5 +68,12 @@
     "month": 10,
     "day": 15,
     "type": "Memorial"
+  },
+  {
+    "name_en": "National Independence Day",
+    "name_km": "ពិធីបុណ្យឯករាជ្យជាតិ",
+    "month": 11,
+    "day": 9,
+    "type": "National"
   }
 ]
