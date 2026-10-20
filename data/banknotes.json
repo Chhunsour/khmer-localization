@@ -62,5 +62,13 @@
     "year": 2017,
     "color": "Orange",
     "front": "King Norodom Sihamoni, Banteay Srei"
+  },
+  {
+    "denomination": 30000,
+    "currency": "KHR",
+    "name_km": "៣០,០០០ រៀល",
+    "year": 2021,
+    "color": "Green/Purple",
+    "front": "Commemorating Paris Peace Agreements 30th Anniversary"
   }
 ]
