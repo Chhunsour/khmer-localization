@@ -52,5 +52,11 @@
     "name_en": "Foreign Trade Bank of Cambodia",
     "name_km": "ធនាគារ ពាណិជ្ជកម្មក្រៅប្រទេស នៃកម្ពុជា",
     "type": "Commercial Bank"
+  },
+  {
+    "code": "JTR",
+    "name_en": "J Trust Royal Bank",
+    "name_km": "ធនាគារ ជេ ត្រាស់ រ៉ូយ៉ាល់",
+    "type": "Commercial Bank"
   }
 ]
