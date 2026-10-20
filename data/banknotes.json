@@ -46,5 +46,13 @@
     "year": 2015,
     "color": "Blue",
     "front": "King Norodom Sihamoni, Neak Pean Temple"
+  },
+  {
+    "denomination": 15000,
+    "currency": "KHR",
+    "name_km": "១៥,០០០ រៀល",
+    "year": 2019,
+    "color": "Purple",
+    "front": "King Norodom Sihamoni 15th Coronation Anniversary"
   }
 ]
