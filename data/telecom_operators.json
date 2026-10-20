@@ -90,5 +90,12 @@
     "mcc_mnc": null,
     "network": "Subsea / Enterprise ISP",
     "prefixes": []
+  },
+  {
+    "name": "SINET",
+    "brand": "SINET",
+    "mcc_mnc": null,
+    "network": "Fiber IP Transit",
+    "prefixes": []
   }
 ]
