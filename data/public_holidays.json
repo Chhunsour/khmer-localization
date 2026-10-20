@@ -12,5 +12,12 @@
     "month": 1,
     "day": 7,
     "type": "National"
+  },
+  {
+    "name_en": "International Women's Day",
+    "name_km": "ទិវាអន្តរជាតិនារី",
+    "month": 3,
+    "day": 8,
+    "type": "International"
   }
 ]
