@@ -14,5 +14,13 @@
     "year": 2014,
     "color": "Red/Purple",
     "front": "King Norodom Sihamoni, Kizuna Bridge"
+  },
+  {
+    "denomination": 1000,
+    "currency": "KHR",
+    "name_km": "១,០០០ រៀល",
+    "year": 2016,
+    "color": "Blue",
+    "front": "King Father Norodom Sihanouk, Royal Palace"
   }
 ]
