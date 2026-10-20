@@ -1,0 +1,164 @@
+[
+  {
+    "key": "k",
+    "name": "Ka / Ko",
+    "normal_char": "ក",
+    "normal_codepoint": "U+1780",
+    "shift_char": "គ",
+    "shift_codepoint": "U+1782",
+    "series": "First / Second"
+  },
+  {
+    "key": "x",
+    "name": "Kha / Kho",
+    "normal_char": "ខ",
+    "normal_codepoint": "U+1781",
+    "shift_char": "ឃ",
+    "shift_codepoint": "U+1783",
+    "series": "First / Second"
+  },
+  {
+    "key": "g",
+    "name": "Ngo",
+    "normal_char": "ង",
+    "normal_codepoint": "U+1784",
+    "shift_char": null,
+    "shift_codepoint": null,
+    "series": "Second"
+  },
+  {
+    "key": "c",
+    "name": "Ca / Co",
+    "normal_char": "ច",
+    "normal_codepoint": "U+1785",
+    "shift_char": "ជ",
+    "shift_codepoint": "U+1787",
+    "series": "First / Second"
+  },
+  {
+    "key": "q",
+    "name": "Cha / Cho",
+    "normal_char": "ឆ",
+    "normal_codepoint": "U+1786",
+    "shift_char": "ឈ",
+    "shift_codepoint": "U+1788",
+    "series": "First / Second"
+  },
+  {
+    "key": "d",
+    "name": "Da / Do",
+    "normal_char": "ដ",
+    "normal_codepoint": "U+178F",
+    "shift_char": "ឌ",
+    "shift_codepoint": "U+1791",
+    "series": "First / Second"
+  },
+  {
+    "key": "t",
+    "name": "Ta / To",
+    "normal_char": "ត",
+    "normal_codepoint": "U+178F",
+    "shift_char": "ទ",
+    "shift_codepoint": "U+1791",
+    "series": "First / Second"
+  },
+  {
+    "key": "n",
+    "name": "Nna / No",
+    "normal_char": "ណ",
+    "normal_codepoint": "U+178E",
+    "shift_char": "ន",
+    "shift_codepoint": "U+1793",
+    "series": "First / Second"
+  },
+  {
+    "key": "b",
+    "name": "Ba / Po",
+    "normal_char": "ប",
+    "normal_codepoint": "U+1794",
+    "shift_char": "ព",
+    "shift_codepoint": "U+1796",
+    "series": "First / Second"
+  },
+  {
+    "key": "p",
+    "name": "Pha / Pho",
+    "normal_char": "ផ",
+    "normal_codepoint": "U+1795",
+    "shift_char": "ភ",
+    "shift_codepoint": "U+1797",
+    "series": "First / Second"
+  },
+  {
+    "key": "m",
+    "name": "Mo",
+    "normal_char": "ម",
+    "normal_codepoint": "U+1798",
+    "shift_char": null,
+    "shift_codepoint": "U+17C6",
+    "series": "Second"
+  },
+  {
+    "key": "y",
+    "name": "Yo",
+    "normal_char": "យ",
+    "normal_codepoint": "U+1799",
+    "shift_char": null,
+    "shift_codepoint": "U+17BD",
+    "series": "Second"
+  },
+  {
+    "key": "r",
+    "name": "Ro / Ry",
+    "normal_char": "រ",
+    "normal_codepoint": "U+179A",
+    "shift_char": "ឬ",
+    "shift_codepoint": "U+17AC",
+    "series": "Second / Independent"
+  },
+  {
+    "key": "l",
+    "name": "Lo / Ly",
+    "normal_char": "ល",
+    "normal_codepoint": "U+179B",
+    "shift_char": "ឮ",
+    "shift_codepoint": "U+17AE",
+    "series": "Second / Independent"
+  },
+  {
+    "key": "v",
+    "name": "Vo",
+    "normal_char": "វ",
+    "normal_codepoint": "U+179C",
+    "shift_char": null,
+    "shift_codepoint": "U+17DD",
+    "series": "Second"
+  },
+  {
+    "key": "s",
+    "name": "Sa",
+    "normal_char": "ស",
+    "normal_codepoint": "U+179F",
+    "shift_char": null,
+    "shift_codepoint": "U+17B8",
+    "series": "First"
+  },
+  {
+    "key": "h",
+    "name": "Ha",
+    "normal_char": "ហ",
+    "normal_codepoint": "U+17A0",
+    "shift_char": null,
+    "shift_codepoint": "U+17C7",
+    "series": "First"
+  },
+  {
+    "key": "j",
+    "name": "Coeng Subscript Prefix",
+    "normal_char": null,
+    "normal_codepoint": "U+17D2",
+    "shift_char": "ញ",
+    "shift_codepoint": "U+1789",
+    "series": "Subscript Control / Consonant"
+  }
+]
