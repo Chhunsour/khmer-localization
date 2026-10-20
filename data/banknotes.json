@@ -54,5 +54,13 @@
     "year": 2019,
     "color": "Purple",
     "front": "King Norodom Sihamoni 15th Coronation Anniversary"
+  },
+  {
+    "denomination": 20000,
+    "currency": "KHR",
+    "name_km": "២០,០០០ រៀល",
+    "year": 2017,
+    "color": "Orange",
+    "front": "King Norodom Sihamoni, Banteay Srei"
   }
 ]
