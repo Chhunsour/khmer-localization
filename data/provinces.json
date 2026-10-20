@@ -110,5 +110,12 @@
     "name_km": "ខេត្តរតនគិរី",
     "type": "Province",
     "districts": 9
+  },
+  {
+    "code": "KH-17",
+    "name_en": "Siem Reap",
+    "name_km": "ខេត្តសៀមរាប",
+    "type": "Province",
+    "districts": 13
   }
 ]
