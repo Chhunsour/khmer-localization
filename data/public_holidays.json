@@ -19,5 +19,12 @@
     "month": 3,
     "day": 8,
     "type": "International"
+  },
+  {
+    "name_en": "Khmer New Year Day 1 (Moha Sangkran)",
+    "name_km": "ពិធីបុណ្យចូលឆ្នាំថ្មី មហាសង្ក្រាន្ត",
+    "month": 4,
+    "day": 13,
+    "type": "Traditional"
   }
 ]
