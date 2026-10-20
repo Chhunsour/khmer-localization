@@ -104,5 +104,12 @@
     "mcc_mnc": null,
     "network": "Enterprise ISP",
     "prefixes": []
+  },
+  {
+    "name": "King Technologies",
+    "brand": "Opennet",
+    "mcc_mnc": null,
+    "network": "Broadband ISP",
+    "prefixes": []
   }
 ]
