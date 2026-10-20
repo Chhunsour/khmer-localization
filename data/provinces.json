@@ -117,5 +117,12 @@
     "name_km": "ខេត្តសៀមរាប",
     "type": "Province",
     "districts": 13
+  },
+  {
+    "code": "KH-18",
+    "name_en": "Preah Sihanouk",
+    "name_km": "ខេត្តព្រះសីហនុ",
+    "type": "Province",
+    "districts": 5
   }
 ]
