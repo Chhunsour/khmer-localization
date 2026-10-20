@@ -46,3 +46,15 @@ class TestDataCatalogIntegrity(unittest.TestCase):
         smart = next(o for o in operators if o["brand"] == "Smart")
         self.assertIn("010", smart["prefixes"])
 
+    def test_05_public_holidays_count_and_months(self):
+        """Verify statutory Cambodian public holidays and their calendar months."""
+        path = os.path.join(DATA_DIR, "public_holidays.json")
+        self.assertTrue(os.path.exists(path))
+        with open(path, "r", encoding="utf-8") as f:
+            holidays = json.load(f)
+        self.assertEqual(len(holidays), 12)
+        months = {h["month"] for h in holidays}
+        self.assertIn(1, months)
+        self.assertIn(4, months)
+        self.assertIn(11, months)
+
