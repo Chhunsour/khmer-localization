@@ -4,5 +4,11 @@
     "name_en": "National Bank of Cambodia",
     "name_km": "ធនាគារជាតិនៃកម្ពុជា",
     "type": "Central Bank"
+  },
+  {
+    "code": "ACLEDA",
+    "name_en": "ACLEDA Bank Plc.",
+    "name_km": "ធនាគារ អេស៊ីលីដា ភីអិលស៊ី",
+    "type": "Commercial Bank"
   }
 ]
