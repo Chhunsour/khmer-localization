@@ -75,5 +75,12 @@
     "month": 11,
     "day": 9,
     "type": "National"
+  },
+  {
+    "name_en": "Water and Moon Festival (Bon Om Touk)",
+    "name_km": "ព្រះរាជពិធីបុណ្យអុំទូក បណ្តែតប្រទីប និងសំពះព្រះខែ អកអំបុក",
+    "month": 11,
+    "day": 26,
+    "type": "Traditional"
   }
 ]
