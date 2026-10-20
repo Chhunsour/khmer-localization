@@ -188,3 +188,7 @@ When rendering a KHQR code on an e-commerce checkout page or physical payment te
    - Pending: `រង់ចាំការទូទាត់...` (Awaiting payment...)
    - Success: `ការទូទាត់ទទួលបានជោគជ័យ!` (Payment successful!)
    - Expired: `កូដ QR បានផុតកំណត់` (QR code has expired)
+
+
+> [!TIP]
+> A structured registry of key Bakong participant financial institutions is available at [`data/bakong_members.json`](../data/bakong_members.json).
