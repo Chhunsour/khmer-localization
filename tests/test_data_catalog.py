@@ -58,3 +58,15 @@ class TestDataCatalogIntegrity(unittest.TestCase):
         self.assertIn(4, months)
         self.assertIn(11, months)
 
+    def test_06_bakong_participant_members(self):
+        """Verify NBC Bakong participant financial institutions registry."""
+        path = os.path.join(DATA_DIR, "bakong_members.json")
+        self.assertTrue(os.path.exists(path))
+        with open(path, "r", encoding="utf-8") as f:
+            members = json.load(f)
+        self.assertEqual(len(members), 10)
+        codes = {m["code"] for m in members}
+        self.assertIn("NBC", codes)
+        self.assertIn("ABA", codes)
+        self.assertIn("ACLEDA", codes)
+
