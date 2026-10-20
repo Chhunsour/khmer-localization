@@ -26,5 +26,12 @@
     "month": 4,
     "day": 13,
     "type": "Traditional"
+  },
+  {
+    "name_en": "Khmer New Year Day 2 (Virak Vanabat)",
+    "name_km": "ពិធីបុណ្យចូលឆ្នាំថ្មី វារៈវ័នបត",
+    "month": 4,
+    "day": 14,
+    "type": "Traditional"
   }
 ]
