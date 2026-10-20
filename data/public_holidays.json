@@ -40,5 +40,12 @@
     "month": 4,
     "day": 15,
     "type": "Traditional"
+  },
+  {
+    "name_en": "International Labor Day",
+    "name_km": "ទិវាពលកម្មអន្តរជាតិ",
+    "month": 5,
+    "day": 1,
+    "type": "International"
   }
 ]
