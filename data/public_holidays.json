@@ -33,5 +33,12 @@
     "month": 4,
     "day": 14,
     "type": "Traditional"
+  },
+  {
+    "name_en": "Khmer New Year Day 3 (Virak Loeung Sak)",
+    "name_km": "ពិធីបុណ្យចូលឆ្នាំថ្មី វារៈឡើងស័ក",
+    "month": 4,
+    "day": 15,
+    "type": "Traditional"
   }
 ]
