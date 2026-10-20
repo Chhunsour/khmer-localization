@@ -40,5 +40,12 @@
     "name_km": "ខេត្តកំពង់ស្ពឺ",
     "type": "Province",
     "districts": 9
+  },
+  {
+    "code": "KH-6",
+    "name_en": "Kampong Thom",
+    "name_km": "ខេត្តកំពង់ធំ",
+    "type": "Province",
+    "districts": 9
   }
 ]
