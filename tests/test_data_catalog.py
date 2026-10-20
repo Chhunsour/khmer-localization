@@ -25,3 +25,14 @@ class TestDataCatalogIntegrity(unittest.TestCase):
         for p in provinces:
             self.assertTrue(p["name_km"].startswith("ខេត្ត") or p["name_km"].startswith("រាជធានី"))
 
+    def test_03_banknote_denominations_validity(self):
+        """Verify all 11 active Cambodian Riel (KHR) banknote denominations are registered."""
+        path = os.path.join(DATA_DIR, "banknotes.json")
+        self.assertTrue(os.path.exists(path))
+        with open(path, "r", encoding="utf-8") as f:
+            notes = json.load(f)
+        self.assertEqual(len(notes), 11)
+        denominations = [n["denomination"] for n in notes]
+        self.assertIn(100, denominations)
+        self.assertIn(100000, denominations)
+
