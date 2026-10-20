@@ -339,6 +339,59 @@ def verify_khqr(khqr_string: str) -> Tuple[bool, Optional[str]]:
     return True, None
 
 
+# --- Text and Character Utilities ---
+
+def is_khmer_text(text: str) -> bool:
+    """
+    Check if the string contains any Khmer Unicode characters.
+    Covers the primary Khmer block (U+1780..U+17FF) and Khmer Symbols (U+19E0..U+19FF).
+    """
+    if not text:
+        return False
+    return any(0x1780 <= ord(c) <= 0x17FF or 0x19E0 <= ord(c) <= 0x19FF for c in text)
+
+
+def get_khmer_character_stats(text: str) -> dict:
+    """
+    Analyze text and return counts of Khmer script structural components:
+    consonants, independent vowels, dependent vowels, Coeng markers, diacritics, digits, and symbols.
+    """
+    stats = {
+        "total_khmer": 0,
+        "consonants": 0,
+        "independent_vowels": 0,
+        "dependent_vowels": 0,
+        "coeng_subscripts": 0,
+        "diacritics": 0,
+        "digits": 0,
+        "symbols": 0,
+    }
+    for ch in text:
+        cp = ord(ch)
+        if 0x1780 <= cp <= 0x17A2:
+            stats["consonants"] += 1
+            stats["total_khmer"] += 1
+        elif 0x17A3 <= cp <= 0x17B3:
+            stats["independent_vowels"] += 1
+            stats["total_khmer"] += 1
+        elif 0x17B6 <= cp <= 0x17C5:
+            stats["dependent_vowels"] += 1
+            stats["total_khmer"] += 1
+        elif cp == 0x17D2:
+            stats["coeng_subscripts"] += 1
+            stats["total_khmer"] += 1
+        elif (0x17C6 <= cp <= 0x17D1) or cp == 0x17DD:
+            stats["diacritics"] += 1
+            stats["total_khmer"] += 1
+        elif 0x17E0 <= cp <= 0x17E9:
+            stats["digits"] += 1
+            stats["total_khmer"] += 1
+        elif (0x17D4 <= cp <= 0x17DA) or cp == 0x17DB:
+            stats["symbols"] += 1
+            stats["total_khmer"] += 1
+    return stats
+
+
 # --- CLI Interface ---
 
 def main() -> int:
@@ -372,6 +425,10 @@ def main() -> int:
     crc_p = subparsers.add_parser("khqr-crc", help="Compute CRC16 for a KHQR payload")
     crc_p.add_argument("payload", help="Payload ending with '6304'")
 
+    # stats command
+    stats_p = subparsers.add_parser("stats", help="Analyze Khmer text character statistics")
+    stats_p.add_argument("text", help="Khmer string to analyze")
+
     args = parser.parse_args()
 
     if args.command == "phone":
@@ -402,6 +459,12 @@ def main() -> int:
         crc = calculate_khqr_crc16(args.payload)
         print(f"Computed CRC16: {crc}")
         print(f"Full KHQR: {args.payload}{crc}")
+        return 0
+
+    if args.command == "stats":
+        stats = get_khmer_character_stats(args.text)
+        stats["is_khmer"] = is_khmer_text(args.text)
+        print(json.dumps(stats, indent=2, ensure_ascii=False))
         return 0
 
     return 0
