@@ -83,5 +83,12 @@
     "prefixes": [
       "023"
     ]
+  },
+  {
+    "name": "Telcotech",
+    "brand": "Ezecom",
+    "mcc_mnc": null,
+    "network": "Subsea / Enterprise ISP",
+    "prefixes": []
   }
 ]
