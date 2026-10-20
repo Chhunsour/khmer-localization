@@ -166,5 +166,12 @@
     "name_km": "ខេត្តប៉ៃលិន",
     "type": "Province",
     "districts": 2
+  },
+  {
+    "code": "KH-25",
+    "name_en": "Tboung Khmum",
+    "name_km": "ខេត្តត្បូងឃ្មុំ",
+    "type": "Province",
+    "districts": 7
   }
 ]
