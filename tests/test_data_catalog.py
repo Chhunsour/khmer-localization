@@ -36,3 +36,13 @@ class TestDataCatalogIntegrity(unittest.TestCase):
         self.assertIn(100, denominations)
         self.assertIn(100000, denominations)
 
+    def test_04_telecom_operators_and_prefixes(self):
+        """Verify major Cambodian telecommunication and internet service providers."""
+        path = os.path.join(DATA_DIR, "telecom_operators.json")
+        self.assertTrue(os.path.exists(path))
+        with open(path, "r", encoding="utf-8") as f:
+            operators = json.load(f)
+        self.assertEqual(len(operators), 10)
+        smart = next(o for o in operators if o["brand"] == "Smart")
+        self.assertIn("010", smart["prefixes"])
+
