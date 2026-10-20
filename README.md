@@ -1,7 +1,7 @@
 # Khmer Localization (`khmer-localization`) — Production AI Agent Skill for Cambodian Software Engineering
 
 [![Tests](https://github.com/Chhunsour/khmer-localization/actions/workflows/tests.yml/badge.svg)](https://github.com/Chhunsour/khmer-localization/actions)
-[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-83%20Passed-brightgreen.svg)](#testing--quality-assurance)
+[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-85%20Passed-brightgreen.svg)](#testing--quality-assurance)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10+-green.svg)](https://www.python.org/)
 [![Agent Skills Standard](https://img.shields.io/badge/Standard-Agent%20Skills-purple.svg)](https://agentskills.org)
@@ -419,6 +419,8 @@ The repository includes curated, zero-dependency offline JSON datasets for Cambo
 - **`data/telecom_operators.json`**: Cambodian telecommunication network operators, ITU-T MCC-MNC codes, and TRC prefixes.
 - **`data/public_holidays.json`**: Cambodian statutory national public holidays with bilingual names and types.
 - **`data/bakong_members.json`**: National Bank of Cambodia Bakong participant commercial banks and microfinance institutions.
+- **`data/khmer_symbols.json`**: Unicode codepoints, names, and typographical usage rules for Khmer punctuation marks (។, ៕, ៖, ៗ, ៘, ៚, ៛).
+- **`data/khmer_keyboard.json`**: Standard NiDA / Khmer OS keyboard layout key mapping for 33 consonants and subscripts.
 
 ---
 
@@ -526,9 +528,9 @@ Run the comprehensive, zero-dependency offline test suite:
 python3 -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-All **83 automated tests** run deterministically in ~1 second:
+All **85 automated tests** run deterministically in ~1 second:
 - `tests/test_check_khmer_unicode.py` (20 tests): Replacement character detection, C0/C1 control codes, ZWSP preservation, orphaned marks, trailing Coeng, and JSON CLI reporting.
-- `tests/test_khmer_utils.py` (22 tests): Reusable Python library verification: phone normalization, currency formatting, dates/BE, safe truncation, number-to-words, and Bakong KHQR CRC16 checksums.
+- `tests/test_khmer_utils.py` (24 tests): Reusable Python library verification: phone normalization, currency formatting, dates/BE, safe truncation, number-to-words, text detection, character statistics, and Bakong KHQR CRC16 checksums.
 - `tests/test_data_catalog.py` (6 tests): Automated integrity verification of offline JSON datasets: 25 ISO 3166-2:KH provinces, 11 banknote denominations, 10 telecom operators, 12 public holidays, and 10 Bakong members.
 - `tests/test_currency_formatting.py` (12 tests): KHR explicit whole-riel formatting, ISO 4217 runtime defaults, rounding of fractional amounts, multi-billion amounts, and live Node.js `Intl.NumberFormat` tests.
 - `tests/test_date_and_formatting.py` (15 tests): Khmer month names, Buddhist Era calculation ($\text{BE} = \text{CE} + 543$), relative time formatting, grapheme cluster text truncation, and live Node.js `Intl.DateTimeFormat` / `Intl.Segmenter` tests.

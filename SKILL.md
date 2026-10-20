@@ -29,6 +29,8 @@ When generating code, lookup forms, or data schemas, consult the offline JSON ca
 - `data/telecom_operators.json`: Cambodian mobile operators, TRC prefixes, and MCC-MNC codes.
 - `data/public_holidays.json`: Cambodian national public holidays with bilingual titles.
 - `data/bakong_members.json`: Key NBC Bakong participant banks and financial institutions.
+- `data/khmer_symbols.json`: Khmer punctuation and typographical symbols (Khan, Bariyoosan, Lek Too).
+- `data/khmer_keyboard.json`: NiDA standard keyboard character layout and key mappings.
 
 ---
 
