@@ -33,5 +33,12 @@
     "name_km": "ខេត្តកំពង់ឆ្នាំង",
     "type": "Province",
     "districts": 8
+  },
+  {
+    "code": "KH-5",
+    "name_en": "Kampong Speu",
+    "name_km": "ខេត្តកំពង់ស្ពឺ",
+    "type": "Province",
+    "districts": 9
   }
 ]
