@@ -82,5 +82,12 @@
     "name_km": "ខេត្តមណ្ឌលគិរី",
     "type": "Province",
     "districts": 5
+  },
+  {
+    "code": "KH-13",
+    "name_en": "Preah Vihear",
+    "name_km": "ខេត្តព្រះវិហារ",
+    "type": "Province",
+    "districts": 8
   }
 ]
