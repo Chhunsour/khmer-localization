@@ -138,5 +138,12 @@
     "name_km": "ខេត្តស្វាយរៀង",
     "type": "Province",
     "districts": 8
+  },
+  {
+    "code": "KH-21",
+    "name_en": "Takeo",
+    "name_km": "ខេត្តតាកែវ",
+    "type": "Province",
+    "districts": 10
   }
 ]
