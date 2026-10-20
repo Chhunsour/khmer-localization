@@ -17,3 +17,11 @@ class TestDataCatalogIntegrity(unittest.TestCase):
         self.assertIn("KH-12", codes)
         self.assertIn("KH-17", codes)
 
+    def test_02_provinces_khmer_script_presence(self):
+        """Ensure all administrative divisions include valid native Khmer script names."""
+        path = os.path.join(DATA_DIR, "provinces.json")
+        with open(path, "r", encoding="utf-8") as f:
+            provinces = json.load(f)
+        for p in provinces:
+            self.assertTrue(p["name_km"].startswith("ខេត្ត") or p["name_km"].startswith("រាជធានី"))
+
