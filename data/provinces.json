@@ -75,5 +75,12 @@
     "name_km": "ខេត្តក្រចេះ",
     "type": "Province",
     "districts": 7
+  },
+  {
+    "code": "KH-11",
+    "name_en": "Mondulkiri",
+    "name_km": "ខេត្តមណ្ឌលគិរី",
+    "type": "Province",
+    "districts": 5
   }
 ]
