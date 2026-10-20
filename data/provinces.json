@@ -89,5 +89,12 @@
     "name_km": "ខេត្តព្រះវិហារ",
     "type": "Province",
     "districts": 8
+  },
+  {
+    "code": "KH-14",
+    "name_en": "Prey Veng",
+    "name_km": "ខេត្តព្រៃវែង",
+    "type": "Province",
+    "districts": 13
   }
 ]
