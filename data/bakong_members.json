@@ -10,5 +10,11 @@
     "name_en": "ACLEDA Bank Plc.",
     "name_km": "ធនាគារ អេស៊ីលីដា ភីអិលស៊ី",
     "type": "Commercial Bank"
+  },
+  {
+    "code": "ABA",
+    "name_en": "Advanced Bank of Asia Ltd.",
+    "name_km": "ធនាគារ អេប៊ីអេ",
+    "type": "Commercial Bank"
   }
 ]
