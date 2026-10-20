@@ -118,3 +118,7 @@ export interface CambodianAddress {
 1. **Provide Cascading Dropdowns:** Start with Province/City $\rightarrow$ Filter District/Khan $\rightarrow$ Filter Sangkat/Commune.
 2. **Include Landmark / Directions Field:** "Near Central Market", "Opposite Calmette Hospital", etc. Domestic couriers rely heavily on visual landmarks.
 3. **Primary Phone is the Delivery Anchor:** In Cambodia, couriers always phone the customer before delivery. Ensure the phone number input validates standard Cambodian formats (`0xx xxx xxx` or `0xx xxx xxxx`).
+
+
+> [!TIP]
+> A machine-readable JSON dataset containing all 25 divisions is available at [`data/provinces.json`](../data/provinces.json).
