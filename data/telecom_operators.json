@@ -97,5 +97,12 @@
     "mcc_mnc": null,
     "network": "Fiber IP Transit",
     "prefixes": []
+  },
+  {
+    "name": "Angkor Data Communication",
+    "brand": "MekongNet",
+    "mcc_mnc": null,
+    "network": "Enterprise ISP",
+    "prefixes": []
   }
 ]
