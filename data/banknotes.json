@@ -22,5 +22,13 @@
     "year": 2016,
     "color": "Blue",
     "front": "King Father Norodom Sihanouk, Royal Palace"
+  },
+  {
+    "denomination": 2000,
+    "currency": "KHR",
+    "name_km": "២,០០០ រៀល",
+    "year": 2013,
+    "color": "Green",
+    "front": "Prasat Preah Vihear, Ancient Artifacts"
   }
 ]
