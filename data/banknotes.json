@@ -78,5 +78,13 @@
     "year": 2013,
     "color": "Brown/Khaki",
     "front": "King Father Norodom Sihanouk, Koh Ker Temple"
+  },
+  {
+    "denomination": 100000,
+    "currency": "KHR",
+    "name_km": "១០០,០០០ រៀល",
+    "year": 2012,
+    "color": "Green/Blue",
+    "front": "King Father Norodom Sihanouk and Queen Mother Monineath"
   }
 ]
