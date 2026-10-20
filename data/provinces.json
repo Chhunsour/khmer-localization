@@ -145,5 +145,12 @@
     "name_km": "ខេត្តតាកែវ",
     "type": "Province",
     "districts": 10
+  },
+  {
+    "code": "KH-22",
+    "name_en": "Oddar Meanchey",
+    "name_km": "ខេត្តឧត្តរមានជ័យ",
+    "type": "Province",
+    "districts": 5
   }
 ]
