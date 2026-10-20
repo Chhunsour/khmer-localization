@@ -56,5 +56,14 @@
       "090",
       "097"
     ]
+  },
+  {
+    "name": "Southeast Asia Telecom",
+    "brand": "Seatel",
+    "mcc_mnc": "456-09",
+    "network": "4G/VoLTE",
+    "prefixes": [
+      "018"
+    ]
   }
 ]
