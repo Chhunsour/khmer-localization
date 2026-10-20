@@ -24,7 +24,9 @@ from scripts.khmer_utils import (
     format_khmer_date,
     format_khmer_relative_time,
     format_usd,
+    get_khmer_character_stats,
     integer_to_khmer_words,
+    is_khmer_text,
     normalize_cambodian_phone,
     safe_truncate_khmer,
     to_buddhist_era,
@@ -176,6 +178,22 @@ class TestBakongKhqrCrc16(unittest.TestCase):
         is_valid, err = verify_khqr(tampered)
         self.assertFalse(is_valid)
         self.assertIn("CRC mismatch", err)
+
+
+class TestKhmerTextDetection(unittest.TestCase):
+    def test_is_khmer_text_detection(self):
+        self.assertTrue(is_khmer_text("សួស្តី"))
+        self.assertTrue(is_khmer_text("Hello សួស្តី World"))
+        self.assertTrue(is_khmer_text("៛"))
+        self.assertFalse(is_khmer_text("Hello World 123!"))
+        self.assertFalse(is_khmer_text(""))
+
+    def test_get_khmer_character_stats(self):
+        stats = get_khmer_character_stats("សួស្តី")
+        self.assertEqual(stats["total_khmer"], 6)
+        self.assertEqual(stats["consonants"], 3) # ស, ស, ដ
+        self.assertEqual(stats["coeng_subscripts"], 1) # Coeng
+        self.assertEqual(stats["dependent_vowels"], 2)  # U+17BD, U+17B8
 
 
 if __name__ == "__main__":
