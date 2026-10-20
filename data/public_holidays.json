@@ -47,5 +47,12 @@
     "month": 5,
     "day": 1,
     "type": "International"
+  },
+  {
+    "name_en": "King Norodom Sihamoni Birthday",
+    "name_km": "ព្រះរាជពិធីបុណ្យចម្រើនព្រះជន្ម ព្រះករុណា ព្រះបាទសម្តេច ព្រះបរមនាថ នរោត្តម សីហមុនី",
+    "month": 5,
+    "day": 14,
+    "type": "Royal"
   }
 ]
