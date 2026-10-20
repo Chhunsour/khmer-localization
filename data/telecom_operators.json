@@ -74,5 +74,14 @@
     "prefixes": [
       "038"
     ]
+  },
+  {
+    "name": "Telecom Cambodia",
+    "brand": "TC",
+    "mcc_mnc": "456-02",
+    "network": "Fixed/Transit",
+    "prefixes": [
+      "023"
+    ]
   }
 ]
