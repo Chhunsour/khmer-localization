@@ -54,5 +54,12 @@
     "name_km": "ខេត្តកំពត",
     "type": "Province",
     "districts": 9
+  },
+  {
+    "code": "KH-8",
+    "name_en": "Kandal",
+    "name_km": "ខេត្តកណ្តាល",
+    "type": "Province",
+    "districts": 13
   }
 ]
