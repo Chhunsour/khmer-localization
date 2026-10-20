@@ -152,5 +152,12 @@
     "name_km": "ខេត្តឧត្តរមានជ័យ",
     "type": "Province",
     "districts": 5
+  },
+  {
+    "code": "KH-23",
+    "name_en": "Kep",
+    "name_km": "ខេត្តកែប",
+    "type": "Province",
+    "districts": 2
   }
 ]
