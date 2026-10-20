@@ -21,6 +21,17 @@ It provides actionable procedures, battle-tested code patterns, and automated ve
 
 ---
 
+## Machine-Readable Data Catalogs (`data/`)
+
+When generating code, lookup forms, or data schemas, consult the offline JSON catalogs in `data/`:
+- `data/provinces.json`: All 25 ISO 3166-2:KH administrative divisions with Khmer script names.
+- `data/banknotes.json`: 11 Cambodian Riel banknote denominations with Khmer script names.
+- `data/telecom_operators.json`: Cambodian mobile operators, TRC prefixes, and MCC-MNC codes.
+- `data/public_holidays.json`: Cambodian national public holidays with bilingual titles.
+- `data/bakong_members.json`: Key NBC Bakong participant banks and financial institutions.
+
+---
+
 ## Agent Quick-Routing Matrix
 
 When a user prompt involves Cambodian localization, consult this direct lookup table:
