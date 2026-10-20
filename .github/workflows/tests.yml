@@ -29,6 +29,7 @@ jobs:
     - name: Verify CLI --help output
       run: |
         python scripts/check_khmer_unicode.py --help
+        python scripts/khmer_utils.py --help
 
     - name: Run Unicode integrity check on repository
       run: |

@@ -370,3 +370,10 @@ export function formatKhmerRelativeTime(diffSeconds: number): string {
 | **Payment Status: Pending** | ស្ថានភាព៖ កំពុងដំណើរការ | In-flight authorization badge |
 | **Payment Status: Failed** | ស្ថានភាព៖ មិនជោគជ័យ | Terminal decline badge |
 
+> [!TIP]
+> **Deep-Dive Specialized References:**
+> - For full EMVCo TLV tag mappings, payload structure, and CRC16 checksum algorithms, see [Khmer Fintech & Bakong KHQR](./khmer-fintech-and-khqr.md).
+> - For Cambodian administrative hierarchy (Provinces, Khans, Sangkats, Villages) and address forms, see [Cambodian Administrative Divisions](./cambodia-administrative-divisions.md).
+> - For Khmer alphabetical dictionary sorting and number-to-words currency spellouts, see [Khmer Collation & Number-to-Words](./khmer-collation-and-number-words.md).
+
+

@@ -1,6 +1,7 @@
 # Khmer Localization (`khmer-localization`) — Production AI Agent Skill for Cambodian Software Engineering
 
 [![Tests](https://github.com/Chhunsour/khmer-localization/actions/workflows/tests.yml/badge.svg)](https://github.com/Chhunsour/khmer-localization/actions)
+[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-77%20Passed-brightgreen.svg)](#testing--quality-assurance)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10+-green.svg)](https://www.python.org/)
 [![Agent Skills Standard](https://img.shields.io/badge/Standard-Agent%20Skills-purple.svg)](https://agentskills.org)
@@ -24,11 +25,15 @@ The definitive open-source **Agent Skill** for AI coding assistants (**Google An
   - [1. Khmer Unicode Integrity & OpenType Typography](#1-khmer-unicode-integrity--opentype-typography)
   - [2. Modern Digital Tech Microcopy & Register Control](#2-modern-digital-tech-microcopy--register-control)
   - [3. Cambodian Phone Number Engineering (+855)](#3-cambodian-phone-number-engineering-855)
-  - [4. Dual-Currency Economics (USD & KHR) & Bakong KHQR](#4-dual-currency-economics-usd--khr--bakong-khqr)
-  - [5. Cambodian Calendar, Dates, Times & Buddhist Era (BE)](#5-cambodian-calendar-dates-times--buddhist-era-be)
-  - [6. Mobile Responsive UX & Zero-Width Word Breaking](#6-mobile-responsive-ux--zero-width-word-breaking)
+  - [4. Dual-Currency Economics (USD & KHR)](#4-dual-currency-economics-usd--khr)
+  - [5. Bakong KHQR EMVCo Fintech Standards & CRC16](#5-bakong-khqr-emvco-fintech-standards--crc16)
+  - [6. Cambodian Administrative Hierarchy & Addresses](#6-cambodian-administrative-hierarchy--addresses)
+  - [7. Cambodian Calendar, Dates, Times & Buddhist Era (BE)](#7-cambodian-calendar-dates-times--buddhist-era-be)
+  - [8. Khmer Alphabetical Collation & GDT Number-to-Words](#8-khmer-alphabetical-collation--gdt-number-to-words)
+  - [9. Mobile Responsive UX & Zero-Width Word Breaking](#9-mobile-responsive-ux--zero-width-word-breaking)
 - [Production Framework Integration Recipes](#production-framework-integration-recipes)
-- [Static Unicode & UTF-8 Audit Tool](#static-unicode--utf-8-audit-tool)
+- [Python Utility Module (`scripts/khmer_utils.py`)](#python-utility-module-scriptskhmer_utilspy)
+- [Static Unicode & UTF-8 Audit Tool (`scripts/check_khmer_unicode.py`)](#static-unicode--utf-8-audit-tool-scriptscheck_khmer_unicodepy)
 - [Installation by Agent Platform](#installation-by-agent-platform)
 - [Frequently Asked Questions (FAQ) for Search & Answer Engines](#frequently-asked-questions-faq-for-search--answer-engines)
 - [Authoritative Regulatory & Standards Citations](#authoritative-regulatory--standards-citations)
@@ -44,7 +49,9 @@ Engineering software for the Cambodian market presents unique internationalizati
 - **No Inherent Word Delimiters:** Khmer is written without visible spaces between words. Web browsers without dictionary-based line breakers either overflow containers or break words mid-syllable unless soft break opportunities (Zero-Width Space `\u200B` / ZWSP) are injected.
 - **Dual-Currency Circulation:** Daily commerce in Cambodia operates simultaneously in **Cambodian Riel (KHR / ៛)** and **United States Dollars (USD / $)**. Standard ECMAScript / ICU implementations of `Intl.NumberFormat` mistakenly format KHR with two decimal places (`25,000.00៛`) by default, requiring explicit whole-riel configuration.
 - **Unique Telecommunications Plan:** The Telecommunication Regulator of Cambodia (TRC) and ITU-T Recommendation E.164 mandate closed 8-digit and extended 9-digit National Significant Numbers (NSN) under country calling code `+855`.
-- **National QR Payment System (Bakong KHQR):** The National Bank of Cambodia (NBC) operates a universal EMVCo-compliant payment rail requiring precise bilingual labeling and currency isolation.
+- **National QR Payment System (Bakong KHQR):** The National Bank of Cambodia (NBC) operates a universal EMVCo-compliant payment rail requiring precise bilingual labeling, currency isolation, and CRC16 checksum calculation.
+- **4-Tier Administrative Divisions:** Addressing follows a distinct structure: Province/Capital (`រាជធានី-ខេត្ត`) $\rightarrow$ District/Khan (`ស្រុក/ខណ្ឌ/ក្រុង`) $\rightarrow$ Commune/Sangkat (`ឃុំ/សង្កាត់`) $\rightarrow$ Village (`ភូមិ`).
+- **GDT Tax Invoice Compliance:** Tax authorities require official invoices to spell out numbers in Khmer words (`ពីរម៉ឺនប្រាំពាន់រៀលគត់`).
 - **AI Register Hallucinations:** Large language models frequently hallucinate archaic royal vocabulary (*Reachasap* / រាជសព្ទ) or Buddhist monk vocabulary (*Sanghasap* / សង្ឃសព្ទ) when asked for standard user interface copy.
 
 `khmer-localization` solves these challenges comprehensively by providing deterministic rules, verified code templates, and automated auditing scripts directly into your AI assistant's context.
@@ -60,11 +67,15 @@ For AI coding agents (Claude, Codex, Gemini, Antigravity), use this lookup matri
 | **Translate or review UI copy** | Use natural, active tech verbs (`ចូល`, `ដាក់ស្នើ`, `ចុះឈ្មោះ`); eliminate royal/monk vocabulary. | [Khmer Writing Guide](./references/khmer-writing-guide.md) |
 | **Cambodian phone input (+855)** | Use `normalizeCambodianPhone` (8/9-digit NSN; decouple prefix tables; preserve OTP boundary). | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
 | **Currency formatting (KHR / USD)** | Configure `{ minimumFractionDigits: 0, maximumFractionDigits: 0 }` for whole-riel prices. | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
-| **QR Payments / Fintech (KHQR)** | Explicitly specify currency (`KHR` vs `USD`), recipient name, and whole riel display. | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
+| **QR Payments / Fintech (KHQR)** | Generate EMVCo TLV payload, currency 116 (KHR) or 840 (USD), compute CRC16. | [Khmer Fintech & KHQR](./references/khmer-fintech-and-khqr.md) |
+| **Addresses & delivery forms** | Model 4-tier hierarchy: Province (`រាជធានី/ខេត្ត`) $\rightarrow$ District $\rightarrow$ Sangkat $\rightarrow$ Village. | [Administrative Divisions](./references/cambodia-administrative-divisions.md) |
+| **Number to Khmer words (Invoices)** | Convert amounts to formal Khmer currency words (`ពីរម៉ឺនប្រាំពាន់រៀលគត់`) for GDT. | [Collation & Number Words](./references/khmer-collation-and-number-words.md) |
+| **Khmer alphabetical sorting** | Use `Intl.Collator("km-KH", { sensitivity: "base" })` per Chuon Nath dictionary order. | [Collation & Number Words](./references/khmer-collation-and-number-words.md) |
 | **Dates, Calendars & Buddhist Era** | Use solar months (មករា..ធ្នូ), day-first format `DD/MM/YYYY`, $\text{BE} = \text{CE} + 543$. | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
 | **Diacritic clipping on mobile** | Apply CSS `line-height: 1.6`–`1.8`, `min-h-[44px]`, `includeFontPadding: false` (Android). | [Unicode & Typography](./references/unicode-and-typography.md) |
 | **Word breaking / container overflow** | Use `insertKhmerWordBreaks` with `Intl.Segmenter` + CSS `overflow-wrap: break-word`. | [Unicode & Typography](./references/unicode-and-typography.md) |
 | **String truncation & dotted circles** | Truncate grapheme clusters with `Intl.Segmenter` (never slice after Coeng `U+17D2`). | [Unicode & Typography](./references/unicode-and-typography.md) |
+| **Python utility library** | Import `normalize_cambodian_phone`, `format_khr`, `number_to_khmer_words`, `crc16`. | [Khmer Utils Module](./scripts/khmer_utils.py) |
 | **Static code check / CI gate** | Run `python3 scripts/check_khmer_unicode.py --strict --json <path>` | [Checker Script](./scripts/check_khmer_unicode.py) |
 
 ---
@@ -112,10 +123,6 @@ $$\text{Subscript Consonant} = \text{U+17D2 (Coeng)} + \text{Base Consonant}$$
 
 #### Safe Grapheme Cluster Truncation
 ```typescript
-/**
- * Safely truncates Khmer text at visual grapheme cluster boundaries,
- * preventing orphaned Coeng signs and dotted circle (U+25CC) defects.
- */
 export function safeTruncateKhmer(text: string, maxGraphemes: number): string {
   if (!text) return "";
   const segmenter = new Intl.Segmenter("km", { granularity: "grapheme" });
@@ -155,31 +162,7 @@ Under ITU-T Recommendation E.164 and the Telecommunication Regulator of Cambodia
 
 #### Normalization Implementation
 ```typescript
-export interface PhoneNormalizationResult {
-  raw: string;
-  nsn: string | null;                  // 8 or 9 digits
-  normalizedE164: string | null;       // +855...
-  normalizedDomestic: string | null;   // 0...
-  isValidSyntax: boolean;
-  lengthCategory: "8_digits" | "9_digits" | "invalid";
-  requiresOtpVerification: true;      // Explicit boundary flag
-  isActiveSim: false;                  // Syntax check NEVER confirms active status
-}
-
 export function normalizeCambodianPhone(input: string): PhoneNormalizationResult {
-  const result: PhoneNormalizationResult = {
-    raw: input,
-    nsn: null,
-    normalizedE164: null,
-    normalizedDomestic: null,
-    isValidSyntax: false,
-    lengthCategory: "invalid",
-    requiresOtpVerification: true,
-    isActiveSim: false,
-  };
-
-  if (!input) return result;
-
   // 1. Strip symbols and normalize Khmer numerals (០-៩) to ASCII
   let cleaned = input.replace(/[\s\-\(\)\.]+/g, "");
   cleaned = cleaned.replace(/[\u17E0-\u17E9]/g, (ch) => String(ch.charCodeAt(0) - 0x17E0));
@@ -192,51 +175,32 @@ export function normalizeCambodianPhone(input: string): PhoneNormalizationResult
   else if (nationalNumber.startsWith("0")) nationalNumber = nationalNumber.slice(1);
 
   if (nationalNumber.startsWith("0")) nationalNumber = nationalNumber.slice(1);
+  if (!/^\d+$/.test(nationalNumber)) return { isValidSyntax: false, ... };
 
-  if (!/^\d+$/.test(nationalNumber)) return result;
+  // 3. Length verification (8 digits standard, 9 digits extended mobile)
+  const is8 = nationalNumber.length === 8;
+  const is9 = nationalNumber.length === 9;
+  if (!is8 && !is9) return { isValidSyntax: false, ... };
 
-  // 3. Length verification (TRC closed numbering architecture)
-  if (nationalNumber.length === 8) {
-    result.lengthCategory = "8_digits";
-  } else if (nationalNumber.length === 9) {
-    result.lengthCategory = "9_digits";
-  } else {
-    return result;
-  }
-
-  result.nsn = nationalNumber;
-  result.normalizedE164 = `+855${nationalNumber}`;
-  result.normalizedDomestic = `0${nationalNumber}`;
-  result.isValidSyntax = true;
-  return result;
+  return {
+    nsn: nationalNumber,
+    normalizedE164: `+855${nationalNumber}`,
+    normalizedDomestic: `0${nationalNumber}`,
+    isValidSyntax: true,
+    requiresOtpVerification: true,
+    isActiveSim: false,
+  };
 }
 ```
 
 ---
 
-### 4. Dual-Currency Economics (USD & KHR) & Bakong KHQR
+### 4. Dual-Currency Economics (USD & KHR)
 
 Cambodia operates a dual-currency financial economy:
 - **Cambodian Riel (KHR / ៛):** Circulates without physical coins/cents. The smallest banknote is 100 ៛. Consumer prices are expressed as **whole riel without decimals** (`25,000 ៛`).
 - **United States Dollar (USD / $):** Used extensively for commerce, electronic payments, and banking. Formats with **2 decimal places** (`$25.00`).
 
-#### The `Intl.NumberFormat` Decimal Trap
-```javascript
-// PITFALL: Standard Intl.NumberFormat defaults to 2 decimals under ISO 4217 minor units!
-new Intl.NumberFormat('km-KH', { style: 'currency', currency: 'KHR' }).format(1000);
-// -> Produces "1,000.00៛" (UNEXPECTED in Cambodian retail)
-
-// CORRECT: Explicitly pass whole-riel options
-new Intl.NumberFormat('km-KH', {
-  style: 'currency',
-  currency: 'KHR',
-  minimumFractionDigits: 0,
-  maximumFractionDigits: 0,
-}).format(1000);
-// -> Produces "1,000៛" (CORRECT)
-```
-
-#### Production Currency Formatter
 ```typescript
 export function formatKHR(amount: number, wholeRiel: boolean = true): string {
   return new Intl.NumberFormat("km-KH", {
@@ -259,7 +223,36 @@ export function formatUSD(amount: number): string {
 
 ---
 
-### 5. Cambodian Calendar, Dates, Times & Buddhist Era (BE)
+### 5. Bakong KHQR EMVCo Fintech Standards & CRC16
+
+The **National Bank of Cambodia (NBC)** operates **Bakong**, the national payment switch. Its QR code standard, **KHQR**, follows the EMVCo Merchant-Presented Mode (MPM) specification.
+
+#### Key Tag Mapping:
+- **Tag 00:** Payload Version (`01`)
+- **Tag 01:** Point of Initiation (`11` Static, `12` Dynamic)
+- **Tag 29:** Individual Account Info (contains sub-tag `00` Bakong ID)
+- **Tag 30:** Corporate Merchant Info (contains sub-tag `00` Bakong ID, `01` Merchant ID)
+- **Tag 53:** Currency (`116` for KHR, `840` for USD)
+- **Tag 54:** Amount (Integer whole-riel for KHR; 2 decimals for USD)
+- **Tag 63:** CRC16-CCITT-FALSE Checksum (4 uppercase hex digits over all characters including `6304`)
+
+See [references/khmer-fintech-and-khqr.md](./references/khmer-fintech-and-khqr.md) for full generator and parser code.
+
+---
+
+### 6. Cambodian Administrative Hierarchy & Addresses
+
+Cambodian addresses follow a strict 4-tier civilian administrative hierarchy:
+$$\text{Province / Capital (រាជធានី-ខេត្ត)} \rightarrow \text{District / Khan / Municipality (ស្រុក/ខណ្ឌ/ក្រុង)} \rightarrow \text{Commune / Sangkat (ឃុំ/សង្កាត់)} \rightarrow \text{Village (ភូមិ)}$$
+
+- **Tier 1:** 25 Divisions (1 Autonomous Municipality: Phnom Penh `KH-12`, and 24 Provinces).
+- **Domestic Couriers:** Rely on recipient phone numbers, Sangkat, Khan, and **Landmarks/Directions** rather than postal codes.
+
+See [references/cambodia-administrative-divisions.md](./references/cambodia-administrative-divisions.md) for complete ISO 3166-2:KH code listings and address form models.
+
+---
+
+### 7. Cambodian Calendar, Dates, Times & Buddhist Era (BE)
 
 - **Solar Month Names:** មករា (Jan), កុម្ភៈ (Feb), មីនា (Mar), មេសា (Apr), ឧសភា (May), មិថុនា (Jun), កក្កដា (Jul), សីហា (Aug), កញ្ញា (Sep), តុលា (Oct), វិច្ឆិកា (Nov), ធ្នូ (Dec).
 - **Date Ordering:** Day precedes month (`DD/MM/YYYY` or `ថ្ងៃទីDD ខែMM ឆ្នាំYYYY`).
@@ -269,18 +262,24 @@ export function formatUSD(amount: number): string {
 
 ---
 
-### 6. Mobile Responsive UX & Zero-Width Word Breaking
+### 8. Khmer Alphabetical Collation & GDT Number-to-Words
+
+1. **Chuon Nath Dictionary Collation:** Khmer alphabetical ordering sorts by 33 consonants (`ក..អ`), independent vowels, dependent vowel signs, and Coeng subscript consonants. Use `Intl.Collator("km-KH", { sensitivity: "base", numeric: true })` instead of raw Unicode code-point sorting.
+2. **Number-to-Words Spellout:** Official tax invoices for the General Department of Taxation (GDT) require currency amounts to be spelled out using the Khmer numerical scale (ដប់, រយ, ពាន់, ម៉ឺន, សែន, លាន).
+   - `25,000 ៛` $\rightarrow$ `ពីរម៉ឺនប្រាំពាន់រៀលគត់`
+   - `150,000 ៛` $\rightarrow$ `មួយសែនប្រាំម៉ឺនរៀលគត់`
+
+See [references/khmer-collation-and-number-words.md](./references/khmer-collation-and-number-words.md) for complete implementations.
+
+---
+
+### 9. Mobile Responsive UX & Zero-Width Word Breaking
 
 Khmer lacks visible word boundaries. Web browsers without built-in ICU Khmer dictionaries break lines at random characters.
 
 ```typescript
-/**
- * Inserts Zero-Width Spaces (U+200B) at Khmer word boundaries using Intl.Segmenter,
- * enabling responsive, natural line wrapping on mobile viewports.
- */
 export function insertKhmerWordBreaks(text: string): string {
   if (!text || typeof Intl === "undefined" || !("Segmenter" in Intl)) return text;
-
   const segmenter = new Intl.Segmenter("km", { granularity: "word" });
   const segments = Array.from(segmenter.segment(text));
 
@@ -373,7 +372,29 @@ export const styles = StyleSheet.create({
 
 ---
 
-## Static Unicode & UTF-8 Audit Tool
+## Python Utility Module (`scripts/khmer_utils.py`)
+
+A zero-dependency reference Python module implementing all core localization algorithms:
+
+```bash
+# Normalize phone number to E.164
+python3 scripts/khmer_utils.py phone "012 345 678"
+
+# Spell out currency amounts in Khmer words (GDT invoice compliance)
+python3 scripts/khmer_utils.py words 25000 --currency KHR
+# Outputs: ពីរម៉ឺនប្រាំពាន់រៀលគត់
+
+# Format date with Buddhist Era
+python3 scripts/khmer_utils.py date 2026-10-20 --be
+# Outputs: ថ្ងៃទី 20 ខែតុលា ឆ្នាំ 2026 (ព.ស. 2569)
+
+# Compute CRC16 checksum for KHQR payload
+python3 scripts/khmer_utils.py khqr-crc "00020101021129330017sokha@devb5204541153031165405250005802KH5912AngkorCoffee6010Phnom Penh6304"
+```
+
+---
+
+## Static Unicode & UTF-8 Audit Tool (`scripts/check_khmer_unicode.py`)
 
 The bundled `check_khmer_unicode.py` script inspects codebases for corrupted characters (`U+FFFD`), suspicious control codes, and orphaned combining marks. Zero third-party dependencies (Python 3.10+ standard library):
 
@@ -386,22 +407,6 @@ python3 scripts/check_khmer_unicode.py --strict src/
 
 # Structured JSON output for automated agents & CI
 python3 scripts/check_khmer_unicode.py --strict --json .
-```
-
-### JSON Output Schema
-```json
-{
-  "summary": {
-    "status": "PASS",
-    "total_files": 7,
-    "files_with_khmer": 6,
-    "total_khmer_chars": 3657,
-    "zero_width_spaces": 0,
-    "total_errors": 0,
-    "total_warnings": 0
-  },
-  "files": [ ... ]
-}
 ```
 
 ---
@@ -479,15 +484,26 @@ $$\text{Year (BE)} = \text{Year (CE)} + 543 \quad (2026\text{ CE} + 543 = 2569\t
 ### Q6: Why do AI models generate royal language in Khmer software translations?
 **A:** Many general LLMs are trained on historical, religious, and formal texts without register conditioning, causing them to generate royal terms (*Reachasap* / រាជសព្ទ) like `យាង` or `សោយ`. This skill provides explicit guardrails conditioning agents to use modern digital tech register (`ចូល`, `ដាក់ស្នើ`, `រក្សាទុក`).
 
+### Q7: How do I generate and validate a Bakong KHQR QR code with CRC16?
+**A:** Construct serialized EMVCo TLV blocks (Tag 00, 01, 29/30, 52, 53, 54, 58, 59, 60, 62), append `6304`, and compute the **CRC16-CCITT-FALSE** checksum (polynomial `0x1021`, initial `0xFFFF`) over the entire string. See [references/khmer-fintech-and-khqr.md](./references/khmer-fintech-and-khqr.md) for full code.
+
+### Q8: How should addresses be modeled in Cambodian e-commerce and delivery forms?
+**A:** Follow Cambodia's 4-tier hierarchy: Province/Capital (`រាជធានី-ខេត្ត`) $\rightarrow$ District/Khan (`ស្រុក/ខណ្ឌ/ក្រុង`) $\rightarrow$ Commune/Sangkat (`ឃុំ/សង្កាត់`) $\rightarrow$ Village (`ភូមិ`). In e-commerce checkout forms, never make postal codes mandatory; always collect recipient phone numbers and a dedicated **Landmark / Directions** field.
+
+### Q9: How do I spell out currency amounts in Khmer words for tax invoices?
+**A:** Convert the integer amount into Khmer numerical scales (ដប់, រយ, ពាន់, ម៉ឺន, សែន, លាន) and append `រៀលគត់` (Riel exact) or `ដុល្លារអាមេរិកគត់` (USD exact). E.g., `25,000 ៛` $\rightarrow$ `ពីរម៉ឺនប្រាំពាន់រៀលគត់`. See [references/khmer-collation-and-number-words.md](./references/khmer-collation-and-number-words.md).
+
 ---
 
 ## Authoritative Regulatory & Standards Citations
 
 - **Telecommunication Regulator of Cambodia (TRC):** [https://trc.gov.kh](https://trc.gov.kh) — *National Numbering Plan & Mobile Operator Allocations* (verified October 2026).
 - **National Bank of Cambodia (NBC):** [https://www.nbc.gov.kh](https://www.nbc.gov.kh) — *Bakong Payment System & KHQR Specifications*.
+- **General Department of Taxation (GDT):** [https://www.tax.gov.kh](https://www.tax.gov.kh) — *E-Invoicing and Khmer Word Currency Requirements*.
 - **International Telecommunication Union (ITU):** [ITU-T Recommendation E.164](https://www.itu.int/rec/T-REC-E.164) — *The International Public Telecommunication Numbering Plan (Cambodia +855)*.
 - **The Unicode Consortium:** [Khmer Unicode Block Charts (U+1780..U+17FF)](https://unicode.org/charts/PDF/U1780.pdf).
 - **ISO 4217 Currency Standard:** Maintenance Agency for Currency Codes (`KHR` numeric 116, minor unit 2).
+- **ISO 3166-2:KH:** International standard for Cambodia's 25 primary administrative subdivisions.
 
 ---
 
@@ -499,8 +515,9 @@ Run the comprehensive, zero-dependency offline test suite:
 python3 -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-All **55 automated tests** run deterministically in under 1 second:
+All **77 automated tests** run deterministically in ~1 second:
 - `tests/test_check_khmer_unicode.py` (20 tests): Replacement character detection, C0/C1 control codes, ZWSP preservation, orphaned marks, trailing Coeng, and JSON CLI reporting.
+- `tests/test_khmer_utils.py` (22 tests): Reusable Python library verification: phone normalization, currency formatting, dates/BE, safe truncation, number-to-words, and Bakong KHQR CRC16 checksums.
 - `tests/test_currency_formatting.py` (12 tests): KHR explicit whole-riel formatting, ISO 4217 runtime defaults, rounding of fractional amounts, multi-billion amounts, and live Node.js `Intl.NumberFormat` tests.
 - `tests/test_date_and_formatting.py` (15 tests): Khmer month names, Buddhist Era calculation ($\text{BE} = \text{CE} + 543$), relative time formatting, grapheme cluster text truncation, and live Node.js `Intl.DateTimeFormat` / `Intl.Segmenter` tests.
 - `tests/test_phone_normalization.py` (8 tests): E.164 normalization, 8-digit vs. 9-digit NSN lengths, Khmer numeral conversion, decoupling from carrier tables, and OTP verification boundary.

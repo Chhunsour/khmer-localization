@@ -514,3 +514,276 @@ export function KhmerParagraph({ content, className = "" }: KhmerParagraphProps)
 **Why this is better:**
 - Employs `Intl.Segmenter` to insert `\u200B` at natural word boundaries without altering visible text.
 - Pairs with CSS `break-words` and `overflowWrap: break-word` for complete layout safety on all mobile viewports.
+
+
+---
+
+## Example 11: Cascading Cambodian Administrative Address Selector
+
+### Problem
+An e-commerce app used a Western address form requiring "State / Postal Code", confusing Cambodian shoppers and leading to high parcel delivery failure rates due to missing Sangkat, Khan, and landmark directions.
+
+### After (Cambodia-Tailored Cascading Address Form)
+```tsx
+import React, { useState } from "react";
+
+export interface AddressFormData {
+  provinceCode: string;   // e.g. "KH-12" (Phnom Penh)
+  districtName: string;   // e.g. "ខណ្ឌដូនពេញ" (Khan Daun Penh)
+  communeName: string;    // e.g. "សង្កាត់បឹងរាំង" (Sangkat Boeng Reang)
+  streetAndHouse: string; // e.g. "ផ្ទះលេខ ១២A, ផ្លូវ ២០០"
+  landmarkNotes: string;  // e.g. "ទល់មុខមន្ទីរពេទ្យកាល់ម៉ែត" (Opposite Calmette)
+  deliveryPhone: string;  // e.g. "012 345 678" (Courier anchor)
+}
+
+export function CambodianAddressForm({
+  onSubmit,
+}: {
+  onSubmit: (data: AddressFormData) => void;
+}) {
+  const [form, setForm] = useState<AddressFormData>({
+    provinceCode: "KH-12",
+    districtName: "",
+    communeName: "",
+    streetAndHouse: "",
+    landmarkNotes: "",
+    deliveryPhone: "",
+  });
+
+  return (
+    <form className="space-y-4 font-khmer text-sm" onSubmit={(e) => { e.preventDefault(); onSubmit(form); }}>
+      <div>
+        <label className="block font-medium mb-1">រាជធានី-ខេត្ត (Province / City) *</label>
+        <select
+          className="w-full p-2.5 border rounded-lg"
+          value={form.provinceCode}
+          onChange={(e) => setForm({ ...form, provinceCode: e.target.value })}
+        >
+          <option value="KH-12">រាជធានីភ្នំពេញ (Phnom Penh)</option>
+          <option value="KH-17">ខេត្តសៀមរាប (Siem Reap)</option>
+          <option value="KH-2">ខេត្តបាត់ដំបង (Battambang)</option>
+          <option value="KH-18">ខេត្តព្រះសីហនុ (Preah Sihanouk)</option>
+        </select>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block font-medium mb-1">ក្រុង/ស្រុក/ខណ្ឌ (District / Khan) *</label>
+          <input
+            type="text"
+            placeholder="ឧ. ខណ្ឌដូនពេញ"
+            className="w-full p-2.5 border rounded-lg"
+            value={form.districtName}
+            onChange={(e) => setForm({ ...form, districtName: e.target.value })}
+            required
+          />
+        </div>
+        <div>
+          <label className="block font-medium mb-1">ឃុំ/សង្កាត់ (Commune / Sangkat) *</label>
+          <input
+            type="text"
+            placeholder="ឧ. សង្កាត់បឹងរាំង"
+            className="w-full p-2.5 border rounded-lg"
+            value={form.communeName}
+            onChange={(e) => setForm({ ...form, communeName: e.target.value })}
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block font-medium mb-1">ផ្ទះលេខ និងផ្លូវ (House No. & Street) *</label>
+        <input
+          type="text"
+          placeholder="ឧ. ផ្ទះលេខ ១២A ផ្លូវ ២០០"
+          className="w-full p-2.5 border rounded-lg"
+          value={form.streetAndHouse}
+          onChange={(e) => setForm({ ...form, streetAndHouse: e.target.value })}
+          required
+        />
+      </div>
+
+      <div>
+        <label className="block font-medium mb-1">ចំណាំទីតាំងសម្គាល់ (Landmark / Directions)</label>
+        <input
+          type="text"
+          placeholder="ឧ. ជិតផ្សារកណ្តាល ឬ ទល់មុខសាលារៀន"
+          className="w-full p-2.5 border rounded-lg"
+          value={form.landmarkNotes}
+          onChange={(e) => setForm({ ...form, landmarkNotes: e.target.value })}
+        />
+      </div>
+
+      <div>
+        <label className="block font-medium mb-1">លេខទូរស័ព្ទអ្នកទទួល (Recipient Phone) *</label>
+        <input
+          type="tel"
+          placeholder="ឧ. 012 345 678"
+          className="w-full p-2.5 border rounded-lg"
+          value={form.deliveryPhone}
+          onChange={(e) => setForm({ ...form, deliveryPhone: e.target.value })}
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="w-full min-h-[44px] py-2.5 px-4 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700"
+      >
+        បញ្ជាក់អាសយដ្ឋានដឹកជញ្ជូន
+      </button>
+    </form>
+  );
+}
+```
+**Why this is better:**
+- Matches the authentic Cambodian 4-tier administrative hierarchy.
+- Includes a dedicated "Landmark / Directions" input, which is essential for parcel delivery in Cambodia.
+- Prioritizes the recipient phone number as the courier anchor.
+
+---
+
+## Example 12: Generating and Verifying a Bakong KHQR String (CRC16)
+
+### Problem
+A payment gateway needed to generate merchant-presented dynamic KHQR strings compatible with NBC's Bakong mobile switch, but failed to format the EMVCo TLV blocks or compute the CRC16-CCITT checksum accurately.
+
+### After (Standard KHQR Generator & CRC16 Validator)
+```typescript
+import { calculateKhqrCrc16, formatTlv, verifyKhqr } from "@/utils/khqr";
+
+export interface InvoiceKhqrParams {
+  merchantBakongId: string; // e.g. "merchant@devb"
+  merchantName: string;     // e.g. "Coffee Express"
+  billNumber: string;       // e.g. "INV-2026-001"
+  amount: number;           // e.g. 25000 (KHR) or 6.25 (USD)
+  currency: "KHR" | "USD";
+}
+
+export function createInvoiceKhqr(params: InvoiceKhqrParams): string {
+  let payload = "";
+
+  // 00: EMVCo version 01
+  payload += formatTlv("00", "01");
+
+  // 01: Dynamic QR (single invoice with preset amount)
+  payload += formatTlv("01", "12");
+
+  // 29: Individual / Merchant Account Info
+  const accountSubTag = formatTlv("00", params.merchantBakongId);
+  payload += formatTlv("29", accountSubTag);
+
+  // 52: Merchant Category Code (General)
+  payload += formatTlv("52", "0000");
+
+  // 53: Transaction Currency (116 = KHR, 840 = USD)
+  const currencyCode = params.currency === "KHR" ? "116" : "840";
+  payload += formatTlv("53", currencyCode);
+
+  // 54: Transaction Amount (Whole riel for KHR; 2 decimals for USD)
+  const formattedAmount =
+    params.currency === "KHR"
+      ? Math.round(params.amount).toString()
+      : params.amount.toFixed(2);
+  payload += formatTlv("54", formattedAmount);
+
+  // 58: Country Code (KH)
+  payload += formatTlv("58", "KH");
+
+  // 59: Merchant Name
+  payload += formatTlv("59", params.merchantName.slice(0, 25));
+
+  // 60: City
+  payload += formatTlv("60", "Phnom Penh");
+
+  // 62: Additional Data (Bill Number)
+  const billSubTag = formatTlv("01", params.billNumber);
+  payload += formatTlv("62", billSubTag);
+
+  // 63: CRC16 Tag
+  payload += "6304";
+  const checksum = calculateKhqrCrc16(payload);
+
+  const fullQr = payload + checksum;
+  const { isValid, error } = verifyKhqr(fullQr);
+  if (!isValid) {
+    throw new Error(`KHQR self-check failed: ${error}`);
+  }
+
+  return fullQr;
+}
+```
+**Why this is better:**
+- Follows the official National Bank of Cambodia (NBC) KHQR tag specifications.
+- Guarantees KHR amounts are rounded to whole riel integers.
+- Appends and self-verifies the CRC16-CCITT-FALSE checksum (`Tag 63`).
+
+---
+
+## Example 13: Spelled-Out Khmer Currency Words on Tax Invoices
+
+### Problem
+A SaaS billing system generated VAT tax invoices for Cambodia's General Department of Taxation (GDT) showing only numeric amounts (`150,000 ៛`), which failed compliance audits requiring amounts spelled out in Khmer words.
+
+### After (Automated GDT Spelled-Out Invoice Line)
+```tsx
+import { formatKHR } from "@/utils/currency";
+import { formatCurrencyKhmerWords } from "@/utils/khmerWords";
+
+export function InvoiceTotalRow({ subtotalKHR, vatKHR }: { subtotalKHR: number; vatKHR: number }) {
+  const totalKHR = subtotalKHR + vatKHR;
+  const numericDisplay = formatKHR(totalKHR); // "165,000៛"
+  const spelledWords = formatCurrencyKhmerWords(totalKHR, "KHR"); // "មួយសែនប្រាំមួយម៉ឺនប្រាំពាន់រៀលគត់"
+
+  return (
+    <div className="border-t pt-4 font-khmer">
+      <div className="flex justify-between text-lg font-bold">
+        <span>សរុបរួម (Grand Total):</span>
+        <span>{numericDisplay}</span>
+      </div>
+      <div className="mt-1 text-sm text-gray-600 bg-gray-50 p-2.5 rounded border">
+        <span className="font-medium text-gray-700">ចំនួនទឹកប្រាក់ជាអក្សរ (Amount in words): </span>
+        <span className="font-semibold text-gray-900">{spelledWords}</span>
+      </div>
+    </div>
+  );
+}
+```
+**Why this is better:**
+- Displays both numeric whole riel (`165,000៛`) and spelled-out Khmer words (`មួយសែនប្រាំមួយម៉ឺនប្រាំពាន់រៀលគត់`).
+- Follows standard Cambodian GDT invoicing and accounting legal standards.
+
+---
+
+## Example 14: Alphabetical Sorting of Customer Names with `Intl.Collator`
+
+### Problem
+A customer management portal sorted Khmer names using standard JavaScript `.sort()`. Names starting with `គ` appeared before `ក`, and subscript vowels scrambled the list order.
+
+### After (Chuon Nath Dictionary Collation)
+```typescript
+/**
+ * Sorts customer records alphabetically using official Khmer dictionary rules.
+ */
+export interface CustomerRecord {
+  id: string;
+  fullNameKh: string; // e.g. "ចាន់ សុខា", "កែវ ពិសិដ្ឋ", "ស៊ុន ម៉ាលី"
+}
+
+export function sortCustomersAlphabetically(
+  customers: CustomerRecord[]
+): CustomerRecord[] {
+  // Use ICU-tailored Khmer collator
+  const collator = new Intl.Collator("km-KH", {
+    sensitivity: "base",
+    numeric: true,
+  });
+
+  return [...customers].sort((a, b) =>
+    collator.compare(a.fullNameKh, b.fullNameKh)
+  );
+}
+```
+**Why this is better:**
+- Applies official Khmer dictionary ordering (`ក` before `ខ` before `គ`...).
+- Groups base consonants and subscript clusters in proper linguistic sequence.
