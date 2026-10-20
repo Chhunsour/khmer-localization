@@ -124,5 +124,12 @@
     "name_km": "ខេត្តព្រះសីហនុ",
     "type": "Province",
     "districts": 5
+  },
+  {
+    "code": "KH-19",
+    "name_en": "Stung Treng",
+    "name_km": "ខេត្តស្ទឹងត្រែង",
+    "type": "Province",
+    "districts": 6
   }
 ]
