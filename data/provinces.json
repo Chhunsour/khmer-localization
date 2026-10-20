@@ -61,5 +61,12 @@
     "name_km": "ខេត្តកណ្តាល",
     "type": "Province",
     "districts": 13
+  },
+  {
+    "code": "KH-9",
+    "name_en": "Koh Kong",
+    "name_km": "ខេត្តកោះកុង",
+    "type": "Province",
+    "districts": 7
   }
 ]
