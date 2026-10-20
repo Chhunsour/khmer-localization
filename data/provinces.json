@@ -159,5 +159,12 @@
     "name_km": "ខេត្តកែប",
     "type": "Province",
     "districts": 2
+  },
+  {
+    "code": "KH-24",
+    "name_en": "Pailin",
+    "name_km": "ខេត្តប៉ៃលិន",
+    "type": "Province",
+    "districts": 2
   }
 ]
