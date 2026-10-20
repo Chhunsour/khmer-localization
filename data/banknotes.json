@@ -30,5 +30,13 @@
     "year": 2013,
     "color": "Green",
     "front": "Prasat Preah Vihear, Ancient Artifacts"
+  },
+  {
+    "denomination": 5000,
+    "currency": "KHR",
+    "name_km": "៥,០០០ រៀល",
+    "year": 2015,
+    "color": "Brown",
+    "front": "King Father Norodom Sihanouk, Spean Praptos"
   }
 ]
