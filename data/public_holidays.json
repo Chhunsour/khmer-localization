@@ -5,5 +5,12 @@
     "month": 1,
     "day": 1,
     "type": "Civic"
+  },
+  {
+    "name_en": "Victory over Genocide Day",
+    "name_km": "ទិវាជ័យជម្នះលើរបបប្រល័យពូជសាសន៍",
+    "month": 1,
+    "day": 7,
+    "type": "National"
   }
 ]
