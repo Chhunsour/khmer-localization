@@ -54,5 +54,12 @@
     "name_km": "ស្រុកប្រាសាទបាគង",
     "type": "District",
     "communes": 9
+  },
+  {
+    "code": "1708",
+    "name_en": "Soutr Nikom",
+    "name_km": "ស្រុកសូទ្រនិគម",
+    "type": "District",
+    "communes": 10
   }
 ]
