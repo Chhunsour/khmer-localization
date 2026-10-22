@@ -68,5 +68,12 @@
     "name_km": "ស្រុកសំពៅលូន",
     "type": "District",
     "communes": 6
+  },
+  {
+    "code": "0211",
+    "name_en": "Phnum Proek",
+    "name_km": "ស្រុកភ្នំព្រឹក",
+    "type": "District",
+    "communes": 5
   }
 ]
