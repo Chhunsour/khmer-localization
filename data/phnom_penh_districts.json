@@ -89,5 +89,12 @@
     "name_km": "ខណ្ឌបឹងកេងកង",
     "type": "Khan",
     "sangkats": 7
+  },
+  {
+    "code": "1214",
+    "name_en": "Kamboul",
+    "name_km": "ខណ្ឌកំបូល",
+    "type": "Khan",
+    "sangkats": 7
   }
 ]
