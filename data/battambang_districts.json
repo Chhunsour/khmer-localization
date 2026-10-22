@@ -33,5 +33,12 @@
     "name_km": "ស្រុកឯកភ្នំ",
     "type": "District",
     "communes": 7
+  },
+  {
+    "code": "0206",
+    "name_en": "Moung Ruessei",
+    "name_km": "ស្រុកមោងឫស្សី",
+    "type": "District",
+    "communes": 9
   }
 ]
