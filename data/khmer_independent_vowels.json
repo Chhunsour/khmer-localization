@@ -75,5 +75,12 @@
     "name_km": "ស្រៈឰ",
     "romanization": "qai",
     "example": "ឰដ៏ (Aido)"
+  },
+  {
+    "character": "ឱ",
+    "codepoint": "U+17B1",
+    "name_km": "ស្រៈឱ",
+    "romanization": "qao",
+    "example": "ឱកាស (Okas)"
   }
 ]
