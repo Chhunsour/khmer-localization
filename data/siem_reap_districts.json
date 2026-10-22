@@ -19,5 +19,12 @@
     "name_km": "ស្រុកអង្គរជុំ",
     "type": "District",
     "communes": 7
+  },
+  {
+    "code": "1703",
+    "name_en": "Banteay Srei",
+    "name_km": "ស្រុកបន្ទាយស្រី",
+    "type": "District",
+    "communes": 6
   }
 ]
