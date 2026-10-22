@@ -19,5 +19,12 @@
     "name_km": "ខណ្ឌ៧មករា",
     "type": "Khan",
     "sangkats": 8
+  },
+  {
+    "code": "1204",
+    "name_en": "Tuol Kouk",
+    "name_km": "ខណ្ឌទួលគោក",
+    "type": "Khan",
+    "sangkats": 10
   }
 ]
