@@ -16,5 +16,11 @@
     "name_en": "Fast Food Restaurants",
     "name_km": "អាហាររហ័សទាន់ចិត្ត",
     "industry": "Quick Service Food"
+  },
+  {
+    "mcc": "5311",
+    "name_en": "Department Stores",
+    "name_km": "ហាងលក់ទំនិញចម្រុះ",
+    "industry": "General Merchandise"
   }
 ]
