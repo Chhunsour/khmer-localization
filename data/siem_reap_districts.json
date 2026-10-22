@@ -68,5 +68,12 @@
     "name_km": "ស្រុកស្រីស្នំ",
     "type": "District",
     "communes": 6
+  },
+  {
+    "code": "1711",
+    "name_en": "Svay Leu",
+    "name_km": "ស្រុកស្វាយលើ",
+    "type": "District",
+    "communes": 5
   }
 ]
