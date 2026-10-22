@@ -89,5 +89,12 @@
     "name_km": "ស្រុកគាស់ក្រឡ",
     "type": "District",
     "communes": 6
+  },
+  {
+    "code": "0214",
+    "name_en": "Rukh Kiri",
+    "name_km": "ស្រុករុក្ខគិរី",
+    "type": "District",
+    "communes": 5
   }
 ]
