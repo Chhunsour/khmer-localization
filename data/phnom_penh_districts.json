@@ -12,5 +12,12 @@
     "name_km": "ខណ្ឌដូនពេញ",
     "type": "Khan",
     "sangkats": 11
+  },
+  {
+    "code": "1203",
+    "name_en": "Prampir Meakkakra (7 Makara)",
+    "name_km": "ខណ្ឌ៧មករា",
+    "type": "Khan",
+    "sangkats": 8
   }
 ]
