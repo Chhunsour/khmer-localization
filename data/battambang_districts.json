@@ -47,5 +47,12 @@
     "name_km": "ស្រុករតនមណ្ឌល",
     "type": "District",
     "communes": 5
+  },
+  {
+    "code": "0208",
+    "name_en": "Sangkae",
+    "name_km": "ស្រុកសង្កែ",
+    "type": "District",
+    "communes": 10
   }
 ]
