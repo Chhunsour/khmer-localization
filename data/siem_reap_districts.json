@@ -47,5 +47,12 @@
     "name_km": "ស្រុកពួក",
     "type": "District",
     "communes": 14
+  },
+  {
+    "code": "1707",
+    "name_en": "Prasat Bakong",
+    "name_km": "ស្រុកប្រាសាទបាគង",
+    "type": "District",
+    "communes": 9
   }
 ]
