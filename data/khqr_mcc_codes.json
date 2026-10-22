@@ -10,5 +10,11 @@
     "name_en": "Grocery Stores and Supermarkets",
     "name_km": "ផ្សារទំនើប និងហាងលក់ទំនិញ",
     "industry": "Retail Grocery"
+  },
+  {
+    "mcc": "5814",
+    "name_en": "Fast Food Restaurants",
+    "name_km": "អាហាររហ័សទាន់ចិត្ត",
+    "industry": "Quick Service Food"
   }
 ]
