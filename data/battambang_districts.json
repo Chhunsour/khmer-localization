@@ -40,5 +40,12 @@
     "name_km": "ស្រុកមោងឫស្សី",
     "type": "District",
     "communes": 9
+  },
+  {
+    "code": "0207",
+    "name_en": "Rotanak Mondol",
+    "name_km": "ស្រុករតនមណ្ឌល",
+    "type": "District",
+    "communes": 5
   }
 ]
