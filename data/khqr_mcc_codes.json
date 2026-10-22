@@ -28,5 +28,11 @@
     "name_en": "Service Stations (Fuel & Convenience)",
     "name_km": "ស្ថានីយប្រេងឥន្ធនៈ",
     "industry": "Automotive Fuel"
+  },
+  {
+    "mcc": "4121",
+    "name_en": "Taxicabs, Limousines & Ride-hailing",
+    "name_km": "សេវាដឹកអ្នកដំណើរ និងតាក់ស៊ី",
+    "industry": "Transportation"
   }
 ]
