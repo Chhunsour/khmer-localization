@@ -54,5 +54,12 @@
     "name_km": "ស្រៈឭ",
     "romanization": "ly",
     "example": "ឭ (Ly)"
+  },
+  {
+    "character": "ឮ",
+    "codepoint": "U+17AE",
+    "name_km": "ស្រៈឮ",
+    "romanization": "lyy",
+    "example": "ឮ (Lyy)"
   }
 ]
