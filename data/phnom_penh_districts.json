@@ -61,5 +61,12 @@
     "name_km": "ខណ្ឌពោធិ៍សែនជ័យ",
     "type": "Khan",
     "sangkats": 7
+  },
+  {
+    "code": "1210",
+    "name_en": "Chrouy Changva",
+    "name_km": "ខណ្ឌជ្រោយចង្វារ",
+    "type": "Khan",
+    "sangkats": 5
   }
 ]
