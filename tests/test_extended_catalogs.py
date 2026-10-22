@@ -30,3 +30,14 @@ class TestExtendedCatalogs(unittest.TestCase):
         self.assertEqual(len(sr_districts), 12)
         self.assertEqual(len(btb_districts), 14)
 
+    def test_03_independent_vowels_integrity(self):
+        """Verify 14 standard non-deprecated Khmer independent vowels."""
+        path = os.path.join(DATA_DIR, "khmer_independent_vowels.json")
+        self.assertTrue(os.path.exists(path))
+        with open(path, "r", encoding="utf-8") as f:
+            vowels = json.load(f)
+        self.assertEqual(len(vowels), 14)
+        chars = {v["character"] for v in vowels}
+        self.assertIn("ឥ", chars)
+        self.assertIn("ឪ", chars)
+
