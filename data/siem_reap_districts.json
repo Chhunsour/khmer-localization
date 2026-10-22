@@ -5,5 +5,12 @@
     "name_km": "ក្រុងសៀមរាប",
     "type": "Municipality",
     "sangkats": 12
+  },
+  {
+    "code": "1701",
+    "name_en": "Angkor Thom",
+    "name_km": "ស្រុកអង្គរធំ",
+    "type": "District",
+    "communes": 4
   }
 ]
