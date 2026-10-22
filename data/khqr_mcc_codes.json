@@ -4,5 +4,11 @@
     "name_en": "Eating Places and Restaurants",
     "name_km": "ភោជនីយដ្ឋាន និងអាហារដ្ឋាន",
     "industry": "Food & Beverage"
+  },
+  {
+    "mcc": "5411",
+    "name_en": "Grocery Stores and Supermarkets",
+    "name_km": "ផ្សារទំនើប និងហាងលក់ទំនិញ",
+    "industry": "Retail Grocery"
   }
 ]
