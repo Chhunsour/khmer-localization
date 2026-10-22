@@ -68,5 +68,12 @@
     "name_km": "ខណ្ឌជ្រោយចង្វារ",
     "type": "Khan",
     "sangkats": 5
+  },
+  {
+    "code": "1211",
+    "name_en": "Praek Pnov",
+    "name_km": "ខណ្ឌព្រែកព្នៅ",
+    "type": "Khan",
+    "sangkats": 5
   }
 ]
