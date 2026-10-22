@@ -75,5 +75,12 @@
     "name_km": "ស្រុកស្វាយលើ",
     "type": "District",
     "communes": 5
+  },
+  {
+    "code": "1712",
+    "name_en": "Varin",
+    "name_km": "ស្រុកវ៉ារិន",
+    "type": "District",
+    "communes": 5
   }
 ]
