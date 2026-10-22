@@ -40,5 +40,11 @@
     "name_en": "Drug Stores and Pharmacies",
     "name_km": "ឱសថស្ថាន",
     "industry": "Healthcare & Pharma"
+  },
+  {
+    "mcc": "5651",
+    "name_en": "Family Clothing Stores",
+    "name_km": "ហាងលក់សម្លៀកបំពាក់",
+    "industry": "Apparel"
   }
 ]
