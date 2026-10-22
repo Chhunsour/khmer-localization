@@ -46,5 +46,11 @@
     "name_en": "Family Clothing Stores",
     "name_km": "ហាងលក់សម្លៀកបំពាក់",
     "industry": "Apparel"
+  },
+  {
+    "mcc": "7011",
+    "name_en": "Hotels, Motels and Resorts",
+    "name_km": "សណ្ឋាគារ និងរមណីយដ្ឋាន",
+    "industry": "Hospitality & Lodging"
   }
 ]
