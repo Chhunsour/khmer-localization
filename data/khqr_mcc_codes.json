@@ -22,5 +22,11 @@
     "name_en": "Department Stores",
     "name_km": "ហាងលក់ទំនិញចម្រុះ",
     "industry": "General Merchandise"
+  },
+  {
+    "mcc": "5541",
+    "name_en": "Service Stations (Fuel & Convenience)",
+    "name_km": "ស្ថានីយប្រេងឥន្ធនៈ",
+    "industry": "Automotive Fuel"
   }
 ]
