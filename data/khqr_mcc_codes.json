@@ -52,5 +52,11 @@
     "name_en": "Hotels, Motels and Resorts",
     "name_km": "សណ្ឋាគារ និងរមណីយដ្ឋាន",
     "industry": "Hospitality & Lodging"
+  },
+  {
+    "mcc": "8220",
+    "name_en": "Colleges, Universities & Professional Schools",
+    "name_km": "គ្រឹះស្ថានឧត្តមសិក្សា",
+    "industry": "Higher Education"
   }
 ]
