@@ -82,5 +82,12 @@
     "name_km": "ស្រុកកំរៀង",
     "type": "District",
     "communes": 6
+  },
+  {
+    "code": "0213",
+    "name_en": "Koas Krala",
+    "name_km": "ស្រុកគាស់ក្រឡ",
+    "type": "District",
+    "communes": 6
   }
 ]
