@@ -33,5 +33,12 @@
     "name_km": "ខណ្ឌដង្កោ",
     "type": "Khan",
     "sangkats": 13
+  },
+  {
+    "code": "1206",
+    "name_en": "Mean Chey",
+    "name_km": "ខណ្ឌមានជ័យ",
+    "type": "Khan",
+    "sangkats": 7
   }
 ]
