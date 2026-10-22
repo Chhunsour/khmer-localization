@@ -68,5 +68,12 @@
     "name_km": "ស្រៈឯ",
     "romanization": "qe",
     "example": "ឯកសារ (Ekasar)"
+  },
+  {
+    "character": "ឰ",
+    "codepoint": "U+17B0",
+    "name_km": "ស្រៈឰ",
+    "romanization": "qai",
+    "example": "ឰដ៏ (Aido)"
   }
 ]
