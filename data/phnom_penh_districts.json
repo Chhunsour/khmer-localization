@@ -54,5 +54,12 @@
     "name_km": "ខណ្ឌសែនសុខ",
     "type": "Khan",
     "sangkats": 6
+  },
+  {
+    "code": "1209",
+    "name_en": "Pur SenChey",
+    "name_km": "ខណ្ឌពោធិ៍សែនជ័យ",
+    "type": "Khan",
+    "sangkats": 7
   }
 ]
