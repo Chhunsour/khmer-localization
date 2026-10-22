@@ -34,5 +34,11 @@
     "name_en": "Taxicabs, Limousines & Ride-hailing",
     "name_km": "សេវាដឹកអ្នកដំណើរ និងតាក់ស៊ី",
     "industry": "Transportation"
+  },
+  {
+    "mcc": "5912",
+    "name_en": "Drug Stores and Pharmacies",
+    "name_km": "ឱសថស្ថាន",
+    "industry": "Healthcare & Pharma"
   }
 ]
