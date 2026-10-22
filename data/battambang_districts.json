@@ -5,5 +5,12 @@
     "name_km": "ក្រុងបាត់ដំបង",
     "type": "Municipality",
     "sangkats": 10
+  },
+  {
+    "code": "0201",
+    "name_en": "Banan",
+    "name_km": "ស្រុកបាណន់",
+    "type": "District",
+    "communes": 8
   }
 ]
