@@ -5,5 +5,12 @@
     "name_km": "ខណ្ឌចំការមន",
     "type": "Khan",
     "sangkats": 5
+  },
+  {
+    "code": "1202",
+    "name_en": "Doun Penh",
+    "name_km": "ខណ្ឌដូនពេញ",
+    "type": "Khan",
+    "sangkats": 11
   }
 ]
