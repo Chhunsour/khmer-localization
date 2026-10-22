@@ -26,5 +26,12 @@
     "name_km": "ខណ្ឌទួលគោក",
     "type": "Khan",
     "sangkats": 10
+  },
+  {
+    "code": "1205",
+    "name_en": "Dangkao",
+    "name_km": "ខណ្ឌដង្កោ",
+    "type": "Khan",
+    "sangkats": 13
   }
 ]
