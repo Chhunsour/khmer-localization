@@ -12,5 +12,12 @@
     "name_km": "ស្រុកបាណន់",
     "type": "District",
     "communes": 8
+  },
+  {
+    "code": "0202",
+    "name_en": "Thma Koul",
+    "name_km": "ស្រុកថ្មគោល",
+    "type": "District",
+    "communes": 10
   }
 ]
