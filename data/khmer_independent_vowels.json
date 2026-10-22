@@ -61,5 +61,12 @@
     "name_km": "ស្រៈឮ",
     "romanization": "lyy",
     "example": "ឮ (Lyy)"
+  },
+  {
+    "character": "ឯ",
+    "codepoint": "U+17AF",
+    "name_km": "ស្រៈឯ",
+    "romanization": "qe",
+    "example": "ឯកសារ (Ekasar)"
   }
 ]
