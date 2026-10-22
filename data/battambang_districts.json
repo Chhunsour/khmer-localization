@@ -26,5 +26,12 @@
     "name_km": "ស្រុកបវេល",
     "type": "District",
     "communes": 8
+  },
+  {
+    "code": "0205",
+    "name_en": "Aek Phnum",
+    "name_km": "ស្រុកឯកភ្នំ",
+    "type": "District",
+    "communes": 7
   }
 ]
