@@ -82,5 +82,12 @@
     "name_km": "ខណ្ឌច្បារអំពៅ",
     "type": "Khan",
     "sangkats": 8
+  },
+  {
+    "code": "1213",
+    "name_en": "Boeng Keng Kang",
+    "name_km": "ខណ្ឌបឹងកេងកង",
+    "type": "Khan",
+    "sangkats": 7
   }
 ]
