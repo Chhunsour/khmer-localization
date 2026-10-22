@@ -19,3 +19,14 @@ class TestExtendedCatalogs(unittest.TestCase):
         self.assertIn("1201", codes)
         self.assertIn("1202", codes)
 
+    def test_02_siem_reap_and_battambang_districts(self):
+        """Verify all 26 districts across Siem Reap and Battambang provinces."""
+        sr_path = os.path.join(DATA_DIR, "siem_reap_districts.json")
+        btb_path = os.path.join(DATA_DIR, "battambang_districts.json")
+        with open(sr_path, "r", encoding="utf-8") as f:
+            sr_districts = json.load(f)
+        with open(btb_path, "r", encoding="utf-8") as f:
+            btb_districts = json.load(f)
+        self.assertEqual(len(sr_districts), 12)
+        self.assertEqual(len(btb_districts), 14)
+
