@@ -33,5 +33,12 @@
     "name_km": "ស្រុកជីក្រែង",
     "type": "District",
     "communes": 12
+  },
+  {
+    "code": "1705",
+    "name_en": "Kralanh",
+    "name_km": "ស្រុកក្រឡាញ់",
+    "type": "District",
+    "communes": 10
   }
 ]
