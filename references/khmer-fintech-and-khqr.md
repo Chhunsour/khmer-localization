@@ -192,3 +192,7 @@ When rendering a KHQR code on an e-commerce checkout page or physical payment te
 
 > [!TIP]
 > A structured registry of key Bakong participant financial institutions is available at [`data/bakong_members.json`](../data/bakong_members.json).
+
+
+> [!NOTE]
+> A catalog of standard ISO 18245 Merchant Category Codes (Tag 52) used in KHQR is available at [`data/khqr_mcc_codes.json`](../data/khqr_mcc_codes.json).
