@@ -75,5 +75,12 @@
     "name_km": "ស្រុកភ្នំព្រឹក",
     "type": "District",
     "communes": 5
+  },
+  {
+    "code": "0212",
+    "name_en": "Kamrieng",
+    "name_km": "ស្រុកកំរៀង",
+    "type": "District",
+    "communes": 6
   }
 ]
