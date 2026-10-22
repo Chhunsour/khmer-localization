@@ -122,3 +122,7 @@ export interface CambodianAddress {
 
 > [!TIP]
 > A machine-readable JSON dataset containing all 25 divisions is available at [`data/provinces.json`](../data/provinces.json).
+
+
+> [!NOTE]
+> District-level datasets are available at [`data/phnom_penh_districts.json`](../data/phnom_penh_districts.json), [`data/siem_reap_districts.json`](../data/siem_reap_districts.json), and [`data/battambang_districts.json`](../data/battambang_districts.json).
