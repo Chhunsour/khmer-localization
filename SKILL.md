@@ -31,6 +31,12 @@ When generating code, lookup forms, or data schemas, consult the offline JSON ca
 - `data/bakong_members.json`: Key NBC Bakong participant banks and financial institutions.
 - `data/khmer_symbols.json`: Khmer punctuation and typographical symbols (Khan, Bariyoosan, Lek Too).
 - `data/khmer_keyboard.json`: NiDA standard keyboard character layout and key mappings.
+- `data/phnom_penh_districts.json`: All 14 Khans of Phnom Penh capital with administrative codes.
+- `data/siem_reap_districts.json`: All 12 districts/municipalities of Siem Reap province.
+- `data/battambang_districts.json`: All 14 districts/municipalities of Battambang province.
+- `data/khmer_independent_vowels.json`: Standard 14 non-deprecated independent vowels.
+- `data/cambodia_postal_codes.json`: Major postal hubs and 6-digit postcodes across Cambodia.
+- `data/khqr_mcc_codes.json`: ISO 18245 Merchant Category Codes for Bakong KHQR Tag 52.
 
 ---
 
