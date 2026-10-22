@@ -41,3 +41,16 @@ class TestExtendedCatalogs(unittest.TestCase):
         self.assertIn("ឥ", chars)
         self.assertIn("ឪ", chars)
 
+    def test_04_postal_codes_and_khqr_mcc_codes(self):
+        """Verify Cambodian postal codes and ISO 18245 KHQR MCC codes."""
+        post_path = os.path.join(DATA_DIR, "cambodia_postal_codes.json")
+        mcc_path = os.path.join(DATA_DIR, "khqr_mcc_codes.json")
+        with open(post_path, "r", encoding="utf-8") as f:
+            postals = json.load(f)
+        with open(mcc_path, "r", encoding="utf-8") as f:
+            mccs = json.load(f)
+        self.assertEqual(len(postals), 12)
+        self.assertEqual(len(mccs), 10)
+        mcc_nums = {m["mcc"] for m in mccs}
+        self.assertIn("5812", mcc_nums)
+
