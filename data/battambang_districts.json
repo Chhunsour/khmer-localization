@@ -19,5 +19,12 @@
     "name_km": "ស្រុកថ្មគោល",
     "type": "District",
     "communes": 10
+  },
+  {
+    "code": "0204",
+    "name_en": "Bavel",
+    "name_km": "ស្រុកបវេល",
+    "type": "District",
+    "communes": 8
   }
 ]
