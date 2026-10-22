@@ -75,5 +75,12 @@
     "name_km": "ខណ្ឌព្រែកព្នៅ",
     "type": "Khan",
     "sangkats": 5
+  },
+  {
+    "code": "1212",
+    "name_en": "Chbar Ampov",
+    "name_km": "ខណ្ឌច្បារអំពៅ",
+    "type": "Khan",
+    "sangkats": 8
   }
 ]
