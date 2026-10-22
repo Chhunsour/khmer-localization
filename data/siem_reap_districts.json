@@ -61,5 +61,12 @@
     "name_km": "ស្រុកសូទ្រនិគម",
     "type": "District",
     "communes": 10
+  },
+  {
+    "code": "1709",
+    "name_en": "Srei Snam",
+    "name_km": "ស្រុកស្រីស្នំ",
+    "type": "District",
+    "communes": 6
   }
 ]
