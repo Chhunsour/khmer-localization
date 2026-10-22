@@ -12,5 +12,12 @@
     "name_km": "ស្រុកអង្គរធំ",
     "type": "District",
     "communes": 4
+  },
+  {
+    "code": "1702",
+    "name_en": "Angkor Chum",
+    "name_km": "ស្រុកអង្គរជុំ",
+    "type": "District",
+    "communes": 7
   }
 ]
