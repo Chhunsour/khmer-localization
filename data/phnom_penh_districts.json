@@ -47,5 +47,12 @@
     "name_km": "ខណ្ឌឫស្សីកែវ",
     "type": "Khan",
     "sangkats": 7
+  },
+  {
+    "code": "1208",
+    "name_en": "Saensokh",
+    "name_km": "ខណ្ឌសែនសុខ",
+    "type": "Khan",
+    "sangkats": 6
   }
 ]
