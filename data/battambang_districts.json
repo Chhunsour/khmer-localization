@@ -54,5 +54,12 @@
     "name_km": "ស្រុកសង្កែ",
     "type": "District",
     "communes": 10
+  },
+  {
+    "code": "0209",
+    "name_en": "Samlout",
+    "name_km": "ស្រុកសំឡូត",
+    "type": "District",
+    "communes": 7
   }
 ]
