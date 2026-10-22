@@ -40,5 +40,12 @@
     "name_km": "ស្រុកក្រឡាញ់",
     "type": "District",
     "communes": 10
+  },
+  {
+    "code": "1706",
+    "name_en": "Puok",
+    "name_km": "ស្រុកពួក",
+    "type": "District",
+    "communes": 14
   }
 ]
