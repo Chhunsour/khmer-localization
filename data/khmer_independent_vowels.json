@@ -82,5 +82,12 @@
     "name_km": "ស្រៈឱ",
     "romanization": "qao",
     "example": "ឱកាស (Okas)"
+  },
+  {
+    "character": "ឲ",
+    "codepoint": "U+17B2",
+    "name_km": "ស្រៈឲ",
+    "romanization": "qoo",
+    "example": "ឲ្យ (Aoy)"
   }
 ]
