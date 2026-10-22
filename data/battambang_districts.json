@@ -61,5 +61,12 @@
     "name_km": "ស្រុកសំឡូត",
     "type": "District",
     "communes": 7
+  },
+  {
+    "code": "0210",
+    "name_en": "Sampov Loun",
+    "name_km": "ស្រុកសំពៅលូន",
+    "type": "District",
+    "communes": 6
   }
 ]
