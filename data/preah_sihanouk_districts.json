@@ -19,5 +19,12 @@
     "name_km": "ស្រុកព្រៃនប់",
     "type": "District",
     "communes": 14
+  },
+  {
+    "code": "1803",
+    "name_en": "Stueng Hav",
+    "name_km": "ស្រុកស្ទឹងហាវ",
+    "type": "District",
+    "communes": 4
   }
 ]
