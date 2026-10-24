@@ -5,5 +5,12 @@
     "name_km": "ក្រុងកំពត",
     "type": "Municipality",
     "sangkats": 5
+  },
+  {
+    "code": "0709",
+    "name_en": "Krong Bokor",
+    "name_km": "ក្រុងបូកគោ",
+    "type": "Municipality",
+    "sangkats": 3
   }
 ]
