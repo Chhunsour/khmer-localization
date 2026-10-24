@@ -178,5 +178,14 @@
     "series": 2,
     "vagga": "Dental",
     "ipa": "nɔː"
+  },
+  {
+    "char": "ប",
+    "codepoint": "U+1794",
+    "name_km": "អក្សរប",
+    "name_en": "Ba",
+    "series": 1,
+    "vagga": "Labial",
+    "ipa": "ɓɑː"
   }
 ]
