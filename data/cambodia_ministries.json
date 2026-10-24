@@ -22,5 +22,11 @@
     "name_en": "National Bank of Cambodia",
     "name_km": "ធនាគារជាតិនៃកម្ពុជា",
     "domain": "Central Banking & Bakong KHQR"
+  },
+  {
+    "abbr": "GDT",
+    "name_en": "General Department of Taxation",
+    "name_km": "អគ្គនាយកដ្ឋានពន្ធដារ",
+    "domain": "Tax Invoicing & Compliance"
   }
 ]
