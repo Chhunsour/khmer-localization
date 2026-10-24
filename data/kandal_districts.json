@@ -61,5 +61,12 @@
     "name_km": "ស្រុកអង្គស្នួល",
     "type": "District",
     "communes": 10
+  },
+  {
+    "code": "0809",
+    "name_en": "Ponhea Lueu",
+    "name_km": "ស្រុកពញាឮ",
+    "type": "District",
+    "communes": 11
   }
 ]
