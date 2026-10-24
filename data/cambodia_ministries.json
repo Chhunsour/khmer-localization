@@ -10,5 +10,11 @@
     "name_en": "Ministry of Economy and Finance",
     "name_km": "ក្រសួងសេដ្ឋកិច្ច និងហិរញ្ញវត្ថុ",
     "domain": "Fiscal Policy & Public Finance"
+  },
+  {
+    "abbr": "MOC",
+    "name_en": "Ministry of Commerce",
+    "name_km": "ក្រសួងពាណិជ្ជកម្ម",
+    "domain": "Business Registration & Trade"
   }
 ]
