@@ -12,5 +12,12 @@
     "name_km": "ស្រុកបាធាយ",
     "type": "District",
     "communes": 12
+  },
+  {
+    "code": "0302",
+    "name_en": "Chamkar Leu",
+    "name_km": "ស្រុកចំការលើ",
+    "type": "District",
+    "communes": 8
   }
 ]
