@@ -250,5 +250,14 @@
     "series": 2,
     "vagga": "Non-vagga",
     "ipa": "lɔː"
+  },
+  {
+    "char": "វ",
+    "codepoint": "U+179C",
+    "name_km": "អក្សរវ",
+    "name_en": "Vo",
+    "series": 2,
+    "vagga": "Non-vagga",
+    "ipa": "ʋɔː"
   }
 ]
