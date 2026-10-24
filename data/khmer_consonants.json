@@ -52,5 +52,14 @@
     "series": 1,
     "vagga": "Palatal",
     "ipa": "cɑː"
+  },
+  {
+    "char": "ឆ",
+    "codepoint": "U+1786",
+    "name_km": "អក្សរឆ",
+    "name_en": "Cha",
+    "series": 1,
+    "vagga": "Palatal",
+    "ipa": "cʰɑː"
   }
 ]
