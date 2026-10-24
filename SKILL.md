@@ -37,6 +37,13 @@ When generating code, lookup forms, or data schemas, consult the offline JSON ca
 - `data/khmer_independent_vowels.json`: Standard 14 non-deprecated independent vowels.
 - `data/cambodia_postal_codes.json`: Major postal hubs and 6-digit postcodes across Cambodia.
 - `data/khqr_mcc_codes.json`: ISO 18245 Merchant Category Codes for Bakong KHQR Tag 52.
+- `data/kandal_districts.json`: All 11 districts/municipalities of Kandal province.
+- `data/kampong_cham_districts.json`: All 10 districts/municipalities of Kampong Cham province.
+- `data/kampot_districts.json`: All 9 districts/municipalities of Kampot province.
+- `data/preah_sihanouk_districts.json`: All 5 coastal districts/municipalities of Preah Sihanouk.
+- `data/khmer_consonants.json`: Complete 33 consonants with Vagga phonology and series 1/2.
+- `data/cambodia_logistics.json`: 10 major express couriers and on-demand delivery services.
+- `data/cambodia_ministries.json`: Key regulatory ministries and government authorities.
 
 ---
 
