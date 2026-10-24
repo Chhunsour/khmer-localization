@@ -19,5 +19,12 @@
     "name_km": "ស្រុកកៀនស្វាយ",
     "type": "District",
     "communes": 8
+  },
+  {
+    "code": "0803",
+    "name_en": "Khsach Kandal",
+    "name_km": "ស្រុកខ្សាច់កណ្តាល",
+    "type": "District",
+    "communes": 18
   }
 ]
