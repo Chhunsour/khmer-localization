@@ -88,5 +88,14 @@
     "series": 2,
     "vagga": "Palatal",
     "ipa": "ɲɔː"
+  },
+  {
+    "char": "ដ",
+    "codepoint": "U+178A",
+    "name_km": "អក្សរដ",
+    "name_en": "Da",
+    "series": 1,
+    "vagga": "Retroflex",
+    "ipa": "ɗɑː"
   }
 ]
