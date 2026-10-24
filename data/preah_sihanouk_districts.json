@@ -26,5 +26,12 @@
     "name_km": "ស្រុកស្ទឹងហាវ",
     "type": "District",
     "communes": 4
+  },
+  {
+    "code": "1804",
+    "name_en": "Kampong Seila",
+    "name_km": "ស្រុកកំពង់សិលា",
+    "type": "District",
+    "communes": 4
   }
 ]
