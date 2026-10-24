@@ -205,5 +205,14 @@
     "series": 2,
     "vagga": "Labial",
     "ipa": "pɔː"
+  },
+  {
+    "char": "ភ",
+    "codepoint": "U+1797",
+    "name_km": "អក្សរភ",
+    "name_en": "Pho",
+    "series": 2,
+    "vagga": "Labial",
+    "ipa": "pʰɔː"
   }
 ]
