@@ -12,5 +12,12 @@
     "name_km": "ស្រុកកណ្តាលស្ទឹង",
     "type": "District",
     "communes": 18
+  },
+  {
+    "code": "0802",
+    "name_en": "Kien Svay",
+    "name_km": "ស្រុកកៀនស្វាយ",
+    "type": "District",
+    "communes": 8
   }
 ]
