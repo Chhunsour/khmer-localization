@@ -54,5 +54,12 @@
     "name_km": "ហ្វូដភេនដា",
     "type": "Food & Instant Grocery",
     "coverage": "Urban Hubs"
+  },
+  {
+    "code": "NHAM24",
+    "name_en": "NHAM24 On-Demand Logistics",
+    "name_km": "ញ៉ាំ២៤",
+    "type": "Local Food & Express Courier",
+    "coverage": "Major Cities"
   }
 ]
