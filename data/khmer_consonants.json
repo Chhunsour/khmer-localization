@@ -124,5 +124,14 @@
     "series": 2,
     "vagga": "Retroflex",
     "ipa": "tʰɔː"
+  },
+  {
+    "char": "ណ",
+    "codepoint": "U+178E",
+    "name_km": "អក្សរណ",
+    "name_en": "Nna",
+    "series": 1,
+    "vagga": "Retroflex",
+    "ipa": "nɑː"
   }
 ]
