@@ -115,5 +115,14 @@
     "series": 2,
     "vagga": "Retroflex",
     "ipa": "ɗɔː"
+  },
+  {
+    "char": "ឍ",
+    "codepoint": "U+178D",
+    "name_km": "អក្សរឍ",
+    "name_en": "Ttho",
+    "series": 2,
+    "vagga": "Retroflex",
+    "ipa": "tʰɔː"
   }
 ]
