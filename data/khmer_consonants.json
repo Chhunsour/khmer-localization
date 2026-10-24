@@ -43,5 +43,14 @@
     "series": 2,
     "vagga": "Velar",
     "ipa": "ŋɔː"
+  },
+  {
+    "char": "ច",
+    "codepoint": "U+1785",
+    "name_km": "អក្សរច",
+    "name_en": "Ca",
+    "series": 1,
+    "vagga": "Palatal",
+    "ipa": "cɑː"
   }
 ]
