@@ -5,5 +5,12 @@
     "name_km": "ក្រុងកំពង់ចាម",
     "type": "Municipality",
     "sangkats": 4
+  },
+  {
+    "code": "0301",
+    "name_en": "Batheay",
+    "name_km": "ស្រុកបាធាយ",
+    "type": "District",
+    "communes": 12
   }
 ]
