@@ -268,5 +268,14 @@
     "series": 1,
     "vagga": "Non-vagga",
     "ipa": "sɑː"
+  },
+  {
+    "char": "ហ",
+    "codepoint": "U+17A0",
+    "name_km": "អក្សរហ",
+    "name_en": "Ha",
+    "series": 1,
+    "vagga": "Non-vagga",
+    "ipa": "hɑː"
   }
 ]
