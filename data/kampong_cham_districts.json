@@ -19,5 +19,12 @@
     "name_km": "ស្រុកចំការលើ",
     "type": "District",
     "communes": 8
+  },
+  {
+    "code": "0303",
+    "name_en": "Cheung Prey",
+    "name_km": "ស្រុកជើងព្រៃ",
+    "type": "District",
+    "communes": 10
   }
 ]
