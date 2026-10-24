@@ -47,5 +47,12 @@
     "name_km": "ស្រុកដងទង់",
     "type": "District",
     "communes": 10
+  },
+  {
+    "code": "0706",
+    "name_en": "Kampong Trach",
+    "name_km": "ស្រុកកំពង់ត្រាច",
+    "type": "District",
+    "communes": 14
   }
 ]
