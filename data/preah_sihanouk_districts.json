@@ -12,5 +12,12 @@
     "name_km": "ក្រុងកោះរ៉ុង",
     "type": "Municipality",
     "sangkats": 2
+  },
+  {
+    "code": "1802",
+    "name_en": "Prey Nob",
+    "name_km": "ស្រុកព្រៃនប់",
+    "type": "District",
+    "communes": 14
   }
 ]
