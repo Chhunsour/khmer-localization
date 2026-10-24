@@ -40,5 +40,12 @@
     "name_km": "ស្រុកកងមាស",
     "type": "District",
     "communes": 11
+  },
+  {
+    "code": "0308",
+    "name_en": "Koh Sotin",
+    "name_km": "ស្រុកកោះសូទិន",
+    "type": "District",
+    "communes": 8
   }
 ]
