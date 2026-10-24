@@ -40,5 +40,12 @@
     "name_km": "ស្រុកលើកដែក",
     "type": "District",
     "communes": 7
+  },
+  {
+    "code": "0806",
+    "name_en": "Lvea Aem",
+    "name_km": "ស្រុកល្វាឯម",
+    "type": "District",
+    "communes": 15
   }
 ]
