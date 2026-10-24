@@ -12,5 +12,12 @@
     "name_km": "ហ្វ្លាស អិចប្រេស",
     "type": "E-Commerce Courier",
     "coverage": "Nationwide"
+  },
+  {
+    "code": "VET",
+    "name_en": "Virak Buntham Express (VET Logistics)",
+    "name_km": "វីរៈ ប៊ុនថាំ",
+    "type": "Freight & Passenger Bus",
+    "coverage": "Nationwide & Cross-Border"
   }
 ]
