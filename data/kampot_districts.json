@@ -19,5 +19,12 @@
     "name_km": "ស្រុកអង្គរជ័យ",
     "type": "District",
     "communes": 11
+  },
+  {
+    "code": "0702",
+    "name_en": "Banteay Meas",
+    "name_km": "ស្រុកបន្ទាយមាស",
+    "type": "District",
+    "communes": 14
   }
 ]
