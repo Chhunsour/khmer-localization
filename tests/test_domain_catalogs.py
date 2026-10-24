@@ -21,3 +21,16 @@ class TestDomainCatalogs(unittest.TestCase):
         self.assertIn("0811", {d["code"] for d in kd})
         self.assertIn("0305", {d["code"] for d in kc})
 
+    def test_02_kampot_and_sihanoukville_districts(self):
+        """Verify Kampot (9) and Preah Sihanouk (5) coastal districts."""
+        kp_path = os.path.join(DATA_DIR, "kampot_districts.json")
+        sh_path = os.path.join(DATA_DIR, "preah_sihanouk_districts.json")
+        with open(kp_path, "r", encoding="utf-8") as f:
+            kp = json.load(f)
+        with open(sh_path, "r", encoding="utf-8") as f:
+            sh = json.load(f)
+        self.assertEqual(len(kp), 9)
+        self.assertEqual(len(sh), 5)
+        self.assertIn("0708", {d["code"] for d in kp})
+        self.assertIn("1801", {d["code"] for d in sh})
+
