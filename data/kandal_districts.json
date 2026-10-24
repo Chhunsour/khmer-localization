@@ -5,5 +5,12 @@
     "name_km": "ក្រុងតាខ្មៅ",
     "type": "Municipality",
     "sangkats": 6
+  },
+  {
+    "code": "0801",
+    "name_en": "Kandal Stueng",
+    "name_km": "ស្រុកកណ្តាលស្ទឹង",
+    "type": "District",
+    "communes": 18
   }
 ]
