@@ -70,5 +70,14 @@
     "series": 2,
     "vagga": "Palatal",
     "ipa": "cɔː"
+  },
+  {
+    "char": "ឈ",
+    "codepoint": "U+1788",
+    "name_km": "អក្សរឈ",
+    "name_en": "Cho",
+    "series": 2,
+    "vagga": "Palatal",
+    "ipa": "cʰɔː"
   }
 ]
