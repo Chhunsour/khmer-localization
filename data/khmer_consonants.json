@@ -214,5 +214,14 @@
     "series": 2,
     "vagga": "Labial",
     "ipa": "pʰɔː"
+  },
+  {
+    "char": "ម",
+    "codepoint": "U+1798",
+    "name_km": "អក្សរម",
+    "name_en": "Mo",
+    "series": 2,
+    "vagga": "Labial",
+    "ipa": "mɔː"
   }
 ]
