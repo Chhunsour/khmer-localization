@@ -34,3 +34,17 @@ class TestDomainCatalogs(unittest.TestCase):
         self.assertIn("0708", {d["code"] for d in kp})
         self.assertIn("1801", {d["code"] for d in sh})
 
+    def test_03_khmer_33_consonants_phonetics(self):
+        """Verify full set of 33 standard Khmer consonants and series classification."""
+        cs_path = os.path.join(DATA_DIR, "khmer_consonants.json")
+        self.assertTrue(os.path.exists(cs_path))
+        with open(cs_path, "r", encoding="utf-8") as f:
+            cs = json.load(f)
+        self.assertEqual(len(cs), 33)
+        series1 = [c for c in cs if c["series"] == 1]
+        series2 = [c for c in cs if c["series"] == 2]
+        self.assertEqual(len(series1), 15)
+        self.assertEqual(len(series2), 18)
+        self.assertEqual(cs[0]["char"], "ក")
+        self.assertEqual(cs[-1]["char"], "អ")
+
