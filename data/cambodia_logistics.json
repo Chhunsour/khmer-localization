@@ -33,5 +33,12 @@
     "name_km": "ឃែររី អិចប្រេស",
     "type": "B2B / B2C Logistics",
     "coverage": "Nationwide"
+  },
+  {
+    "code": "ZTO",
+    "name_en": "ZTO Express Cambodia",
+    "name_km": "ហ្សិតធីអូ អិចប្រេស",
+    "type": "Express Parcel Logistics",
+    "coverage": "Nationwide"
   }
 ]
