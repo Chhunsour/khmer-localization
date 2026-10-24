@@ -68,5 +68,12 @@
     "name_km": "ស្រុកពញាឮ",
     "type": "District",
     "communes": 11
+  },
+  {
+    "code": "0810",
+    "name_en": "Saang",
+    "name_km": "ស្រុកស្អាង",
+    "type": "District",
+    "communes": 12
   }
 ]
