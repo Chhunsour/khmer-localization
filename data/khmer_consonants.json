@@ -259,5 +259,14 @@
     "series": 2,
     "vagga": "Non-vagga",
     "ipa": "ʋɔː"
+  },
+  {
+    "char": "ស",
+    "codepoint": "U+179F",
+    "name_km": "អក្សរស",
+    "name_en": "Sa",
+    "series": 1,
+    "vagga": "Non-vagga",
+    "ipa": "sɑː"
   }
 ]
