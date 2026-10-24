@@ -151,5 +151,14 @@
     "series": 1,
     "vagga": "Dental",
     "ipa": "tʰɑː"
+  },
+  {
+    "char": "ទ",
+    "codepoint": "U+1791",
+    "name_km": "អក្សរទ",
+    "name_en": "To",
+    "series": 2,
+    "vagga": "Dental",
+    "ipa": "tɔː"
   }
 ]
