@@ -26,5 +26,12 @@
     "name_km": "ស្រុកខ្សាច់កណ្តាល",
     "type": "District",
     "communes": 18
+  },
+  {
+    "code": "0804",
+    "name_en": "Koh Thom",
+    "name_km": "ស្រុកកោះធំ",
+    "type": "District",
+    "communes": 11
   }
 ]
