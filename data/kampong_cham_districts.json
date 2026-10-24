@@ -26,5 +26,12 @@
     "name_km": "ស្រុកជើងព្រៃ",
     "type": "District",
     "communes": 10
+  },
+  {
+    "code": "0306",
+    "name_en": "Kampong Siem",
+    "name_km": "ស្រុកកំពង់សៀម",
+    "type": "District",
+    "communes": 15
   }
 ]
