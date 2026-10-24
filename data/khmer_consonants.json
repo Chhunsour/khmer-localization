@@ -16,5 +16,14 @@
     "series": 1,
     "vagga": "Velar",
     "ipa": "kʰɑː"
+  },
+  {
+    "char": "គ",
+    "codepoint": "U+1782",
+    "name_km": "អក្សរគ",
+    "name_en": "Ko",
+    "series": 2,
+    "vagga": "Velar",
+    "ipa": "kɔː"
   }
 ]
