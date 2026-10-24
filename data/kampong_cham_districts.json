@@ -47,5 +47,12 @@
     "name_km": "ស្រុកកោះសូទិន",
     "type": "District",
     "communes": 8
+  },
+  {
+    "code": "0313",
+    "name_en": "Prey Chhor",
+    "name_km": "ស្រុកព្រៃឈរ",
+    "type": "District",
+    "communes": 15
   }
 ]
