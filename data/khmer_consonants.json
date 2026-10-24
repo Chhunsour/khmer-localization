@@ -196,5 +196,14 @@
     "series": 1,
     "vagga": "Labial",
     "ipa": "pʰɑː"
+  },
+  {
+    "char": "ព",
+    "codepoint": "U+1796",
+    "name_km": "អក្សរព",
+    "name_en": "Po",
+    "series": 2,
+    "vagga": "Labial",
+    "ipa": "pɔː"
   }
 ]
