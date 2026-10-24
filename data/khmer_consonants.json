@@ -223,5 +223,14 @@
     "series": 2,
     "vagga": "Labial",
     "ipa": "mɔː"
+  },
+  {
+    "char": "យ",
+    "codepoint": "U+1799",
+    "name_km": "អក្សរយ",
+    "name_en": "Yo",
+    "series": 2,
+    "vagga": "Non-vagga",
+    "ipa": "jɔː"
   }
 ]
