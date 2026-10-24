@@ -33,5 +33,12 @@
     "name_km": "ស្រុកកោះធំ",
     "type": "District",
     "communes": 11
+  },
+  {
+    "code": "0805",
+    "name_en": "Leuk Daek",
+    "name_km": "ស្រុកលើកដែក",
+    "type": "District",
+    "communes": 7
   }
 ]
