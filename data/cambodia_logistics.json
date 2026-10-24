@@ -19,5 +19,12 @@
     "name_km": "វីរៈ ប៊ុនថាំ",
     "type": "Freight & Passenger Bus",
     "coverage": "Nationwide & Cross-Border"
+  },
+  {
+    "code": "CP",
+    "name_en": "Cambodia Post",
+    "name_km": "ប្រៃសណីយ៍កម្ពុជា",
+    "type": "National Postal Operator",
+    "coverage": "Global & Domestic"
   }
 ]
