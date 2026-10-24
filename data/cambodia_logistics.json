@@ -5,5 +5,12 @@
     "name_km": "ជេ អេន ធី អិចប្រេស",
     "type": "Parcel Express",
     "coverage": "Nationwide"
+  },
+  {
+    "code": "FLASH",
+    "name_en": "Flash Express Cambodia",
+    "name_km": "ហ្វ្លាស អិចប្រេស",
+    "type": "E-Commerce Courier",
+    "coverage": "Nationwide"
   }
 ]
