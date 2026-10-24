@@ -33,5 +33,12 @@
     "name_km": "ស្រុកឈូក",
     "type": "District",
     "communes": 14
+  },
+  {
+    "code": "0704",
+    "name_en": "Chum Kiri",
+    "name_km": "ស្រុកជុំគិរី",
+    "type": "District",
+    "communes": 7
   }
 ]
