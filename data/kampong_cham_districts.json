@@ -33,5 +33,12 @@
     "name_km": "ស្រុកកំពង់សៀម",
     "type": "District",
     "communes": 15
+  },
+  {
+    "code": "0307",
+    "name_en": "Kang Meas",
+    "name_km": "ស្រុកកងមាស",
+    "type": "District",
+    "communes": 11
   }
 ]
