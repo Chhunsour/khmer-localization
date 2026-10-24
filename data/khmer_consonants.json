@@ -277,5 +277,14 @@
     "series": 1,
     "vagga": "Non-vagga",
     "ipa": "hɑː"
+  },
+  {
+    "char": "ឡ",
+    "codepoint": "U+17A1",
+    "name_km": "អក្សរឡ",
+    "name_en": "La",
+    "series": 1,
+    "vagga": "Non-vagga",
+    "ipa": "lɑː"
   }
 ]
