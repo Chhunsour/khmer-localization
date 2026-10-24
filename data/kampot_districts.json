@@ -26,5 +26,12 @@
     "name_km": "ស្រុកបន្ទាយមាស",
     "type": "District",
     "communes": 14
+  },
+  {
+    "code": "0703",
+    "name_en": "Chhouk",
+    "name_km": "ស្រុកឈូក",
+    "type": "District",
+    "communes": 14
   }
 ]
