@@ -40,5 +40,12 @@
     "name_km": "ហ្សិតធីអូ អិចប្រេស",
     "type": "Express Parcel Logistics",
     "coverage": "Nationwide"
+  },
+  {
+    "code": "GRAB",
+    "name_en": "GrabExpress Delivery",
+    "name_km": "ហ្គ្រេប",
+    "type": "On-Demand Instant Delivery",
+    "coverage": "Urban Hubs"
   }
 ]
