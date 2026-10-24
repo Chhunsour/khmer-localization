@@ -61,5 +61,14 @@
     "series": 1,
     "vagga": "Palatal",
     "ipa": "cʰɑː"
+  },
+  {
+    "char": "ជ",
+    "codepoint": "U+1787",
+    "name_km": "អក្សរជ",
+    "name_en": "Co",
+    "series": 2,
+    "vagga": "Palatal",
+    "ipa": "cɔː"
   }
 ]
