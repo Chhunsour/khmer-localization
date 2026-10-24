@@ -40,5 +40,12 @@
     "name_km": "ស្រុកជុំគិរី",
     "type": "District",
     "communes": 7
+  },
+  {
+    "code": "0705",
+    "name_en": "Dang Tong",
+    "name_km": "ស្រុកដងទង់",
+    "type": "District",
+    "communes": 10
   }
 ]
