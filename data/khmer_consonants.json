@@ -286,5 +286,14 @@
     "series": 1,
     "vagga": "Non-vagga",
     "ipa": "lɑː"
+  },
+  {
+    "char": "អ",
+    "codepoint": "U+17A2",
+    "name_km": "អក្សរអ",
+    "name_en": "Qa",
+    "series": 1,
+    "vagga": "Non-vagga",
+    "ipa": "ʔɑː"
   }
 ]
