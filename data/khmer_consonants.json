@@ -241,5 +241,14 @@
     "series": 2,
     "vagga": "Non-vagga",
     "ipa": "rɔː"
+  },
+  {
+    "char": "ល",
+    "codepoint": "U+179B",
+    "name_km": "អក្សរល",
+    "name_en": "Lo",
+    "series": 2,
+    "vagga": "Non-vagga",
+    "ipa": "lɔː"
   }
 ]
