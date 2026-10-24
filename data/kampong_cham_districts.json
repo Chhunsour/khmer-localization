@@ -61,5 +61,12 @@
     "name_km": "ស្រុកស្រីសន្ធរ",
     "type": "District",
     "communes": 14
+  },
+  {
+    "code": "0315",
+    "name_en": "Stueng Trang",
+    "name_km": "ស្រុកស្ទឹងត្រង់",
+    "type": "District",
+    "communes": 12
   }
 ]
