@@ -54,5 +54,12 @@
     "name_km": "ស្រុកកំពង់ត្រាច",
     "type": "District",
     "communes": 14
+  },
+  {
+    "code": "0707",
+    "name_en": "Tuek Chhou",
+    "name_km": "ស្រុកទឹកឈូ",
+    "type": "District",
+    "communes": 16
   }
 ]
