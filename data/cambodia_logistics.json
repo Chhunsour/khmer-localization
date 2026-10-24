@@ -61,5 +61,12 @@
     "name_km": "ញ៉ាំ២៤",
     "type": "Local Food & Express Courier",
     "coverage": "Major Cities"
+  },
+  {
+    "code": "WOWNOW",
+    "name_en": "WOWNOW Logistics",
+    "name_km": "វ៉ៅណៅ",
+    "type": "E-Commerce & Food Delivery",
+    "coverage": "Major Cities"
   }
 ]
