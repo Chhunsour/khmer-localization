@@ -232,5 +232,14 @@
     "series": 2,
     "vagga": "Non-vagga",
     "ipa": "jɔː"
+  },
+  {
+    "char": "រ",
+    "codepoint": "U+179A",
+    "name_km": "អក្សររ",
+    "name_en": "Ro",
+    "series": 2,
+    "vagga": "Non-vagga",
+    "ipa": "rɔː"
   }
 ]
