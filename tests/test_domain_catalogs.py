@@ -48,3 +48,17 @@ class TestDomainCatalogs(unittest.TestCase):
         self.assertEqual(cs[0]["char"], "ក")
         self.assertEqual(cs[-1]["char"], "អ")
 
+    def test_04_logistics_and_ministries_catalogs(self):
+        """Verify Cambodian delivery providers and regulatory ministries catalog."""
+        log_path = os.path.join(DATA_DIR, "cambodia_logistics.json")
+        min_path = os.path.join(DATA_DIR, "cambodia_ministries.json")
+        with open(log_path, "r", encoding="utf-8") as f:
+            logistics = json.load(f)
+        with open(min_path, "r", encoding="utf-8") as f:
+            ministries = json.load(f)
+        self.assertEqual(len(logistics), 10)
+        self.assertEqual(len(ministries), 5)
+        abbrs = {m["abbr"] for m in ministries}
+        self.assertIn("MPTC", abbrs)
+        self.assertIn("GDT", abbrs)
+
