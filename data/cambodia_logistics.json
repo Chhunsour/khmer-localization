@@ -47,5 +47,12 @@
     "name_km": "ហ្គ្រេប",
     "type": "On-Demand Instant Delivery",
     "coverage": "Urban Hubs"
+  },
+  {
+    "code": "PANDA",
+    "name_en": "Foodpanda Delivery",
+    "name_km": "ហ្វូដភេនដា",
+    "type": "Food & Instant Grocery",
+    "coverage": "Urban Hubs"
   }
 ]
