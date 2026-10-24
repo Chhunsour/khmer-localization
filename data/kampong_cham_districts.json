@@ -54,5 +54,12 @@
     "name_km": "ស្រុកព្រៃឈរ",
     "type": "District",
     "communes": 15
+  },
+  {
+    "code": "0314",
+    "name_en": "Srei Santhor",
+    "name_km": "ស្រុកស្រីសន្ធរ",
+    "type": "District",
+    "communes": 14
   }
 ]
