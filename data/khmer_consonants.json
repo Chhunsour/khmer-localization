@@ -169,5 +169,14 @@
     "series": 2,
     "vagga": "Dental",
     "ipa": "tʰɔː"
+  },
+  {
+    "char": "ន",
+    "codepoint": "U+1793",
+    "name_km": "អក្សរន",
+    "name_en": "No",
+    "series": 2,
+    "vagga": "Dental",
+    "ipa": "nɔː"
   }
 ]
