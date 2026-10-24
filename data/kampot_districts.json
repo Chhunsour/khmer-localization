@@ -12,5 +12,12 @@
     "name_km": "ក្រុងបូកគោ",
     "type": "Municipality",
     "sangkats": 3
+  },
+  {
+    "code": "0701",
+    "name_en": "Angkor Chey",
+    "name_km": "ស្រុកអង្គរជ័យ",
+    "type": "District",
+    "communes": 11
   }
 ]
