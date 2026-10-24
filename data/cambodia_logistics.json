@@ -26,5 +26,12 @@
     "name_km": "ប្រៃសណីយ៍កម្ពុជា",
     "type": "National Postal Operator",
     "coverage": "Global & Domestic"
+  },
+  {
+    "code": "KERRY",
+    "name_en": "Kerry Express Cambodia",
+    "name_km": "ឃែររី អិចប្រេស",
+    "type": "B2B / B2C Logistics",
+    "coverage": "Nationwide"
   }
 ]
