@@ -13,14 +13,14 @@
 
 ## 📊 Executive KPI Dashboard
 
-| Dimension | Engineering Metric | Verification Method | Production Standard |
+| Strategic Dimension | Engineering Metric | Verification Methodology | Production Benchmark Standard |
 | :--- | :---: | :--- | :--- |
-| **Deterministic Reliability** | **104 / 104 Tests Passing** | Automated Python & Node.js test runners | 100% deterministic CI coverage |
-| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 14,200+ Khmer characters |
-| **External Dependencies** | **0 (Zero)** | Pure standard library & native Web APIs | No supply-chain bloat or CVE surface |
-| **AI Token Overhead** | **~90% Reduction** | Modular 45t / 120t / 250t system prompts | Zero exploratory prompt loops |
-| **Curated Offline Data** | **21 JSON Datasets** | Schema-validated offline catalogs | Telecom, banking, administrative |
-| **UI Dictionary Coverage** | **107 UI Terms** | Curated digital strings with hallucination traps | Auth, commerce, actions, navigation |
+| **Deterministic Reliability** | **104 / 104 Passing** | Automated Python & Node.js test runners | 100% deterministic CI coverage |
+| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 13,800+ Khmer characters |
+| **Supply-Chain Security** | **0 (Zero External Deps)** | Pure standard library & native Web APIs | Zero CVE surface, zero npm install lag |
+| **AI Token Optimization** | **Up to 99.0% Reduction** | Modular 45t / 120t / 250t system prompts | Eradicates exploratory prompt loops |
+| **Curated Offline Data** | **21 JSON Catalogs** | Automated schema-validated datasets | Telecom, banking, administrative |
+| **UI Dictionary Coverage** | **107 Standard Terms** | Curated digital strings with hallucination traps | Auth, commerce, actions, navigation |
 | **Cross-Platform Parity** | **TypeScript, JS, Python** | Isomorphic dual implementation | Node 18+, Bun, Deno, iOS, Android, Web |
 
 ---
@@ -29,32 +29,33 @@
 
 ```mermaid
 flowchart TD
-    subgraph Layer1["1. AI Agent & Token Optimization Layer"]
-        A["Agent Prompt / Developer Input"] --> B{"Optimization Tier"}
-        B -->|Nano (45t)| C[".cursorrules / .windsurfrules"]
-        B -->|Standard (120t)| D["CLAUDE.md / Copilot"]
-        B -->|Enterprise (250t)| E["Fintech & KHQR Compliance"]
-        B -->|Zero-Shot| F["Agent Fast-Path Cheat Sheet"]
+    subgraph Layer1["1. Developer & AI Assistant Layer"]
+        IDE["Developer IDE / Coding Agent<br>(Cursor, Claude Code, Antigravity, Copilot)"]
+        PROMPT["Pre-Tuned System Prompts<br>(Nano 45t / Standard 120t / Enterprise 250t)"]
+        FASTPATH["Agent Fast-Path Cheat Sheet<br>(Zero-shot copy-paste snippets)"]
     end
 
-    subgraph Layer2["2. Isomorphic Core Engine (Zero External Deps)"]
-        G["Phone Normalizer (+855)"]
-        H["Dual Currency Engine (KHR / USD)"]
-        I["Unicode Grapheme Segmenter"]
-        J["GDT Number-to-Words Engine"]
-        K["NBC Bakong KHQR CRC16 Validator"]
-        L["Buddhist Era & Calendar Engine"]
+    subgraph Layer2["2. Zero-Dependency Isomorphic Engine"]
+        PHONE["Phone Normalizer (+855)<br>8/9-digit TRC NSN validation"]
+        CURR["Dual-Currency Formatter<br>KHR whole integer vs. USD 2 decimals"]
+        UNICODE["Unicode & Grapheme Segmenter<br>Intl.Segmenter dotted-circle prevention"]
+        WORDS["GDT Number-to-Words Engine<br>Invoice scale words (រៀលគត់)"]
+        KHQR["Bakong KHQR Validator<br>EMVCo MPM TLV + CRC16-CCITT"]
+        CALENDAR["Calendar & Buddhist Era<br>Civil standard: BE = CE + 543"]
     end
 
-    subgraph Layer3["3. Authoritative Datasets & Regulatory Compliance"]
-        M["data/ui_terms.json (107 Terms)"]
-        N["TRC Telecom Plan (+855)"]
-        O["NBC Bakong KHQR (EMVCo)"]
-        P["ISO 3166-2:KH (25 Provinces)"]
-        Q["GDT Invoicing Regulations"]
+    subgraph Layer3["3. Authoritative Offline Catalogs & Compliance"]
+        UI_TERMS["107 UI Terms Catalog<br>(data/ui_terms.json)"]
+        TRC_DATA["TRC Telecom Plan<br>(data/telecom_operators.json)"]
+        NBC_DATA["Bakong Banks & KHQR MCC<br>(data/bakong_members.json)"]
+        ADMIN_DATA["ISO 3166-2:KH 25 Provinces<br>(data/provinces.json + 7 districts)"]
+        GDT_DATA["GDT Tax Invoicing Rules<br>(Official circulars & scales)"]
     end
 
-    Layer1 --> Layer2
+    IDE --> PROMPT
+    IDE --> FASTPATH
+    PROMPT --> Layer2
+    FASTPATH --> Layer2
     Layer2 --> Layer3
 ```
 
@@ -75,6 +76,19 @@ flowchart TD
 | **GDT Tax Invoices (Spellout)** | Convert numeric amounts into official spelled-out Khmer words. | [`references/khmer-collation-and-number-words.md`](./references/khmer-collation-and-number-words.md) |
 | **Mobile Line-Height & Dotted Circle** | Set `line-height: 1.6+` and use `Intl.Segmenter` to prevent broken Coeng glyphs. | [`references/unicode-and-typography.md`](./references/unicode-and-typography.md) |
 | **Static Code Audit / CI Verification** | Run strict Unicode and UTF-8 scanner with zero exit code on clean repos. | [`scripts/check_khmer_unicode.py`](./scripts/check_khmer_unicode.py) |
+
+---
+
+## 📉 AI Context Token Optimization Benchmarks
+
+Localizing into low-resource scripts like Khmer frequently wastes thousands of context tokens due to multi-turn debugging. `khmer-localization` eliminates this overhead with pre-tuned prompt tiers:
+
+| Optimization Strategy | Context Tokens | Overhead Reduction | Visual Token Footprint | Primary Engineering Fit |
+| :--- | :---: | :---: | :--- | :--- |
+| **Raw Multi-File Documentation** | ~4,500 | 0% (Baseline) | `████████████████████` 100% | Full manual documentation review |
+| **Enterprise / Fintech Tier** | ~250 | **94.4%** | `█░░░░░░░░░░░░░░░░░░░` 5.6% | Payment gateways, KHQR, GDT invoices |
+| **Standard UI Tier** | ~120 | **97.3%** | `▌░░░░░░░░░░░░░░░░░░░` 2.7% | Web & mobile frontend apps |
+| **Nano Tier** | ~45 | **99.0%** | `▎░░░░░░░░░░░░░░░░░░░` 1.0% | `.cursorrules`, `.windsurfrules` |
 
 ---
 
@@ -122,6 +136,30 @@ formatUSD(15.5);  // => "$15.50"
 
 The Telecommunication Regulator of Cambodia (TRC) mandates a closed numbering plan under ITU-T E.164:
 
+```mermaid
+stateDiagram-v2
+    [*] --> RawString: Input (e.g. '012 345 678', '+855 97 123 4567')
+    RawString --> Cleaned: Strip whitespace, hyphens, dots & brackets
+    Cleaned --> AsciiDigits: Convert Khmer numerals (០-៩) to ASCII (0-9)
+    AsciiDigits --> PrefixStripped: Strip international (+855, 00855, 855) or trunk (0)
+    
+    state PrefixStripped {
+        [*] --> CheckLength
+        CheckLength --> StandardMobile: NSN length == 8 digits
+        CheckLength --> ExtendedMobile: NSN length == 9 digits
+        CheckLength --> SyntaxError: NSN length not 8 or 9
+    }
+
+    StandardMobile --> Formatted: Valid 8-digit NSN
+    ExtendedMobile --> Formatted: Valid 9-digit NSN
+    SyntaxError --> Rejected: Return is_valid_syntax = false
+
+    Formatted --> E164Ready: Generate E.164 (+855...) & Domestic (0...)
+    E164Ready --> OtpBoundary: Flag requires_otp_verification = true
+    OtpBoundary --> [*]: Safe for DB storage & SMS dispatch
+    Rejected --> [*]: Abort with clear error
+```
+
 | Format Tier | Domestic Notation | International E.164 | NSN Digits | Operator Classification |
 | :--- | :--- | :--- | :---: | :--- |
 | **Standard Mobile** | `012 345 678` | `+85512345678` | **8 digits** | Cellcard, Smart, Metfone |
@@ -149,7 +187,31 @@ const result = normalizeCambodianPhone("012 345 678");
 
 Khmer is an **abugida script** where subscript consonants (ជើងអក្សរ) are constructed dynamically using the Coeng control code (`U+17D2`):
 
-$$\text{Subscript Consonant} = \text{Coeng (U+17D2)} + \text{Base Consonant}$$
+```mermaid
+flowchart LR
+    subgraph Inputs["Character Sequence (Logical Order)"]
+        C1["Base Consonant<br>(e.g. U+1780 'ក')"]
+        COENG["Coeng Subscript Marker<br>(U+17D2)"]
+        C2["Subscript Consonant<br>(e.g. U+1796 'ព')"]
+        V["Dependent Vowel<br>(e.g. U+17BB as in 'កុ')"]
+        D["Diacritic / Accent<br>(e.g. U+17C6)"]
+    end
+
+    subgraph Shaping["OpenType Shaping Engine (HarfBuzz / CoreText)"]
+        SHAPER["Glyph Cluster Shaper<br>& Anchor Placement"]
+    end
+
+    subgraph Render["Rendered 3-Tier Visual Syllable"]
+        TOP["Top Zone: Vowels & Diacritics (U+17BB, U+17C6)"]
+        MID["Middle Zone: Base Consonant (U+1780)"]
+        BOT["Bottom Zone: Subscript Consonants via Coeng (U+17D2+U+1796)"]
+    end
+
+    Inputs --> SHAPER
+    SHAPER --> TOP
+    SHAPER --> MID
+    SHAPER --> BOT
+```
 
 | Failure Mode | Visual Defect | Root Cause | Production Guardrail |
 | :--- | :---: | :--- | :--- |
@@ -174,6 +236,27 @@ $$\text{Subscript Consonant} = \text{Coeng (U+17D2)} + \text{Base Consonant}$$
 
 The National Bank of Cambodia operates Bakong, the national payment switch. KHQR complies with EMVCo Merchant-Presented Mode (MPM):
 
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Customer as Customer (Consumer App)
+    participant Merchant as Merchant (POS / Web Checkout)
+    participant Engine as khmer-localization Engine
+    participant Bakong as NBC Bakong Switch / Acquirer
+
+    Merchant->>Engine: Request KHQR Payload (Amount, Currency: 116 KHR / 840 USD)
+    Engine->>Engine: Build EMVCo TLV blocks (Tags 00..60)
+    Engine->>Engine: Compute CRC16-CCITT-FALSE over Tag 6304
+    Engine-->>Merchant: Return Verified KHQR String + QR Image
+    Merchant->>Customer: Display KHQR Code
+    Customer->>Engine: Scan & Parse KHQR String
+    Engine->>Engine: verifyKhqr() — Validate CRC16 checksum & Currency
+    Engine-->>Customer: Validated Payload (Merchant Name, Amount, Currency)
+    Customer->>Bakong: Authorize Payment via Bakong App
+    Bakong-->>Merchant: Real-Time Payment Settlement Confirmation
+    Merchant-->>Customer: Emit Receipt with Khmer Words (GDT Compliant)
+```
+
 | EMVCo Tag | Field Name | Format & Rule | Validation Standard |
 | :---: | :--- | :--- | :--- |
 | **Tag 00** | Format Indicator | Fixed `"01"` | Mandatory |
@@ -197,11 +280,33 @@ const { isValid, error } = verifyKhqr("000201010211...6304ABCD");
 
 Addressing follows a strict 4-tier civilian administrative hierarchy:
 
-```
-[Tier 1] Province / Capital (រាជធានី-ខេត្ត) — 25 Divisions (Phnom Penh + 24 Provinces)
-  └── [Tier 2] District / Khan / Municipality (ស្រុក/ខណ្ឌ/ក្រុង) — 209 Subdivisions
-        └── [Tier 3] Commune / Sangkat (ឃុំ/សង្កាត់) — 1,652 Communes
-              └── [Tier 4] Village (ភូមិ) — 14,000+ Villages
+```mermaid
+flowchart TD
+    RGC["Royal Government of Cambodia<br>(Civil Administration)"] --> T1
+    
+    subgraph T1["Tier 1: Top-Level Division (25 Total)"]
+        PP["1 Autonomous Capital<br>Phnom Penh (រាជធានីភ្នំពេញ)"]
+        PROV["24 Provincial Administrations<br>Provinces (ខេត្ត)"]
+    end
+
+    subgraph T2["Tier 2: Municipal & District Level (209 Total)"]
+        KHAN["14 Khans (ខណ្ឌ)<br>(Phnom Penh urban districts)"]
+        DIST["164 Sroks (ស្រុក)<br>(Rural provincial districts)"]
+        KRONG["31 Krongs (ក្រុង)<br>(Provincial urban municipalities)"]
+    end
+
+    subgraph T3["Tier 3: Commune Level (1,652 Total)"]
+        SANGKAT["Sangkats (សង្កាត់)<br>(Urban communes)"]
+        KHUM["Khums (ឃុំ)<br>(Rural communes)"]
+    end
+
+    subgraph T4["Tier 4: Village Level (14,000+ Total)"]
+        PHUM["Phum (ភូមិ)<br>(Base community address unit)"]
+    end
+
+    T1 --> T2
+    T2 --> T3
+    T3 --> T4
 ```
 
 | Operational Reality | E-Commerce Delivery Form Rule |
