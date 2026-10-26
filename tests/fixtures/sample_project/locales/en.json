@@ -1,0 +1,14 @@
+{
+  "auth": {
+    "sign_in": "Sign In",
+    "welcome_user": "Welcome, {name}!",
+    "forgot_password": "Forgot Password?"
+  },
+  "commerce": {
+    "total_price": "Total Price",
+    "price_tag": "Price: {amount}"
+  },
+  "common": {
+    "save": "Save"
+  }
+}

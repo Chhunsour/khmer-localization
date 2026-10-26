@@ -156,6 +156,58 @@ class TestKhmerUtilsJs(unittest.TestCase):
         self.assertGreater(out["stats"]["consonants"], 0)
         self.assertGreater(out["stats"]["coengSubscripts"], 0)
 
+    def test_fixed_line_and_short_codes(self):
+        """Test geographic landlines and short codes in Node.js."""
+        code = """
+        const rPp = u.normalizeCambodianPhone("023 210 022");
+        const r117 = u.normalizeCambodianPhone("117");
+        console.log(JSON.stringify({ rPp, r117 }));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertEqual(out["rPp"]["line_type"], "fixed_line")
+        self.assertEqual(out["rPp"]["normalized_e164"], "+85523210022")
+        self.assertEqual(out["r117"]["line_type"], "short_code")
+
+    def test_money_total_precision(self):
+        """Test financial minor unit arithmetic in Node.js."""
+        code = """
+        const items = [{ price: 0.1, quantity: 3 }, { price: 0.2, quantity: 2 }];
+        const res = u.calculateMoneyTotal(items, "USD", 10.0);
+        console.log(JSON.stringify(res));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertEqual(out["subtotal"], 0.7)
+        self.assertEqual(out["tax"], 0.07)
+        self.assertEqual(out["total"], 0.77)
+
+    def test_khqr_full_parsing_js(self):
+        """Test EMVCo TLV parser in Node.js."""
+        code = """
+        const payload = "00020101021129220010sokha@devb5204541153031165405250005802KH5912AngkorCoffee6010Phnom Penh6304";
+        const crc = u.calculateKhqrCrc16(payload);
+        const parsed = u.parseKhqr(payload + crc);
+        console.log(JSON.stringify(parsed));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertTrue(out["is_valid_format"])
+        self.assertTrue(out["is_valid_crc"])
+        self.assertEqual(out["currency_name"], "KHR")
+        self.assertEqual(out["amount"], 25000)
+        self.assertEqual(out["merchant_name"], "AngkorCoffee")
+        self.assertEqual(out["bakong_account_id"], "sokha@devb")
+
+    def test_khmer_words_sorting_js(self):
+        """Test Khmer word sorting with Intl.Collator in Node.js."""
+        code = """
+        const words = ["ចាកចេញ", "កម្ពុជា", "ខេត្ត"];
+        const sorted = u.sortKhmerWords(words);
+        console.log(JSON.stringify(sorted));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertEqual(out[0], "កម្ពុជា")
+        self.assertEqual(out[1], "ខេត្ត")
+        self.assertEqual(out[2], "ចាកចេញ")
+
 
 if __name__ == "__main__":
     unittest.main()

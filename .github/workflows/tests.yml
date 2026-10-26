@@ -22,6 +22,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "20"
+
     - name: Run automated unit tests
       run: |
         python -m unittest discover -s tests -p "test_*.py" -v
@@ -30,6 +35,14 @@ jobs:
       run: |
         python scripts/check_khmer_unicode.py --help
         python scripts/khmer_utils.py --help
+        python scripts/audit_khmer_i18n.py --help
+
+    - name: Run runnable examples
+      run: |
+        python examples/ecommerce_checkout.py
+        python examples/hr_payroll.py
+        node examples/ecommerce_checkout.js
+        node examples/hr_payroll.js
 
     - name: Run Unicode integrity check on repository
       run: |

@@ -1,0 +1,11 @@
+{
+  "auth": {
+    "sign_in": "យាងចូល",
+    "welcome_user": "សូមស្វាគមន៍!",
+    "forgot_password": "Forgot Password?"
+  },
+  "commerce": {
+    "total_price": "សរុបតម្លៃ",
+    "price_tag": "តម្លៃ: 25.00 KHR"
+  }
+}

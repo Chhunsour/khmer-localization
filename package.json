@@ -1,0 +1,44 @@
+{
+  "name": "khmer-localization",
+  "version": "2.0.0",
+  "description": "Production-grade Khmer localization skill, utilities, dataset registry, and i18n quality audit engine.",
+  "main": "scripts/khmer_utils.js",
+  "module": "scripts/khmer_utils.js",
+  "types": "scripts/khmer_utils.ts",
+  "bin": {
+    "khmer-utils": "./scripts/khmer_utils.js"
+  },
+  "scripts": {
+    "test": "python3 -m unittest discover -s tests -p 'test_*.py'",
+    "audit": "python3 scripts/audit_khmer_i18n.py",
+    "check-unicode": "python3 scripts/check_khmer_unicode.py --strict .",
+    "example:checkout": "node examples/ecommerce_checkout.js",
+    "example:payroll": "node examples/hr_payroll.js"
+  },
+  "keywords": [
+    "khmer",
+    "cambodia",
+    "localization",
+    "i18n",
+    "l10n",
+    "khqr",
+    "unicode",
+    "chuon-nath",
+    "riel",
+    "khr",
+    "phnom-penh"
+  ],
+  "author": "Chhunsour",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chhunsour/khmer-localization.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Chhunsour/khmer-localization/issues"
+  },
+  "homepage": "https://github.com/Chhunsour/khmer-localization#readme",
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

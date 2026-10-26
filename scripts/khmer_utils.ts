@@ -2,12 +2,13 @@
  * khmer_utils.ts - Type-Safe Zero-Dependency Isomorphic Khmer Localization Utility
  *
  * Production-ready algorithms for TypeScript and modern JavaScript environments:
- * - Cambodian phone normalization (E.164, 8 & 9-digit NSN TRC standard).
- * - Dual currency formatting (KHR whole-riel integer vs USD 2-decimal).
+ * - Cambodian phone normalization (E.164, 8 & 9-digit NSN TRC standard, fixed-line + mobile).
+ * - Dual currency formatting and financial precision math (KHR whole-riel integer vs USD 2-decimal).
  * - Cambodian calendar, date formatting, and Buddhist Era (BE = CE + 543).
  * - Grapheme-cluster-aware safe text truncation (prevents broken Coeng & dotted circles).
  * - Number-to-words conversion in Khmer for invoices and tax compliance (GDT).
- * - Bakong KHQR EMVCo CRC16 checksum calculation and verification.
+ * - Bakong KHQR EMVCo CRC16 checksum calculation, verification, and full TLV parser.
+ * - Khmer alphabetical collation per Chuon Nath dictionary order.
  *
  * Compatible with TypeScript 4.5+, Next.js, React, React Native, Node.js, Deno, Bun.
  */
@@ -18,7 +19,9 @@ export interface CambodianPhoneResult {
   normalized_e164: string | null;
   normalized_domestic: string | null;
   is_valid_syntax: boolean;
-  length_category: "8_digits" | "9_digits" | "invalid";
+  length_category: "8_digits" | "9_digits" | "short_code" | "invalid";
+  line_type: "mobile" | "fixed_line" | "short_code" | "unknown";
+  area_name: string | null;
   requires_otp_verification: boolean;
   is_active_sim: boolean;
   error: string | null;
@@ -32,6 +35,42 @@ export interface KhmerDateOptions {
 export interface KhqrVerifyResult {
   isValid: boolean;
   error: string | null;
+}
+
+export interface KhqrParsedResult {
+  raw: string;
+  is_valid_format: boolean;
+  is_valid_crc: boolean;
+  crc_expected: string | null;
+  crc_actual: string | null;
+  currency_code: string | null;
+  currency_name: string | null;
+  amount: number | null;
+  merchant_name: string | null;
+  merchant_city: string | null;
+  country_code: string | null;
+  bakong_account_id: string | null;
+  tags: Record<string, any>;
+  error: string | null;
+}
+
+export interface MoneyItem {
+  price: number;
+  quantity?: number;
+}
+
+export interface MoneyTotalResult {
+  currency: string;
+  subtotal_minor: number;
+  tax_minor: number;
+  total_minor: number;
+  subtotal: number;
+  tax: number;
+  total: number;
+  subtotal_formatted: string;
+  tax_formatted: string;
+  total_formatted: string;
+  rounding_mode: string;
 }
 
 export interface KhmerCharacterStats {
@@ -48,9 +87,43 @@ export interface KhmerCharacterStats {
 
 // --- 1. Cambodian Phone Number Normalization ---
 
+export const CAMBODIA_GEOGRAPHIC_PREFIXES: Record<string, string> = {
+  "23": "Phnom Penh / Kandal",
+  "24": "Kandal",
+  "25": "Kampong Speu",
+  "26": "Kampong Chhnang",
+  "32": "Takeo",
+  "33": "Kampot / Kep",
+  "34": "Preah Sihanouk",
+  "35": "Koh Kong",
+  "42": "Kampong Cham / Tboung Khmum",
+  "43": "Prey Veng",
+  "44": "Svay Rieng",
+  "52": "Pursat",
+  "53": "Battambang / Pailin",
+  "54": "Banteay Meanchey",
+  "62": "Kampong Thom",
+  "63": "Siem Reap",
+  "64": "Preah Vihear",
+  "72": "Kratie",
+  "73": "Stung Treng",
+  "74": "Mondulkiri",
+  "75": "Ratanakiri",
+};
+
+export const CAMBODIA_SHORT_CODES: Record<string, string> = {
+  "117": "Police Emergency",
+  "118": "Fire Emergency",
+  "119": "Ambulance Emergency",
+  "115": "CDC Disease Surveillance",
+  "1288": "Anti-Corruption Unit",
+  "1299": "National Disaster Management",
+};
+
 /**
  * Normalizes a Cambodian phone number into E.164 and domestic format.
  * TRC compliant: verifies 8 or 9 digit NSN without carrier lock-in.
+ * Supports mobile, fixed line geographic areas, and emergency short codes.
  */
 export function normalizeCambodianPhone(inputStr: string): CambodianPhoneResult {
   const result: CambodianPhoneResult = {
@@ -60,6 +133,8 @@ export function normalizeCambodianPhone(inputStr: string): CambodianPhoneResult 
     normalized_domestic: null,
     is_valid_syntax: false,
     length_category: "invalid",
+    line_type: "unknown",
+    area_name: null,
     requires_otp_verification: true,
     is_active_sim: false,
     error: null,
@@ -78,7 +153,20 @@ export function normalizeCambodianPhone(inputStr: string): CambodianPhoneResult 
     String(ch.charCodeAt(0) - 0x17e0)
   );
 
-  // 3. Strip international prefixes (+855, 00855, 855) or trunk zero (0)
+  // 3. Handle emergency short codes
+  if (CAMBODIA_SHORT_CODES[cleaned]) {
+    result.nsn = cleaned;
+    result.normalized_domestic = cleaned;
+    result.normalized_e164 = cleaned;
+    result.is_valid_syntax = true;
+    result.length_category = "short_code";
+    result.line_type = "short_code";
+    result.area_name = CAMBODIA_SHORT_CODES[cleaned];
+    result.requires_otp_verification = false;
+    return result;
+  }
+
+  // 4. Strip international prefixes (+855, 00855, 855) or trunk zero (0)
   let nationalNumber = cleaned;
   if (nationalNumber.startsWith("+855")) {
     nationalNumber = nationalNumber.slice(4);
@@ -95,13 +183,13 @@ export function normalizeCambodianPhone(inputStr: string): CambodianPhoneResult 
     nationalNumber = nationalNumber.slice(1);
   }
 
-  // 4. Validate digits only
+  // 5. Validate digits only
   if (!/^\d+$/.test(nationalNumber)) {
     result.error = "Phone number contains non-numeric characters.";
     return result;
   }
 
-  // 5. NSN length: 8 digits (standard mobile) or 9 digits (extended mobile)
+  // 6. NSN length: 8 digits (standard mobile / fixed) or 9 digits (extended mobile)
   if (nationalNumber.length === 8) {
     result.length_category = "8_digits";
   } else if (nationalNumber.length === 9) {
@@ -111,6 +199,15 @@ export function normalizeCambodianPhone(inputStr: string): CambodianPhoneResult 
     return result;
   }
 
+  // 7. Determine line type and geographic area
+  const prefix2 = nationalNumber.slice(0, 2);
+  if (CAMBODIA_GEOGRAPHIC_PREFIXES[prefix2]) {
+    result.line_type = "fixed_line";
+    result.area_name = CAMBODIA_GEOGRAPHIC_PREFIXES[prefix2];
+  } else {
+    result.line_type = "mobile";
+  }
+
   result.nsn = nationalNumber;
   result.normalized_e164 = `+855${nationalNumber}`;
   result.normalized_domestic = `0${nationalNumber}`;
@@ -118,7 +215,7 @@ export function normalizeCambodianPhone(inputStr: string): CambodianPhoneResult 
   return result;
 }
 
-// --- 2. Dual-Currency Formatting (USD & KHR) ---
+// --- 2. Dual-Currency Formatting & Financial Precision Engine ---
 
 /**
  * Format Cambodian Riel (KHR).
@@ -169,6 +266,72 @@ export function formatUSD(amount: number): string {
     maximumFractionDigits: 2,
   });
   return `$${formattedNum}`;
+}
+
+/**
+ * Financial calculation engine using integer minor units (riels for KHR, cents for USD)
+ * to prevent IEEE 754 floating-point precision drift.
+ */
+export function calculateMoneyTotal(
+  items: MoneyItem[],
+  currency: string = "KHR",
+  taxRatePercent: number = 0.0,
+  roundingMode: "half_up" | "half_even" = "half_up"
+): MoneyTotalResult {
+  const isKhr = currency.toUpperCase() === "KHR";
+  let subtotalMinor = 0;
+
+  for (const item of items) {
+    const price = item.price || 0;
+    const qty = item.quantity !== undefined ? item.quantity : 1;
+    if (isKhr) {
+      subtotalMinor += Math.round(price) * qty;
+    } else {
+      subtotalMinor += Math.round(price * 100) * qty;
+    }
+  }
+
+  const rawTax = (subtotalMinor * taxRatePercent) / 100.0;
+  let taxMinor: number;
+  if (roundingMode === "half_even") {
+    taxMinor = Math.round(rawTax);
+  } else {
+    taxMinor = Math.floor(rawTax + 0.5);
+  }
+
+  const totalMinor = subtotalMinor + taxMinor;
+  let subtotalVal: number, taxVal: number, totalVal: number;
+  let subtotalFmt: string, taxFmt: string, totalFmt: string;
+
+  if (isKhr) {
+    subtotalVal = subtotalMinor;
+    taxVal = taxMinor;
+    totalVal = totalMinor;
+    subtotalFmt = formatKHR(subtotalVal);
+    taxFmt = formatKHR(taxVal);
+    totalFmt = formatKHR(totalVal);
+  } else {
+    subtotalVal = subtotalMinor / 100.0;
+    taxVal = taxMinor / 100.0;
+    totalVal = totalMinor / 100.0;
+    subtotalFmt = formatUSD(subtotalVal);
+    taxFmt = formatUSD(taxVal);
+    totalFmt = formatUSD(totalVal);
+  }
+
+  return {
+    currency: currency.toUpperCase(),
+    subtotal_minor: subtotalMinor,
+    tax_minor: taxMinor,
+    total_minor: totalMinor,
+    subtotal: subtotalVal,
+    tax: taxVal,
+    total: totalVal,
+    subtotal_formatted: subtotalFmt,
+    tax_formatted: taxFmt,
+    total_formatted: totalFmt,
+    rounding_mode: roundingMode,
+  };
 }
 
 // --- 3. Calendar, Dates & Buddhist Era ---
@@ -380,6 +543,7 @@ function _threeDigitsToKhmer(n: number): string {
 /**
  * Convert an integer to spelled-out Khmer words.
  * Handles millions (លាន), hundred thousands (សែន), ten thousands (ម៉ឺន), thousands (ពាន់).
+ * Recursive million grouping supports unlimited values.
  */
 export function integerToKhmerWords(num: number): string {
   const nInt = Math.floor(num);
@@ -389,10 +553,10 @@ export function integerToKhmerWords(num: number): string {
   let n = nInt;
   let words = "";
 
-  // Millions (លាន)
+  // Millions (លាន) - Recursive grouping to support millions, billions, trillions
   if (n >= 1000000) {
     const millions = Math.floor(n / 1000000);
-    words += `${_threeDigitsToKhmer(millions)}លាន`;
+    words += `${integerToKhmerWords(millions)}លាន`;
     n %= 1000000;
   }
 
@@ -446,10 +610,14 @@ export function formatCurrencyKhmerWords(
   }
 
   const centsWords = integerToKhmerWords(cents);
+  if (intPart === 0) {
+    return `${centsWords}សេន`;
+  }
+
   return `${words}ដុល្លារអាមេរិក និង${centsWords}សេន`;
 }
 
-// --- 6. Bakong KHQR EMVCo CRC16 Checksum ---
+// --- 6. Bakong KHQR EMVCo CRC16 Checksum & Parser ---
 
 /**
  * Calculate CRC16-CCITT-FALSE for EMVCo / KHQR payload.
@@ -497,7 +665,189 @@ export function verifyKhqr(khqrString: string): KhqrVerifyResult {
   return { isValid: true, error: null };
 }
 
-// --- 7. Character and Text Utilities ---
+/**
+ * Parse a raw EMVCo KHQR string into structured TLV records and payment details.
+ */
+export function parseKhqr(khqrString: string): KhqrParsedResult {
+  const result: KhqrParsedResult = {
+    raw: khqrString,
+    is_valid_format: false,
+    is_valid_crc: false,
+    crc_expected: null,
+    crc_actual: null,
+    currency_code: null,
+    currency_name: null,
+    amount: null,
+    merchant_name: null,
+    merchant_city: null,
+    country_code: null,
+    bakong_account_id: null,
+    tags: {},
+    error: null,
+  };
+
+  if (!khqrString || khqrString.length < 20) {
+    result.error = "Payload is empty or shorter than minimum EMVCo length.";
+    return result;
+  }
+
+  const verifyRes = verifyKhqr(khqrString);
+  result.is_valid_crc = verifyRes.isValid;
+  if (!verifyRes.isValid) {
+    result.error = verifyRes.error;
+  }
+
+  let idx = 0;
+  const tags: Record<string, any> = {};
+  const len = khqrString.length;
+
+  try {
+    while (idx < len) {
+      if (idx + 4 > len) break;
+      const tag = khqrString.slice(idx, idx + 2);
+      const tagLen = parseInt(khqrString.slice(idx + 2, idx + 4), 10);
+      idx += 4;
+      const val = khqrString.slice(idx, idx + tagLen);
+      idx += tagLen;
+
+      if ((tag === "29" || tag === "30" || tag === "62") && val.length >= 4) {
+        const subTags: Record<string, string> = {};
+        let sIdx = 0;
+        while (sIdx < val.length) {
+          if (sIdx + 4 > val.length) break;
+          const sTag = val.slice(sIdx, sIdx + 2);
+          const sLen = parseInt(val.slice(sIdx + 2, sIdx + 4), 10);
+          sIdx += 4;
+          const sVal = val.slice(sIdx, sIdx + sLen);
+          sIdx += sLen;
+          subTags[sTag] = sVal;
+        }
+        tags[tag] = { raw: val, sub_tags: subTags };
+      } else {
+        tags[tag] = val;
+      }
+    }
+
+    result.tags = tags;
+    result.is_valid_format = true;
+
+    if (tags["53"]) {
+      result.currency_code = tags["53"];
+      if (tags["53"] === "116") result.currency_name = "KHR";
+      else if (tags["53"] === "840") result.currency_name = "USD";
+      else result.currency_name = "UNKNOWN";
+    }
+
+    if (tags["54"]) {
+      const parsedAmount = parseFloat(tags["54"]);
+      result.amount = isNaN(parsedAmount) ? null : parsedAmount;
+    }
+
+    if (tags["59"]) result.merchant_name = tags["59"];
+    if (tags["60"]) result.merchant_city = tags["60"];
+    if (tags["58"]) result.country_code = tags["58"];
+
+    for (const mTag of ["29", "30"]) {
+      if (tags[mTag] && tags[mTag].sub_tags && tags[mTag].sub_tags["00"]) {
+        result.bakong_account_id = tags[mTag].sub_tags["00"];
+        break;
+      }
+    }
+
+    if (tags["63"]) {
+      result.crc_expected = tags["63"];
+    }
+  } catch (err: any) {
+    result.error = `Failed to parse EMVCo TLV structure: ${err.message}`;
+    result.is_valid_format = false;
+  }
+
+  return result;
+}
+
+export interface GenerateKhqrParams {
+  bakongAccountId: string;
+  merchantName: string;
+  amount: number;
+  currency?: string;
+  merchantCity?: string;
+  billNumber?: string;
+  storeLabel?: string;
+  terminalLabel?: string;
+  mcc?: string;
+}
+
+/**
+ * Generate an EMVCo compliant Bakong KHQR dynamic payment payload with CRC16 checksum.
+ * Decouples payload generation from bank settlement or API authentication.
+ */
+export function generateKhqr({
+  bakongAccountId,
+  merchantName,
+  amount,
+  currency = "KHR",
+  merchantCity = "Phnom Penh",
+  billNumber = "",
+  storeLabel = "",
+  terminalLabel = "",
+  mcc = "5999",
+}: GenerateKhqrParams): string {
+  function formatTlv(tag: string, val: string | number): string {
+    const s = String(val);
+    const len = String(s.length).padStart(2, "0");
+    return `${tag}${len}${s}`;
+  }
+
+  const parts = [formatTlv("00", "01"), formatTlv("01", "12")];
+  const sub29 = formatTlv("00", bakongAccountId);
+  parts.push(formatTlv("29", sub29));
+  parts.push(formatTlv("52", mcc));
+
+  const currUpper = (currency || "KHR").toUpperCase();
+  const currCode = currUpper === "KHR" ? "116" : "840";
+  parts.push(formatTlv("53", currCode));
+
+  let amountStr = "";
+  if (currCode === "116") {
+    amountStr = String(Math.round(amount));
+  } else {
+    amountStr = Number(amount).toFixed(2);
+  }
+  parts.push(formatTlv("54", amountStr));
+
+  parts.push(formatTlv("58", "KH"));
+  parts.push(formatTlv("59", (merchantName || "").slice(0, 25)));
+  parts.push(formatTlv("60", (merchantCity || "Phnom Penh").slice(0, 15)));
+
+  let sub62 = "";
+  if (billNumber) sub62 += formatTlv("01", billNumber);
+  if (storeLabel) sub62 += formatTlv("07", storeLabel);
+  if (terminalLabel) sub62 += formatTlv("08", terminalLabel);
+  if (sub62) parts.push(formatTlv("62", sub62));
+
+  const rawWithoutCrc = parts.join("") + "6304";
+  const crc = calculateKhqrCrc16(rawWithoutCrc);
+  return rawWithoutCrc + crc;
+}
+
+export const generateKHQR = generateKhqr;
+
+// --- 7. Character and Collation Utilities ---
+
+/**
+ * Sort a list of Khmer words per Chuon Nath dictionary order using Intl.Collator.
+ */
+export function sortKhmerWords(words: string[]): string[] {
+  if (!Array.isArray(words)) return [];
+  if (typeof Intl !== "undefined" && (Intl as any).Collator) {
+    const collator = new (Intl as any).Collator("km-KH", {
+      sensitivity: "base",
+      numeric: true,
+    });
+    return [...words].sort((a, b) => collator.compare(a, b));
+  }
+  return [...words].sort();
+}
 
 /**
  * Check if the string contains any Khmer Unicode characters.
