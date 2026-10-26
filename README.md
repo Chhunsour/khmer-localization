@@ -1,18 +1,20 @@
 # Khmer Localization (`khmer-localization`) — Production AI Agent Skill for Cambodian Software Engineering
 
 [![Tests](https://github.com/Chhunsour/khmer-localization/actions/workflows/tests.yml/badge.svg)](https://github.com/Chhunsour/khmer-localization/actions)
-[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-93%20Passed-brightgreen.svg)](#testing--quality-assurance)
+[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-104%20Passed-brightgreen.svg)](#testing--quality-assurance)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.10+](https://img.shields.io/badge/Python-3.10+-green.svg)](https://www.python.org/)
+[![Node: 18+](https://img.shields.io/badge/Node.js-18+-success.svg)](https://nodejs.org/)
+[![TypeScript: 4.5+](https://img.shields.io/badge/TypeScript-4.5+-blue.svg)](https://www.typescriptlang.org/)
 [![Agent Skills Standard](https://img.shields.io/badge/Standard-Agent%20Skills-purple.svg)](https://agentskills.org)
 [![Unicode: 15.1](https://img.shields.io/badge/Unicode-Khmer%20U%2B1780--U%2B17FF-informational.svg)](https://unicode.org/charts/PDF/U1780.pdf)
 [![Country: Cambodia](https://img.shields.io/badge/Country-Cambodia%20%28%2B855%29-red.svg)](https://trc.gov.kh)
 
-The definitive open-source **Agent Skill** for AI coding assistants (**Google Antigravity**, **Claude Code**, **OpenAI Codex / ChatGPT**, **Gemini CLI**, **Cursor**, **GitHub Copilot**). It equips AI coding agents with verified domain knowledge, algorithmic safeguards, and battle-tested code patterns to build, localize, and audit production software for Khmer-speaking users and the Kingdom of Cambodia.
+The definitive open-source **Agent Skill** for AI coding assistants (**Google Antigravity**, **Claude Code**, **OpenAI Codex / ChatGPT**, **Gemini CLI**, **Cursor**, **GitHub Copilot**). It equips AI coding agents with verified domain knowledge, algorithmic safeguards, token-saving cheat sheets, and battle-tested code patterns to build, localize, and audit production software for Khmer-speaking users and the Kingdom of Cambodia.
 
 > [!NOTE]
 > **What is an Agent Skill?**
-> This repository packages an open-standard **developer tool and AI skill**, not a monolithic runtime library or demo application. Installing this skill teaches your AI coding assistant how to write, inspect, format, and verify Khmer localization across your own applications and codebases.
+> This repository packages an open-standard **developer tool and AI skill**, not a monolithic runtime library or demo application. Installing this skill teaches your AI coding assistant how to write, inspect, format, and verify Khmer localization across your own applications and codebases while saving token budgets.
 
 ---
 
@@ -20,6 +22,8 @@ The definitive open-source **Agent Skill** for AI coding assistants (**Google An
 
 - [Overview & Value Proposition](#overview--value-proposition)
 - [Agent Quick-Routing Matrix](#agent-quick-routing-matrix)
+- [AI Token Optimization & System Prompts](#ai-token-optimization--system-prompts)
+- [The Top 10 Khmer AI Hallucinations & Guardrails](#the-top-10-khmer-ai-hallucinations--guardrails)
 - [The 5 Fatal AI Localization Traps](#the-5-fatal-ai-localization-traps)
 - [Core Engineering Pillars](#core-engineering-pillars)
   - [1. Khmer Unicode Integrity & OpenType Typography](#1-khmer-unicode-integrity--opentype-typography)
@@ -31,9 +35,12 @@ The definitive open-source **Agent Skill** for AI coding assistants (**Google An
   - [7. Cambodian Calendar, Dates, Times & Buddhist Era (BE)](#7-cambodian-calendar-dates-times--buddhist-era-be)
   - [8. Khmer Alphabetical Collation & GDT Number-to-Words](#8-khmer-alphabetical-collation--gdt-number-to-words)
   - [9. Mobile Responsive UX & Zero-Width Word Breaking](#9-mobile-responsive-ux--zero-width-word-breaking)
+- [UI Localization Dictionary (`data/ui_terms.json`)](#ui-localization-dictionary-dataui_termsjson)
+- [Isomorphic JavaScript / TypeScript Utilities (`scripts/khmer_utils.ts` & `.js`)](#isomorphic-javascript--typescript-utilities)
 - [Production Framework Integration Recipes](#production-framework-integration-recipes)
 - [Python Utility Module (`scripts/khmer_utils.py`)](#python-utility-module-scriptskhmer_utilspy)
 - [Static Unicode & UTF-8 Audit Tool (`scripts/check_khmer_unicode.py`)](#static-unicode--utf-8-audit-tool-scriptscheck_khmer_unicodepy)
+- [Machine-Readable Cambodian Data Catalogs (`data/`)](#machine-readable-cambodian-data-catalogs-data)
 - [Installation by Agent Platform](#installation-by-agent-platform)
 - [Frequently Asked Questions (FAQ) for Search & Answer Engines](#frequently-asked-questions-faq-for-search--answer-engines)
 - [Authoritative Regulatory & Standards Citations](#authoritative-regulatory--standards-citations)
@@ -60,10 +67,14 @@ Engineering software for the Cambodian market presents unique internationalizati
 
 ## Agent Quick-Routing Matrix
 
-For AI coding agents (Claude, Codex, Gemini, Antigravity), use this lookup matrix to navigate directly to the verified implementation pattern:
+For AI coding agents (Claude, Codex, Gemini, Antigravity, Cursor), use this lookup matrix to navigate directly to the verified implementation pattern:
 
 | User Task / Problem | Immediate Agent Action | Primary Reference |
 | :--- | :--- | :--- |
+| **Token-efficient agent cheat sheet** | Copy-paste zero-shot snippets for KHR, BE, ZWSP, phone, CRC16, and UI lookups. | [Agent Fast Path](./references/agent-fast-path.md) |
+| **System prompts for Cursor / Claude** | Inject pre-tuned 45t, 120t, or 250t prompts into `.cursorrules` or `CLAUDE.md`. | [Agent System Prompts](./prompts/agent-system-prompts.md) |
+| **Prevent AI hallucinations** | Audit top 10 LLM failure modes (royal words, inverted word order, Coeng slicing). | [Khmer AI Guardrails](./references/khmer-ai-guardrails.md) |
+| **Standard UI dictionary (100+ terms)** | Check natural UI copy vs avoid hallucinated machine translation in `data/ui_terms.json`. | [UI Terms Catalog](./data/ui_terms.json) |
 | **Translate or review UI copy** | Use natural, active tech verbs (`ចូល`, `ដាក់ស្នើ`, `ចុះឈ្មោះ`); eliminate royal/monk vocabulary. | [Khmer Writing Guide](./references/khmer-writing-guide.md) |
 | **Cambodian phone input (+855)** | Use `normalizeCambodianPhone` (8/9-digit NSN; decouple prefix tables; preserve OTP boundary). | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
 | **Currency formatting (KHR / USD)** | Configure `{ minimumFractionDigits: 0, maximumFractionDigits: 0 }` for whole-riel prices. | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
@@ -75,8 +86,43 @@ For AI coding agents (Claude, Codex, Gemini, Antigravity), use this lookup matri
 | **Diacritic clipping on mobile** | Apply CSS `line-height: 1.6`–`1.8`, `min-h-[44px]`, `includeFontPadding: false` (Android). | [Unicode & Typography](./references/unicode-and-typography.md) |
 | **Word breaking / container overflow** | Use `insertKhmerWordBreaks` with `Intl.Segmenter` + CSS `overflow-wrap: break-word`. | [Unicode & Typography](./references/unicode-and-typography.md) |
 | **String truncation & dotted circles** | Truncate grapheme clusters with `Intl.Segmenter` (never slice after Coeng `U+17D2`). | [Unicode & Typography](./references/unicode-and-typography.md) |
+| **JavaScript / TypeScript utilities** | Zero-dependency isomorphic TS/JS library (`scripts/khmer_utils.ts` / `.js`). | [TS / JS Utils Module](./scripts/khmer_utils.ts) |
 | **Python utility library** | Import `normalize_cambodian_phone`, `format_khr`, `number_to_khmer_words`, `crc16`. | [Khmer Utils Module](./scripts/khmer_utils.py) |
 | **Static code check / CI gate** | Run `python3 scripts/check_khmer_unicode.py --strict --json <path>` | [Checker Script](./scripts/check_khmer_unicode.py) |
+
+---
+
+## AI Token Optimization & System Prompts
+
+Localizing into low-resource languages like Khmer often consumes excessive LLM context tokens and triggers multi-turn exploratory debugging loops due to common script pitfalls.
+
+`khmer-localization` provides tiered, token-optimized system prompt blocks in [`prompts/agent-system-prompts.md`](./prompts/agent-system-prompts.md) and an instant 1-page cheat sheet in [`references/agent-fast-path.md`](./references/agent-fast-path.md):
+
+| Prompt Tier | Size | Best For | Typical Use |
+| :--- | :---: | :--- | :--- |
+| **Nano Tier** | ~45 tokens | Context-constrained assistants, general codebases | Paste into `.cursorrules` or `.windsurfrules` |
+| **Standard Tier** | ~120 tokens | Web and mobile frontend/fullstack applications | Paste into `CLAUDE.md` or `.cursor/rules/khmer.mdc` |
+| **Enterprise Tier** | ~250 tokens | Banking, payment gateways, Bakong KHQR, e-commerce | Paste into enterprise system prompts |
+
+> [!TIP]
+> **Token Savings:** Injecting a 45-token or 120-token block eliminates up to 90% of token consumption typically wasted when agents repeatedly query long documentation files or debug broken dotted circle characters.
+
+---
+
+## The Top 10 Khmer AI Hallucinations & Guardrails
+
+Large language models trained on generic multilingual corpora exhibit 10 recurring hallucination patterns when working with Khmer. For deep technical breakdowns and programmatic guardrails, see [`references/khmer-ai-guardrails.md`](./references/khmer-ai-guardrails.md):
+
+1. **Social Register Hallucination:** Using royal (*Reachasap* / រាជសព្ទ) vocabulary (`យាង`, `សោយ`) instead of modern digital tech terms (`ចូល`, `បរិភោគ`).
+2. **Inverted Word Order:** English `[Adjective] + [Noun]` ("Total Price") translated into ungrammatical `សរុបតម្លៃ` instead of natural Khmer `[Noun] + [Adjective]` (`តម្លៃសរុប`).
+3. **Fractional Riel Decimal Bug:** Emitting `.00` on KHR amounts or hallucinating non-existent subunits ("tiens" / "sen") in consumer pricing.
+4. **Code-Unit Slicing & Dotted Circles:** Using `.slice(0, n)` across multi-byte UTF-16 characters, severing Coeng (`U+17D2`) and rendering the dotted circle (`U+25CC`).
+5. **Destructive Whitespace Regexes:** Running `s.replace(/\s+/g, '')` that erases Zero-Width Spaces (`\u200B` / ZWSP), breaking responsive mobile typography.
+6. **Hardcoded Exchange Rates:** Hardcoding outdated rates (e.g., $1 = 4,000៛) instead of fetching real-time National Bank of Cambodia (NBC) rates.
+7. **Western Pluralization Suffixes:** Appending English `-s` or creating awkward literal suffixes like `ទំនិញច្រើន` instead of using Khmer classifier particles.
+8. **Direct English Calquing:** Literal translations like "Home" -> `ផ្ទះ` (residential house) instead of `ទំព័រដើម` (Home page).
+9. **Fake Phone Validation:** Claiming a phone number is "verified" or "active" merely because it conforms to 8 or 9 digits syntax without an SMS OTP verification.
+10. **Corrupting Buddhist Era Calculation:** Using Thai/Solar offset variations or miscalculating CE + 543.
 
 ---
 
@@ -372,6 +418,99 @@ export const styles = StyleSheet.create({
 
 ---
 
+## UI Localization Dictionary (`data/ui_terms.json`)
+
+To prevent agents from hallucinating translations or oscillating between disparate registers, this repository bundles a curated, offline JSON dictionary of **107 standard digital UI strings** in [`data/ui_terms.json`](./data/ui_terms.json).
+
+Each entry contains the standard internationalization key, natural Khmer text, category, and specific LLM pitfalls to avoid:
+
+```json
+[
+  {
+    "key": "commerce.total_price",
+    "en": "Total Price",
+    "km": "តម្លៃសរុប",
+    "category": "commerce_payments",
+    "avoid": "សរុបតម្លៃ (inverted word order hallucination)"
+  },
+  {
+    "key": "auth.sign_in",
+    "en": "Sign In / Log In",
+    "km": "ចូលគណនី",
+    "category": "authentication",
+    "avoid": "យាងចូល (royal register) or ចុះឈ្មោះចូល"
+  },
+  {
+    "key": "action.save",
+    "en": "Save",
+    "km": "រក្សាទុក",
+    "category": "actions",
+    "avoid": "សង្គ្រោះ (saving a life) or សន្សំ (saving money)"
+  }
+]
+```
+
+Categories covered: `authentication`, `navigation`, `actions`, `commerce_payments`, `status_feedback`, `forms_inputs`, and `privacy_terms`.
+
+---
+
+## Isomorphic JavaScript / TypeScript Utilities (`scripts/khmer_utils.ts` & `.js`)
+
+For frontend and fullstack web/mobile applications (Next.js, React, React Native, Vue, Node.js, Bun, Deno), `scripts/` provides a **zero-dependency** isomorphic module:
+
+```typescript
+import {
+  normalizeCambodianPhone,
+  formatKHR,
+  formatUSD,
+  toBuddhistEra,
+  formatKhmerDate,
+  safeTruncateKhmer,
+  integerToKhmerWords,
+  formatCurrencyKhmerWords,
+  calculateKhqrCrc16,
+  verifyKhqr,
+} from "./scripts/khmer_utils";
+
+// 1. Cambodian Phone Normalization (E.164)
+normalizeCambodianPhone("012 345 678");
+// => { normalized_e164: "+85512345678", is_valid_syntax: true, length_category: "8_digits", ... }
+
+// 2. Dual Currency Formatting
+formatKHR(15000); // => "15,000៛" (integer whole riel)
+formatUSD(25.5);   // => "$25.50"
+
+// 3. Buddhist Era & Date Formatting
+const date = new Date(2026, 9, 26);
+formatKhmerDate(date, { includeBE: true });
+// => "ថ្ងៃទី 26 ខែតុលា ឆ្នាំ 2026 (ព.ស. 2569)"
+
+// 4. Safe Grapheme Truncation (No Dotted Circles)
+safeTruncateKhmer("សួស្តីកម្ពុជា", 3); // => "សួស្តី…"
+
+// 5. Spelled-out Currency Words (GDT Invoices)
+formatCurrencyKhmerWords(25000, "KHR");
+// => "ពីរម៉ឺនប្រាំពាន់រៀលគត់"
+
+// 6. Bakong KHQR CRC16 Verification
+verifyKhqr("000201010211...6304ABCD");
+// => { isValid: true, error: null }
+```
+
+CLI execution via Node.js:
+```bash
+# Normalize phone
+node scripts/khmer_utils.js phone "012 345 678"
+
+# Format KHR
+node scripts/khmer_utils.js currency 15000 KHR
+
+# Khmer words for invoice
+node scripts/khmer_utils.js words 25000 KHR
+```
+
+---
+
 ## Python Utility Module (`scripts/khmer_utils.py`)
 
 A zero-dependency reference Python module implementing all core localization algorithms:
@@ -414,6 +553,7 @@ python3 scripts/check_khmer_unicode.py --strict --json .
 ## Machine-Readable Cambodian Data Catalogs (`data/`)
 
 The repository includes curated, zero-dependency offline JSON datasets for Cambodian software engineering:
+- **`data/ui_terms.json`**: 107 standardized digital UI strings categorized across authentication, navigation, actions, payments, forms, and privacy with authentic Khmer copy and prohibited AI hallucinations.
 - **`data/provinces.json`**: All 25 ISO 3166-2:KH provinces and autonomous municipality with bilingual names and district counts.
 - **`data/banknotes.json`**: 11 Cambodian Riel (KHR) currency denominations with Khmer numerals and security motifs.
 - **`data/telecom_operators.json`**: Cambodian telecommunication network operators, ITU-T MCC-MNC codes, and TRC prefixes.
@@ -541,7 +681,9 @@ Run the comprehensive, zero-dependency offline test suite:
 python3 -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-All **93 automated tests** run deterministically in ~1 second:
+All **104 automated tests** run deterministically in ~3 seconds:
+- `tests/test_ui_terms.py` (4 tests): Verification of 107 standardized UI terms, unique keys, schema validation, and strict absence of royal/monastic register words.
+- `tests/test_khmer_utils_js.py` (7 tests): Cross-runtime Node.js verification of isomorphic TypeScript/JavaScript utilities: phone normalization, currency, Buddhist Era, grapheme truncation, number words, and KHQR CRC16.
 - `tests/test_check_khmer_unicode.py` (20 tests): Replacement character detection, C0/C1 control codes, ZWSP preservation, orphaned marks, trailing Coeng, and JSON CLI reporting.
 - `tests/test_khmer_utils.py` (24 tests): Reusable Python library verification: phone normalization, currency formatting, dates/BE, safe truncation, number-to-words, text detection, character statistics, and Bakong KHQR CRC16 checksums.
 - `tests/test_data_catalog.py` (6 tests): Automated integrity verification of offline JSON datasets: 25 ISO 3166-2:KH provinces, 11 banknote denominations, 10 telecom operators, 12 public holidays, and 10 Bakong members.

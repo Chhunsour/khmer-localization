@@ -24,6 +24,7 @@ It provides actionable procedures, battle-tested code patterns, and automated ve
 ## Machine-Readable Data Catalogs (`data/`)
 
 When generating code, lookup forms, or data schemas, consult the offline JSON catalogs in `data/`:
+- `data/ui_terms.json`: 100+ standard UI/software engineering terms with authentic Khmer copy and prohibited AI hallucinations.
 - `data/provinces.json`: All 25 ISO 3166-2:KH administrative divisions with Khmer script names.
 - `data/banknotes.json`: 11 Cambodian Riel banknote denominations with Khmer script names.
 - `data/telecom_operators.json`: Cambodian mobile operators, TRC prefixes, and MCC-MNC codes.
@@ -53,6 +54,10 @@ When a user prompt involves Cambodian localization, consult this direct lookup t
 
 | User Task / Problem | Immediate Agent Action | Primary Reference |
 | :--- | :--- | :--- |
+| **Token-efficient agent cheat sheet** | Copy-paste zero-shot snippets for KHR, BE, ZWSP, phone, CRC16, and UI lookups. | [Agent Fast Path](./references/agent-fast-path.md) |
+| **System prompts for Cursor / Claude** | Inject pre-tuned 45t, 120t, or 250t prompts into `.cursorrules` or `CLAUDE.md`. | [Agent System Prompts](./prompts/agent-system-prompts.md) |
+| **Prevent AI hallucinations** | Audit top 10 LLM failure modes (royal words, inverted word order, Coeng slicing). | [Khmer AI Guardrails](./references/khmer-ai-guardrails.md) |
+| **Standard UI dictionary (100+ terms)** | Check natural UI copy vs avoid hallucinated machine translation in `data/ui_terms.json`. | [UI Terms Catalog](./data/ui_terms.json) |
 | **Translate / review UI copy** | Use natural tech verbs (`ចូល`, `ដាក់ស្នើ`); avoid royal/monk vocabulary. | [Khmer Writing Guide](./references/khmer-writing-guide.md) |
 | **Cambodian phone input (+855)** | Use `normalizeCambodianPhone` (8/9-digit NSN; decouple prefixes; require OTP). | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
 | **Currency formatting (KHR / USD)** | Configure `{ minimumFractionDigits: 0, maximumFractionDigits: 0 }` for whole KHR. | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
@@ -64,6 +69,7 @@ When a user prompt involves Cambodian localization, consult this direct lookup t
 | **Clipping diacritics / layout** | Apply `line-height: 1.6`–`1.8`, `min-h-[44px]`, `includeFontPadding: false` (Android). | [Unicode & Typography](./references/unicode-and-typography.md) |
 | **Word breaking / container overflow** | Use `insertKhmerWordBreaks` with `Intl.Segmenter` + CSS `overflow-wrap: break-word`. | [Unicode & Typography](./references/unicode-and-typography.md) |
 | **String truncation & dotted circles** | Truncate grapheme clusters using `Intl.Segmenter` (never slice after Coeng `U+17D2`). | [Unicode & Typography](./references/unicode-and-typography.md) |
+| **JavaScript / TypeScript utilities** | Zero-dependency isomorphic TS/JS library (`scripts/khmer_utils.ts` / `.js`). | [TS / JS Utils Module](./scripts/khmer_utils.ts) |
 | **Python utility functions** | Import tested helpers (`normalize_cambodian_phone`, `format_khr`, `words`, `crc16`). | [Khmer Utils Module](./scripts/khmer_utils.py) |
 | **Verify repository / CI check** | Run `python3 scripts/check_khmer_unicode.py --strict --json <path>` | [Checker Script](./scripts/check_khmer_unicode.py) |
 

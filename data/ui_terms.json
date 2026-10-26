@@ -1,0 +1,751 @@
+[
+  {
+    "key": "auth.sign_in",
+    "en": "Sign In / Log In",
+    "km": "ចូលគណនី",
+    "category": "authentication",
+    "avoid": "យាងចូល (royal register) or ចុះឈ្មោះចូល"
+  },
+  {
+    "key": "auth.sign_up",
+    "en": "Sign Up / Register",
+    "km": "ចុះឈ្មោះ",
+    "category": "authentication",
+    "avoid": "បង្កើតគណនីថ្មី (overly wordy for buttons) or ចុះបញ្ជី"
+  },
+  {
+    "key": "auth.log_out",
+    "en": "Log Out / Sign Out",
+    "km": "ចាកចេញ",
+    "category": "authentication",
+    "avoid": "យាងចេញ (royal register) or ដើរចេញ"
+  },
+  {
+    "key": "auth.forgot_password",
+    "en": "Forgot Password?",
+    "km": "ភ្លេចពាក្យសម្ងាត់?",
+    "category": "authentication",
+    "avoid": "ភ្លេចលេខកូដសម្ងាត់"
+  },
+  {
+    "key": "auth.reset_password",
+    "en": "Reset Password",
+    "km": "កំណត់ពាក្យសម្ងាត់ឡើងវិញ",
+    "category": "authentication",
+    "avoid": "កំណត់ឡើងវិញនូវពាក្យសម្ងាត់ (unnatural syntax)"
+  },
+  {
+    "key": "auth.email",
+    "en": "Email Address",
+    "km": "អ៊ីមែល",
+    "category": "authentication",
+    "avoid": "សំបុត្រអេឡិចត្រូនិច (archaic/unnatural)"
+  },
+  {
+    "key": "auth.phone_number",
+    "en": "Phone Number",
+    "km": "លេខទូរស័ព្ទ",
+    "category": "authentication",
+    "avoid": "ទូរស័ព្ទលេខ (inverted word order)"
+  },
+  {
+    "key": "auth.password",
+    "en": "Password",
+    "km": "ពាក្យសម្ងាត់",
+    "category": "authentication",
+    "avoid": "លេខកូដឆ្លងកាត់ (literal translation)"
+  },
+  {
+    "key": "auth.confirm_password",
+    "en": "Confirm Password",
+    "km": "បញ្ជាក់ពាក្យសម្ងាត់",
+    "category": "authentication",
+    "avoid": "ពាក្យសម្ងាត់បញ្ជាក់ (inverted word order)"
+  },
+  {
+    "key": "auth.otp_code",
+    "en": "OTP Code",
+    "km": "លេខកូដផ្ទៀងផ្ទាត់ (OTP)",
+    "category": "authentication",
+    "avoid": "កូដមួយដង"
+  },
+  {
+    "key": "auth.remember_me",
+    "en": "Remember Me",
+    "km": "ចងចាំខ្ញុំ",
+    "category": "authentication",
+    "avoid": "ចងចាំគណនីខ្ញុំលើឧបករណ៍នេះ (too long)"
+  },
+  {
+    "key": "auth.profile",
+    "en": "User Profile",
+    "km": "ព័ត៌មានផ្ទាល់ខ្លួន",
+    "category": "authentication",
+    "avoid": "ប្រវត្តិរូប (often confused with CV/resume)"
+  },
+  {
+    "key": "auth.two_factor",
+    "en": "Two-Factor Authentication (2FA)",
+    "km": "ការផ្ទៀងផ្ទាត់ពីរជំហាន",
+    "category": "authentication",
+    "avoid": "ការបញ្ជាក់ពីរកត្តា"
+  },
+  {
+    "key": "nav.home",
+    "en": "Home",
+    "km": "ទំព័រដើម",
+    "category": "navigation",
+    "avoid": "ផ្ទះ (literal translation)"
+  },
+  {
+    "key": "nav.dashboard",
+    "en": "Dashboard",
+    "km": "ផ្ទាំងគ្រប់គ្រង",
+    "category": "navigation",
+    "avoid": "ក្ដារគ្រប់គ្រង"
+  },
+  {
+    "key": "nav.settings",
+    "en": "Settings",
+    "km": "ការកំណត់",
+    "category": "navigation",
+    "avoid": "កំណត់ (verb only) or ការតំរៀប"
+  },
+  {
+    "key": "nav.notifications",
+    "en": "Notifications",
+    "km": "ការជូនដំណឹង",
+    "category": "navigation",
+    "avoid": "ដំណឹង (lacks noun prefix) or ការប្រកាស"
+  },
+  {
+    "key": "nav.menu",
+    "en": "Menu",
+    "km": "ម៉ឺនុយ",
+    "category": "navigation",
+    "avoid": "បញ្ជីមុខម្ហូប (restaurant food menu)"
+  },
+  {
+    "key": "nav.back",
+    "en": "Back",
+    "km": "ថយក្រោយ",
+    "category": "navigation",
+    "avoid": "ត្រឡប់ (ambiguous without context) or ខ្នង (anatomy)"
+  },
+  {
+    "key": "nav.next",
+    "en": "Next",
+    "km": "បន្ទាប់",
+    "category": "navigation",
+    "avoid": "ទៅមុខបន្ទាប់"
+  },
+  {
+    "key": "nav.previous",
+    "en": "Previous",
+    "km": "មុន",
+    "category": "navigation",
+    "avoid": "ពីមុនមក"
+  },
+  {
+    "key": "nav.search",
+    "en": "Search",
+    "km": "ស្វែងរក",
+    "category": "navigation",
+    "avoid": "រុករក (sounds like exploring/jungle trek)"
+  },
+  {
+    "key": "nav.filter",
+    "en": "Filter",
+    "km": "ចម្រាញ់",
+    "category": "navigation",
+    "avoid": "ត្រង (water filtering)"
+  },
+  {
+    "key": "nav.sort",
+    "en": "Sort",
+    "km": "តម្រៀប",
+    "category": "navigation",
+    "avoid": "រៀបចំ"
+  },
+  {
+    "key": "nav.close",
+    "en": "Close",
+    "km": "បិទ",
+    "category": "navigation",
+    "avoid": "បិទទ្វារ"
+  },
+  {
+    "key": "nav.help",
+    "en": "Help & Support",
+    "km": "ជំនួយ",
+    "category": "navigation",
+    "avoid": "ជួយសង្គ្រោះ (emergency rescue)"
+  },
+  {
+    "key": "nav.about_us",
+    "en": "About Us",
+    "km": "អំពីយើង",
+    "category": "navigation",
+    "avoid": "អំពីពួកយើងខ្ញុំ"
+  },
+  {
+    "key": "nav.contact",
+    "en": "Contact Us",
+    "km": "ទំនាក់ទំនង",
+    "category": "navigation",
+    "avoid": "ទាក់ទងមកពួកយើង"
+  },
+  {
+    "key": "nav.faq",
+    "en": "FAQ (Frequently Asked Questions)",
+    "km": "សំណួរញឹកញាប់",
+    "category": "navigation",
+    "avoid": "សំណួរដែលបានសួរញឹកញាប់"
+  },
+  {
+    "key": "action.save",
+    "en": "Save",
+    "km": "រក្សាទុក",
+    "category": "actions",
+    "avoid": "សង្គ្រោះ (saving a life) or សន្សំ (saving money)"
+  },
+  {
+    "key": "action.cancel",
+    "en": "Cancel",
+    "km": "បោះបង់",
+    "category": "actions",
+    "avoid": "លុបចោល (delete/destroy)"
+  },
+  {
+    "key": "action.confirm",
+    "en": "Confirm",
+    "km": "បញ្ជាក់",
+    "category": "actions",
+    "avoid": "យល់ព្រម (agree) or ទទួលស្គាល់"
+  },
+  {
+    "key": "action.delete",
+    "en": "Delete / Remove",
+    "km": "លុប",
+    "category": "actions",
+    "avoid": "បំផ្លាញ (destroy physically)"
+  },
+  {
+    "key": "action.edit",
+    "en": "Edit",
+    "km": "កែសម្រួល",
+    "category": "actions",
+    "avoid": "កែប្រែ (change drastically) or ជួសជុល (repair hardware)"
+  },
+  {
+    "key": "action.update",
+    "en": "Update",
+    "km": "ធ្វើបច្ចុប្បន្នភាព",
+    "category": "actions",
+    "avoid": "កែថ្មី or ធ្វើឱ្យទាន់សម័យ"
+  },
+  {
+    "key": "action.submit",
+    "en": "Submit",
+    "km": "បញ្ជូន",
+    "category": "actions",
+    "avoid": "ដាក់ស្នើ (formal proposal) or ប្រគល់"
+  },
+  {
+    "key": "action.apply",
+    "en": "Apply",
+    "km": "អនុវត្ត",
+    "category": "actions",
+    "avoid": "ដាក់ពាក្យ (job application only)"
+  },
+  {
+    "key": "action.reset",
+    "en": "Reset",
+    "km": "កំណត់ឡើងវិញ",
+    "category": "actions",
+    "avoid": "លុបចោលទាំងអស់"
+  },
+  {
+    "key": "action.download",
+    "en": "Download",
+    "km": "ទាញយក",
+    "category": "actions",
+    "avoid": "ដោនឡូត (colloquial transliteration in formal UI)"
+  },
+  {
+    "key": "action.upload",
+    "en": "Upload",
+    "km": "ផ្ទុកឡើង",
+    "category": "actions",
+    "avoid": "អាប់ឡូត (colloquial transliteration in formal UI)"
+  },
+  {
+    "key": "action.share",
+    "en": "Share",
+    "km": "ចែករំលែក",
+    "category": "actions",
+    "avoid": "ចែកគ្នា"
+  },
+  {
+    "key": "action.copy",
+    "en": "Copy",
+    "km": "ចម្លង",
+    "category": "actions",
+    "avoid": "កូពី (slang)"
+  },
+  {
+    "key": "action.print",
+    "en": "Print",
+    "km": "បោះពុម្ព",
+    "category": "actions",
+    "avoid": "ព្រីន (slang)"
+  },
+  {
+    "key": "action.refresh",
+    "en": "Refresh",
+    "km": "ផ្ទុកឡើងវិញ",
+    "category": "actions",
+    "avoid": "ធ្វើឱ្យស្រស់ស្រាយ (refreshing drink)"
+  },
+  {
+    "key": "action.add",
+    "en": "Add",
+    "km": "បន្ថែម",
+    "category": "actions",
+    "avoid": "បូក"
+  },
+  {
+    "key": "action.view",
+    "en": "View / See Details",
+    "km": "មើលលម្អិត",
+    "category": "actions",
+    "avoid": "ទស្សនា (watching a spectacle/movie)"
+  },
+  {
+    "key": "action.retry",
+    "en": "Try Again / Retry",
+    "km": "ព្យាយាមម្តងទៀត",
+    "category": "actions",
+    "avoid": "សាកល្បងសារជាថ្មី (overly formal)"
+  },
+  {
+    "key": "action.continue",
+    "en": "Continue",
+    "km": "បន្ត",
+    "category": "actions",
+    "avoid": "ទៅមុខទៀត"
+  },
+  {
+    "key": "action.select_all",
+    "en": "Select All",
+    "km": "ជ្រើសរើសទាំងអស់",
+    "category": "actions",
+    "avoid": "យកទាំងអស់"
+  },
+  {
+    "key": "action.clear",
+    "en": "Clear",
+    "km": "សម្អាត",
+    "category": "actions",
+    "avoid": "លុបចេញ"
+  },
+  {
+    "key": "commerce.cart",
+    "en": "Shopping Cart",
+    "km": "កន្ត្រកទំនិញ",
+    "category": "commerce_payments",
+    "avoid": "រទេះទំនិញ (shopping trolley, unnatural on small apps)"
+  },
+  {
+    "key": "commerce.checkout",
+    "en": "Checkout",
+    "km": "ទូទាត់ប្រាក់",
+    "category": "commerce_payments",
+    "avoid": "ឆែកចេញ (hotel checkout) or ពិនិត្យចេញ"
+  },
+  {
+    "key": "commerce.total_price",
+    "en": "Total Price",
+    "km": "តម្លៃសរុប",
+    "category": "commerce_payments",
+    "avoid": "សរុបតម្លៃ (inverted word order hallucination)"
+  },
+  {
+    "key": "commerce.subtotal",
+    "en": "Subtotal",
+    "km": "តម្លៃរងសរុប",
+    "category": "commerce_payments",
+    "avoid": "អនុសរុប"
+  },
+  {
+    "key": "commerce.price",
+    "en": "Price",
+    "km": "តម្លៃ",
+    "category": "commerce_payments",
+    "avoid": "ថ្លៃ (adjective only)"
+  },
+  {
+    "key": "commerce.discount",
+    "en": "Discount",
+    "km": "បញ្ចុះតម្លៃ",
+    "category": "commerce_payments",
+    "avoid": "ការបញ្ចុះថ្លៃ"
+  },
+  {
+    "key": "commerce.payment_method",
+    "en": "Payment Method",
+    "km": "វិធីសាស្ត្រទូទាត់",
+    "category": "commerce_payments",
+    "avoid": "ទូទាត់វិធីសាស្ត្រ (inverted word order)"
+  },
+  {
+    "key": "commerce.transfer",
+    "en": "Transfer Money",
+    "km": "ផ្ទេរប្រាក់",
+    "category": "commerce_payments",
+    "avoid": "ផ្ទេរលុយ (colloquial for banking)"
+  },
+  {
+    "key": "commerce.account_balance",
+    "en": "Account Balance",
+    "km": "សមតុល្យគណនី",
+    "category": "commerce_payments",
+    "avoid": "តុល្យភាពគណនី (physics balance)"
+  },
+  {
+    "key": "commerce.transaction_history",
+    "en": "Transaction History",
+    "km": "ប្រវត្តិប្រតិបត្តិការ",
+    "category": "commerce_payments",
+    "avoid": "ប្រតិបត្តិការប្រវត្តិ (inverted word order)"
+  },
+  {
+    "key": "commerce.invoice",
+    "en": "Invoice",
+    "km": "វិក្កយបត្រ",
+    "category": "commerce_payments",
+    "avoid": "ប័ណ្ណទូទាត់"
+  },
+  {
+    "key": "commerce.receipt",
+    "en": "Receipt",
+    "km": "បង្កាន់ដៃទទួលប្រាក់",
+    "category": "commerce_payments",
+    "avoid": "វិក្កយបត្រទទួល"
+  },
+  {
+    "key": "commerce.shipping_address",
+    "en": "Shipping Address",
+    "km": "អាសយដ្ឋានដឹកជញ្ជូន",
+    "category": "commerce_payments",
+    "avoid": "អាសយដ្ឋានដឹក (incomplete)"
+  },
+  {
+    "key": "commerce.delivery_fee",
+    "en": "Delivery Fee",
+    "km": "ថ្លៃដឹកជញ្ជូន",
+    "category": "commerce_payments",
+    "avoid": "ថ្លៃដឹក (too colloquial for receipts)"
+  },
+  {
+    "key": "commerce.order_status",
+    "en": "Order Status",
+    "km": "ស្ថានភាពការបញ្ជាទិញ",
+    "category": "commerce_payments",
+    "avoid": "ស្ថានភាពលំដាប់ (mathematical order)"
+  },
+  {
+    "key": "commerce.currency_khr",
+    "en": "Khmer Riel",
+    "km": "រៀល",
+    "category": "commerce_payments",
+    "avoid": "ប្រាក់រៀលខ្មែរ (redundant in app context)"
+  },
+  {
+    "key": "commerce.currency_usd",
+    "en": "US Dollar",
+    "km": "ដុល្លារអាមេរិក",
+    "category": "commerce_payments",
+    "avoid": "ដុល្លារ (without country specification when disambiguation needed)"
+  },
+  {
+    "key": "commerce.quantity",
+    "en": "Quantity",
+    "km": "ចំនួន",
+    "category": "commerce_payments",
+    "avoid": "បរិមាណ (volume/mass scientific)"
+  },
+  {
+    "key": "commerce.promocode",
+    "en": "Promo Code / Voucher",
+    "km": "កូដប្រូម៉ូសិន",
+    "category": "commerce_payments",
+    "avoid": "លេខកូដផ្សព្វផ្សាយ"
+  },
+  {
+    "key": "status.loading",
+    "en": "Loading...",
+    "km": "កំពុងផ្ទុក...",
+    "category": "status_feedback",
+    "avoid": "កំពុងផ្ទុកទិន្នន័យ (too verbose)"
+  },
+  {
+    "key": "status.success",
+    "en": "Successful",
+    "km": "ជោគជ័យ",
+    "category": "status_feedback",
+    "avoid": "បានសម្រេច (okay but ជោគជ័យ is standard in mobile UI)"
+  },
+  {
+    "key": "status.failed",
+    "en": "Failed",
+    "km": "បរាជ័យ",
+    "category": "status_feedback",
+    "avoid": "មិនជោគជ័យ (passive phrasing)"
+  },
+  {
+    "key": "status.error",
+    "en": "Error",
+    "km": "កំហុស",
+    "category": "status_feedback",
+    "avoid": "កំហុសឆ្គង (moral mistake/sin)"
+  },
+  {
+    "key": "status.warning",
+    "en": "Warning",
+    "km": "ការព្រមាន",
+    "category": "status_feedback",
+    "avoid": "ប្រុងប្រយ័ត្ន (caution/watch out)"
+  },
+  {
+    "key": "status.pending",
+    "en": "Pending",
+    "km": "កំពុងរង់ចាំ",
+    "category": "status_feedback",
+    "avoid": "មិនទាន់សម្រេច"
+  },
+  {
+    "key": "status.in_progress",
+    "en": "In Progress",
+    "km": "កំពុងដំណើរការ",
+    "category": "status_feedback",
+    "avoid": "កំពុងធ្វើ"
+  },
+  {
+    "key": "status.completed",
+    "en": "Completed",
+    "km": "បានបញ្ចប់",
+    "category": "status_feedback",
+    "avoid": "រួចរាល់ (ready vs completed)"
+  },
+  {
+    "key": "status.empty",
+    "en": "No Data / Empty",
+    "km": "គ្មានទិន្នន័យ",
+    "category": "status_feedback",
+    "avoid": "ទទេ (plain empty)"
+  },
+  {
+    "key": "status.not_found",
+    "en": "Not Found",
+    "km": "រកមិនឃើញ",
+    "category": "status_feedback",
+    "avoid": "មិនបានរកឃើញ"
+  },
+  {
+    "key": "status.unauthorized",
+    "en": "Unauthorized",
+    "km": "គ្មានការអនុញ្ញាត",
+    "category": "status_feedback",
+    "avoid": "មិនមានសិទ្ធិ"
+  },
+  {
+    "key": "status.network_error",
+    "en": "Network Connection Error",
+    "km": "បញ្ហាតភ្ជាប់បណ្តាញ",
+    "category": "status_feedback",
+    "avoid": "កំហុសបណ្តាញ"
+  },
+  {
+    "key": "form.name",
+    "en": "Full Name",
+    "km": "ឈ្មោះពេញ",
+    "category": "forms_inputs",
+    "avoid": "នាមពេញ"
+  },
+  {
+    "key": "form.first_name",
+    "en": "First Name (Given Name)",
+    "km": "នាមខ្លួន",
+    "category": "forms_inputs",
+    "avoid": "ឈ្មោះដំបូង (literal translation)"
+  },
+  {
+    "key": "form.last_name",
+    "en": "Last Name (Family Name)",
+    "km": "នាមត្រកូល",
+    "category": "forms_inputs",
+    "avoid": "ឈ្មោះចុងក្រោយ (literal translation)"
+  },
+  {
+    "key": "form.date_of_birth",
+    "en": "Date of Birth",
+    "km": "ថ្ងៃខែឆ្នាំកំណើត",
+    "category": "forms_inputs",
+    "avoid": "ថ្ងៃកំណើត (birthday celebration)"
+  },
+  {
+    "key": "form.gender",
+    "en": "Gender",
+    "km": "ភេទ",
+    "category": "forms_inputs",
+    "avoid": "លក្ខណៈភេទ"
+  },
+  {
+    "key": "form.gender_male",
+    "en": "Male",
+    "km": "ប្រុស",
+    "category": "forms_inputs",
+    "avoid": "បុរស (formal man)"
+  },
+  {
+    "key": "form.gender_female",
+    "en": "Female",
+    "km": "ស្រី",
+    "category": "forms_inputs",
+    "avoid": "ស្ត្រី (formal woman)"
+  },
+  {
+    "key": "form.address",
+    "en": "Address",
+    "km": "អាសយដ្ឋាន",
+    "category": "forms_inputs",
+    "avoid": "ទីកន្លែងរស់នៅ"
+  },
+  {
+    "key": "form.city",
+    "en": "City / Province",
+    "km": "រាជធានី/ខេត្ត",
+    "category": "forms_inputs",
+    "avoid": "ទីក្រុង (misses provinces in Cambodia)"
+  },
+  {
+    "key": "form.country",
+    "en": "Country",
+    "km": "ប្រទេស",
+    "category": "forms_inputs",
+    "avoid": "រដ្ឋ (state)"
+  },
+  {
+    "key": "form.notes",
+    "en": "Notes / Remarks",
+    "km": "កំណត់សម្គាល់",
+    "category": "forms_inputs",
+    "avoid": "កំណត់ត្រា"
+  },
+  {
+    "key": "form.optional",
+    "en": "Optional",
+    "km": "មិនតម្រូវ",
+    "category": "forms_inputs",
+    "avoid": "ស្រេចចិត្ត"
+  },
+  {
+    "key": "form.required",
+    "en": "Required",
+    "km": "តម្រូវឱ្យបំពេញ",
+    "category": "forms_inputs",
+    "avoid": "ចាំបាច់"
+  },
+  {
+    "key": "form.select_option",
+    "en": "Select an Option",
+    "km": "សូមជ្រើសរើស",
+    "category": "forms_inputs",
+    "avoid": "ជ្រើសរើសជម្រើសមួយ"
+  },
+  {
+    "key": "legal.terms_of_service",
+    "en": "Terms of Service",
+    "km": "លក្ខខណ្ឌប្រើប្រាស់",
+    "category": "privacy_terms",
+    "avoid": "លក្ខខណ្ឌនៃសេវាកម្ម"
+  },
+  {
+    "key": "legal.privacy_policy",
+    "en": "Privacy Policy",
+    "km": "គោលការណ៍ឯកជនភាព",
+    "category": "privacy_terms",
+    "avoid": "គោលនយោបាយភាពឯកជន"
+  },
+  {
+    "key": "legal.agree",
+    "en": "I Agree",
+    "km": "ខ្ញុំយល់ព្រម",
+    "category": "privacy_terms",
+    "avoid": "ខ្ញុំឯកភាព"
+  },
+  {
+    "key": "legal.decline",
+    "en": "Decline",
+    "km": "បដិសេធ",
+    "category": "privacy_terms",
+    "avoid": "មិនយល់ព្រម"
+  },
+  {
+    "key": "legal.security",
+    "en": "Security",
+    "km": "សុវត្ថិភាព",
+    "category": "privacy_terms",
+    "avoid": "សន្តិសុខ (security guard)"
+  },
+  {
+    "key": "legal.permissions",
+    "en": "Permissions",
+    "km": "ការអនុញ្ញាត",
+    "category": "privacy_terms",
+    "avoid": "សិទ្ធិអំណាច"
+  },
+  {
+    "key": "user.active_users",
+    "en": "Active Users",
+    "km": "អ្នកប្រើប្រាស់សកម្ម",
+    "category": "navigation",
+    "avoid": "សកម្មអ្នកប្រើប្រាស់ (inverted word order hallucination)"
+  },
+  {
+    "key": "user.new_password",
+    "en": "New Password",
+    "km": "ពាក្យសម្ងាត់ថ្មី",
+    "category": "authentication",
+    "avoid": "ថ្មីពាក្យសម្ងាត់ (inverted word order hallucination)"
+  },
+  {
+    "key": "user.old_password",
+    "en": "Current / Old Password",
+    "km": "ពាក្យសម្ងាត់ចាស់",
+    "category": "authentication",
+    "avoid": "ចាស់ពាក្យសម្ងាត់ (inverted word order hallucination)"
+  },
+  {
+    "key": "time.today",
+    "en": "Today",
+    "km": "ថ្ងៃនេះ",
+    "category": "status_feedback",
+    "avoid": "ថ្ងៃបច្ចុប្បន្ន"
+  },
+  {
+    "key": "time.yesterday",
+    "en": "Yesterday",
+    "km": "ម្សិលមិញ",
+    "category": "status_feedback",
+    "avoid": "ថ្ងៃម្សិលមិញ (redundant)"
+  },
+  {
+    "key": "time.tomorrow",
+    "en": "Tomorrow",
+    "km": "ថ្ងៃស្អែក",
+    "category": "status_feedback",
+    "avoid": "ស្អែកនេះ"
+  }
+]
