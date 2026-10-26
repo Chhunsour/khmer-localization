@@ -1,6 +1,11 @@
 # Khmer Localization (`khmer-localization`)
 ### Production-Grade Khmer (Cambodia) Localization & AI Agent Engineering Toolkit
 
+<p align="center">
+  <sub>Developed by <strong>Seng Chhunsour</strong></sub>
+</p>
+
+[![Author: Seng Chhunsour](https://img.shields.io/badge/Author-Seng%20Chhunsour-FF5A1F?style=flat-square&logo=github&logoColor=white)](https://github.com/Chhunsour)
 [![Tests](https://github.com/Chhunsour/khmer-localization/actions/workflows/tests.yml/badge.svg)](https://github.com/Chhunsour/khmer-localization/actions)
 [![Unit Tests](https://img.shields.io/badge/Unit%20Tests-120%20Passed-brightgreen.svg)](#-test-suite--quality-assurance-matrix)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
@@ -267,6 +272,14 @@ We take software security and integrity seriously. Because `khmer-localization` 
 - **The Unicode Consortium:** [Khmer Unicode Block Charts (U+1780..U+17FF)](https://unicode.org/charts/PDF/U1780.pdf).
 - **ISO 4217 Currency Standard:** Maintenance Agency for Currency Codes (`KHR` numeric 116, minor unit 2).
 - **ISO 3166-2:KH:** International standard for Cambodia's 25 primary administrative subdivisions.
+
+---
+
+## 👤 Author & Developer
+
+**Developed by Seng Chhunsour**
+- **GitHub:** [@Chhunsour](https://github.com/Chhunsour)
+- **Project:** [Khmer Localization](https://github.com/Chhunsour/khmer-localization)
 
 ---
 

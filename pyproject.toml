@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.8"
 license = { text = "MIT" }
 authors = [
-    { name = "Chhunsour" }
+    { name = "Seng Chhunsour", url = "https://github.com/Chhunsour" }
 ]
 keywords = [
     "khmer",
