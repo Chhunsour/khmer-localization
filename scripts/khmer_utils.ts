@@ -901,3 +901,175 @@ export function getKhmerCharacterStats(text: string): KhmerCharacterStats {
 
   return stats;
 }
+
+export interface UiTerm {
+  key: string;
+  en: string;
+  km: string;
+  category: string;
+  avoid: string;
+}
+
+export interface KhmerLintResult {
+  is_clean: boolean;
+  errors: string[];
+  warnings: string[];
+  suggestions: string[];
+  stats: KhmerCharacterStats;
+}
+
+/**
+ * Search data/ui_terms.json for matching English or Khmer UI terms.
+ * Matches against 'key', 'en', and 'km' fields (case-insensitive for English/keys).
+ */
+export function lookupUiTerm(query = "", dataPath: string | null = null): UiTerm[] {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const fs = require("fs");
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const path = require("path");
+
+  let resolvedPath = dataPath;
+  if (!resolvedPath) {
+    const baseDir = path.dirname(__dirname);
+    const candidate = path.join(baseDir, "data", "ui_terms.json");
+    if (fs.existsSync(candidate)) {
+      resolvedPath = candidate;
+    } else {
+      resolvedPath = path.join("data", "ui_terms.json");
+    }
+  }
+
+  if (!fs.existsSync(resolvedPath)) {
+    return [];
+  }
+
+  const raw = fs.readFileSync(resolvedPath, "utf8");
+  const terms: UiTerm[] = JSON.parse(raw);
+
+  if (!query || !query.trim()) {
+    return terms.slice(0, 50);
+  }
+
+  const qClean = query.trim();
+  const qLower = qClean.toLowerCase();
+  const exactMatches: UiTerm[] = [];
+  const partialMatches: UiTerm[] = [];
+
+  for (const item of terms) {
+    const keyLower = (item.key || "").toLowerCase();
+    const enLower = (item.en || "").toLowerCase();
+    const kmVal = item.km || "";
+
+    if (qLower === keyLower || qLower === enLower || qClean === kmVal) {
+      exactMatches.push(item);
+    } else if (keyLower.includes(qLower) || enLower.includes(qLower) || kmVal.includes(qClean)) {
+      partialMatches.push(item);
+    }
+  }
+
+  return exactMatches.concat(partialMatches);
+}
+
+/**
+ * Fast linting inspection of an in-memory Khmer string for common defects:
+ * - Unicode corruption: Replacement char U+FFFD, control characters
+ * - Broken typography: Literal dotted circle U+25CC
+ * - Orphaned combining marks: Vowels or diacritics without a preceding base consonant
+ * - Trailing Coeng: U+17D2 at the end of text
+ * - Grammatical inversion: Hallucinated [Adj] + [Noun] order
+ * - Prohibited royal / monastic register words in consumer UI
+ * - Currency format: Decimal KHR notation (e.g. 10.00៛)
+ * - Subscript clipping risk: Stacked subscripts without line-height reminder
+ */
+export function lintKhmerText(text: string): KhmerLintResult {
+  const errors: string[] = [];
+  const warnings: string[] = [];
+  const suggestions: string[] = [];
+
+  if (!text) {
+    return {
+      is_clean: true,
+      errors: [],
+      warnings: [],
+      suggestions: [],
+      stats: getKhmerCharacterStats(""),
+    };
+  }
+
+  // 1. Unicode corruption
+  if (text.includes("\uFFFD")) {
+    errors.push("Unicode Replacement Character (U+FFFD) detected: text has suffered encoding corruption.");
+  }
+
+  // 2. Literal dotted circle
+  if (text.includes("\u25CC")) {
+    warnings.push("Literal dotted circle (U+25CC) detected: indicates broken glyph rendering or orphan diacritic.");
+  }
+
+  // 3. Trailing Coeng
+  if (text.endsWith("\u17D2")) {
+    warnings.push("Trailing Coeng subscript sign (U+17D2) at end of text without following consonant.");
+  }
+
+  // 4. Orphaned combining marks
+  for (let i = 0; i < text.length; i++) {
+    const cp = text.charCodeAt(i);
+    const isCombining = (cp >= 0x17B6 && cp <= 0x17C5) || (cp >= 0x17C6 && cp <= 0x17D1) || cp === 0x17DD;
+    if (isCombining) {
+      if (i === 0) {
+        warnings.push(`Orphaned combining mark U+${cp.toString(16).toUpperCase().padStart(4, "0")} at start of string with no base consonant.`);
+      } else {
+        const prevCh = text[i - 1];
+        const prevCp = text.charCodeAt(i - 1);
+        if (" \t\r\n\u200B".includes(prevCh)) {
+          warnings.push(`Orphaned combining mark U+${cp.toString(16).toUpperCase().padStart(4, "0")} follows whitespace or ZWSP boundary.`);
+        } else if (prevCp < 0x80 && /[a-zA-Z0-9]/.test(prevCh)) {
+          warnings.push(`Combining mark U+${cp.toString(16).toUpperCase().padStart(4, "0")} follows Latin/ASCII character '${prevCh}'.`);
+        }
+      }
+    }
+  }
+
+  // 5. Inverted grammatical word patterns
+  const invertedPatterns: [RegExp, string][] = [
+    [/សរុបតម្លៃ/, "Inverted word order: use 'តម្លៃសរុប' (Total Price: [Noun] + [Adjective])"],
+    [/ថ្មីពាក្យសម្ងាត់/, "Inverted word order: use 'ពាក្យសម្ងាត់ថ្មី' (New Password: [Noun] + [Adjective])"],
+    [/ចាស់ពាក្យសម្ងាត់/, "Inverted word order: use 'ពាក្យសម្ងាត់ចាស់' (Old Password: [Noun] + [Adjective])"],
+    [/សកម្មអ្នកប្រើប្រាស់/, "Inverted word order: use 'អ្នកប្រើប្រាស់សកម្ម' (Active Users: [Noun] + [Adjective])"],
+  ];
+  for (const [pattern, desc] of invertedPatterns) {
+    if (pattern.test(text)) {
+      warnings.push(desc);
+    }
+  }
+
+  // 6. Prohibited royal/monastic words
+  const royalTerms = ["យាង", "សោយ", "ព្រះរាជ", "ទ្រង់", "សោយទិវង្គត", "និមន្ត", "ឆាន់"];
+  for (const term of royalTerms) {
+    if (text.includes(term)) {
+      warnings.push(`Prohibited royal/monastic register word '${term}' found. Use modern standard digital terminology.`);
+    }
+  }
+
+  // 7. Decimal KHR currency
+  if (/\d+\.\d{1,2}\s*(?:៛|KHR|រៀល)/.test(text)) {
+    warnings.push("Khmer Riel (KHR) formatted with fractional decimal cents. KHR must be formatted as whole-riel integers without decimals.");
+    suggestions.push("Format KHR amounts using whole-riel integers (e.g. '25,000 ៛').");
+  }
+
+  // 8. Subscript clipping / line-height check
+  const stats = getKhmerCharacterStats(text);
+  if (stats.coengSubscripts > 0 || stats.dependentVowels > 0) {
+    suggestions.push("Khmer text contains stacked subscripts/vowels. Ensure CSS 'line-height: >= 1.6' to prevent diacritic clipping.");
+  }
+
+  const isClean = errors.length === 0 && warnings.length === 0;
+
+  return {
+    is_clean: isClean,
+    errors,
+    warnings,
+    suggestions,
+    stats,
+  };
+}

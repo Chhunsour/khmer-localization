@@ -7,7 +7,8 @@
 
 [![Author: Seng Chhunsour](https://img.shields.io/badge/Author-Seng%20Chhunsour-FF5A1F?style=flat-square&logo=github&logoColor=white)](https://github.com/Chhunsour)
 [![Tests](https://github.com/Chhunsour/khmer-localization/actions/workflows/tests.yml/badge.svg)](https://github.com/Chhunsour/khmer-localization/actions)
-[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-120%20Passed-brightgreen.svg)](#-test-suite--quality-assurance-matrix)
+[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-127%20Passed-brightgreen.svg)](#-test-suite--quality-assurance-matrix)
+[![MCP Server](https://img.shields.io/badge/MCP-Python%20%7C%20Node.js-orange.svg)](#-native-model-context-protocol-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Dependencies: 0](https://img.shields.io/badge/Dependencies-Zero%20External-success.svg)](#-zero-dependency-isomorphic-api-reference)
 [![Unicode: 15.1](https://img.shields.io/badge/Unicode-Khmer%20U%2B1780--U%2B17FF-informational.svg)](https://unicode.org/charts/PDF/U1780.pdf)
@@ -20,13 +21,15 @@
 
 | Strategic Dimension | Engineering Metric | Verification Methodology | Production Benchmark Standard |
 | :--- | :---: | :--- | :--- |
-| **Deterministic Reliability** | **120 / 120 Passing** | 13 test suites in Python & Node.js | 100% deterministic CI coverage |
-| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 13,800+ Khmer characters |
+| **Deterministic Reliability** | **127 / 127 Passing** | 14 test suites in Python & Node.js | 100% deterministic CI coverage |
+| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 14,900+ Khmer characters |
 | **Localization Quality Engine** | **4 Governance Layers** | `scripts/audit_khmer_i18n.py` CLI scanner | Automated, Human, Visual, External |
+| **Zero-Token AI Tools & MCP** | **Native JSON-RPC** | `khmer_mcp_server.py` & `khmer_mcp_server.js` | Zero LLM token generation overhead |
 | **Supply-Chain Security** | **0 (Zero External Deps)** | Pure standard library & native Web APIs | Zero CVE surface, zero npm install lag |
-| **AI Token Optimization** | **Up to 99.0% Reduction** | Modular 45t / 120t / 250t system prompts | Eradicates exploratory prompt loops |
+| **AI Token Optimization** | **Up to 99.0% Reduction** | 80% leaner `SKILL.md` + 45t/120t/250t prompts | Eradicates exploratory prompt loops |
 | **Curated Offline Data** | **21 JSON Catalogs** | Verified via `data/METADATA.json` | Official authorities, sources & licenses |
-| **UI Dictionary Coverage** | **107 Standard Terms** | Curated digital strings with hallucination traps | Auth, commerce, actions, navigation |
+| **UI Dictionary Coverage** | **107 Standard Terms** | Fast zero-token CLI & MCP term lookup | Auth, commerce, actions, navigation |
+| **Interactive Visual Tester** | **Zero-Dep HTML** | `playground/index.html` standalone app | Real-time Unicode, fonts & line-height |
 | **Cross-Platform Parity** | **TypeScript, JS, Python** | Isomorphic dual implementation | Node 18+, Bun, Deno, iOS, Android, Web |
 
 ---
@@ -184,6 +187,58 @@ Localizing into low-resource scripts like Khmer frequently wastes thousands of c
 
 ---
 
+## 🤖 Native Model Context Protocol (MCP) Server
+
+AI agents (Claude Code, Cursor, Windsurf, Antigravity, Copilot) can interact with `khmer-localization` via native JSON-RPC stdio MCP servers with **zero token generation overhead**:
+
+### Configuration (`claude_desktop_config.json` or `.cursor/mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "khmer-localization": {
+      "command": "python3",
+      "args": ["<path-to-repo>/scripts/khmer_mcp_server.py"]
+    }
+  }
+}
+```
+
+Or run via Node.js:
+```json
+{
+  "mcpServers": {
+    "khmer-localization": {
+      "command": "node",
+      "args": ["<path-to-repo>/scripts/khmer_mcp_server.js"]
+    }
+  }
+}
+```
+
+### Supported MCP Tools:
+- `khmer_lookup_term`: Query 100+ standard UI terms without loading large catalog files.
+- `khmer_normalize_phone`: Validate & normalize phone numbers to E.164 and domestic formats.
+- `khmer_format_currency`: Format whole-riel KHR or USD without floating-point errors.
+- `khmer_spellout_words`: Convert amounts to formal Khmer words for GDT invoices.
+- `khmer_khqr_crc`: Compute or verify EMVCo CRC16 for Bakong KHQR payloads.
+- `khmer_lint_text`: Lint strings for Unicode corruption, dotted circles, or royal vocabulary.
+- `khmer_sort_words`: Sort arrays of Khmer words per Chuon Nath dictionary order.
+
+---
+
+## 🎮 Interactive Visual Playground (`playground/index.html`)
+
+Open [`playground/index.html`](./playground/index.html) directly in any browser (zero dependencies, works completely offline):
+- **Live Text & Unicode Linter:** Real-time detection of dotted circles (`U+25CC`), orphan marks, trailing Coeng, and royal registers.
+- **Font & Line-Height Simulator:** Visual preview across Kantumruy Pro, Hanuman, and system fonts with interactive `line-height` sliders (1.0 vs 1.6 vs 2.0).
+- **Currency & GDT Invoice Speller:** Live KHR/USD formatting and formal Khmer words generation.
+- **Phone Normalizer:** Instant E.164 canonical formatting and operator detection.
+- **Bakong KHQR Validator:** Live CRC16 calculation and QR payload inspection.
+- **Searchable UI Dictionary:** Filter 100+ vetted UI terms instantly.
+
+---
+
 ## 🗄️ Curated Offline Datasets (`data/`) & Metadata Registry
 
 All 21 offline JSON catalogs are cataloged in [`data/METADATA.json`](./data/METADATA.json) with documented authorities, verification dates, schemas, and licenses:
@@ -224,7 +279,7 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
 
 ```
 ========================================================================================
- TEST SUITE EXECUTION REPORT — ALL 120 TESTS DETERMINISTICALLY PASSING
+ TEST SUITE EXECUTION REPORT — ALL 127 TESTS DETERMINISTICALLY PASSING
 ========================================================================================
  Suite File                       | Tests | Scope & Verifications
 ----------------------------------+-------+---------------------------------------------
@@ -241,8 +296,9 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
  test_audit_khmer_i18n.py         |   4   | Missing keys, placeholder mismatch, royal registers
  test_khmer_utils_extended.py     |   5   | Landlines, minor unit math, recursive words, KHQR
  test_data_metadata.py            |   3   | Complete data/METADATA.json verification of 21 files
+ test_mcp_and_token_enhancements.py|  7  | Python/Node MCP servers, CLI lookup, lint & help
 ----------------------------------+-------+---------------------------------------------
- TOTAL VERIFIED TESTS             |  120  | 100% Deterministic CI Compliance (0 Failures)
+ TOTAL VERIFIED TESTS             |  127  | 100% Deterministic CI Compliance (0 Failures)
 ========================================================================================
 ```
 

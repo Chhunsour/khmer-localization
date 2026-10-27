@@ -1,17 +1,20 @@
 {
   "name": "khmer-localization",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Production-grade Khmer localization skill, utilities, dataset registry, and i18n quality audit engine.",
   "main": "scripts/khmer_utils.js",
   "module": "scripts/khmer_utils.js",
   "types": "scripts/khmer_utils.ts",
   "bin": {
-    "khmer-utils": "./scripts/khmer_utils.js"
+    "khmer-utils": "./scripts/khmer_utils.js",
+    "khmer-mcp": "./scripts/khmer_mcp_server.js"
   },
   "scripts": {
     "test": "python3 -m unittest discover -s tests -p 'test_*.py'",
     "audit": "python3 scripts/audit_khmer_i18n.py",
     "check-unicode": "python3 scripts/check_khmer_unicode.py --strict .",
+    "mcp": "node scripts/khmer_mcp_server.js",
+    "mcp:py": "python3 scripts/khmer_mcp_server.py",
     "example:checkout": "node examples/ecommerce_checkout.js",
     "example:payroll": "node examples/hr_payroll.js"
   },

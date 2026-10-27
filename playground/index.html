@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khmer Localization Engineering Playground 🇰🇭</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanuman:wght@400;700&family=Kantumruy+Pro:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090d16;
+      --card-bg: #111827;
+      --card-border: #1f2937;
+      --accent: #3b82f6;
+      --accent-glow: rgba(59, 130, 246, 0.2);
+      --success: #10b981;
+      --warning: #f59e0b;
+      --error: #ef4444;
+      --text: #f3f4f6;
+      --text-muted: #9ca3af;
+      --font-ui: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-khmer: 'Kantumruy Pro', 'Hanuman', 'Noto Sans Khmer', system-ui;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-ui);
+      line-height: 1.5;
+      padding: 24px;
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--card-border);
+      margin-bottom: 28px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 14px; }
+    .brand-badge {
+      background: #1e3a8a;
+      color: #93c5fd;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      border: 1px solid #2563eb;
+    }
+    h1 { font-size: 24px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+    .subtitle { color: var(--text-muted); font-size: 14px; margin-top: 4px; }
+
+    .tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--card-border); padding-bottom: 12px; overflow-x: auto; }
+    .tab-btn {
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab-btn:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+    .tab-btn.active {
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .tab-content { display: none; }
+    .tab-content.active { display: grid; gap: 24px; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 22px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+    input, textarea, select {
+      width: 100%;
+      background: #0d131f;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border 0.2s;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); }
+
+    .khmer-input {
+      font-family: var(--font-khmer);
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #2563eb; }
+
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .status-clean { background: rgba(16, 185, 129, 0.15); color: var(--success); border: 1px solid rgba(16, 185, 129, 0.3); }
+    .status-warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); border: 1px solid rgba(245, 158, 11, 0.3); }
+
+    .result-box {
+      background: #090d16;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .stat-card {
+      background: #090d16;
+      border: 1px solid var(--card-border);
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-val { font-size: 20px; font-weight: 700; color: var(--accent); }
+    .stat-label { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+    .preview-box {
+      background: #0b1120;
+      border: 1px dashed #374151;
+      border-radius: 8px;
+      padding: 20px;
+      font-family: var(--font-khmer);
+      color: #f9fafb;
+      margin-top: 14px;
+      transition: all 0.2s;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      max-height: 420px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; text-align: left; }
+    th { background: #0f172a; padding: 10px 14px; color: var(--text-muted); font-weight: 600; position: sticky; top: 0; }
+    td { padding: 10px 14px; border-top: 1px solid var(--card-border); }
+    tr:hover { background: rgba(255, 255, 255, 0.02); }
+    .term-km { font-family: var(--font-khmer); font-weight: 600; color: #60a5fa; font-size: 14px; }
+    .term-avoid { color: #f87171; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <h1>🇰🇭 Khmer Localization Engineering</h1>
+        <span class="brand-badge">Playground v2.1</span>
+      </div>
+      <div class="subtitle">Interactive Unicode Linter, Banking & Currency Math, KHQR & UI Terms</div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('linter')">🔍 Text & Unicode Linter</button>
+      <button class="tab-btn" onclick="switchTab('currency')">💵 Currency & Words (GDT)</button>
+      <button class="tab-btn" onclick="switchTab('phone')">📱 Phone Normalizer (+855)</button>
+      <button class="tab-btn" onclick="switchTab('khqr')">💳 Bakong KHQR & CRC16</button>
+      <button class="tab-btn" onclick="switchTab('dictionary')">📖 Standard UI Terms</button>
+    </div>
+
+    <!-- TAB 1: LINTER & TYPOGRAPHY -->
+    <div id="tab-linter" class="tab-content active" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="card-title">
+          <span>Input Khmer Text</span>
+          <span id="lint-badge" class="status-badge status-clean">✓ Clean Text</span>
+        </div>
+        <div class="form-group">
+          <label>Enter or paste Khmer copy (UI labels, button text, notifications):</label>
+          <textarea id="lint-input" class="khmer-input" rows="4" oninput="runLint()">តម្លៃសរុប 10,000៛ ចូលគណនី</textarea>
+        </div>
+        <div class="form-group">
+          <label>Font Family Preview:</label>
+          <select id="font-select" onchange="updatePreviewStyle()">
+            <option value="'Kantumruy Pro', system-ui">Kantumruy Pro (Recommended Modern Web)</option>
+            <option value="'Hanuman', serif">Hanuman (Classic Editorial)</option>
+            <option value="system-ui, sans-serif">System Default Fallback</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>CSS Line Height (<span id="line-height-val">1.8</span>):</label>
+          <input type="range" id="line-height-range" min="1.0" max="2.4" step="0.1" value="1.8" oninput="updatePreviewStyle()">
+        </div>
+        <div class="preview-box" id="preview-render">
+          តម្លៃសរុប 10,000៛ ចូលគណនី
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Diagnostics & Script Statistics</div>
+        <div id="lint-diagnostics" class="result-box" style="margin-bottom: 16px;">✓ No Unicode or linguistic defects detected.</div>
+        <div class="stat-grid" id="stat-grid">
+          <div class="stat-card"><div class="stat-val" id="stat-total">0</div><div class="stat-label">Total Khmer</div></div>
+          <div class="stat-card"><div class="stat-val" id="stat-consonants">0</div><div class="stat-label">Consonants</div></div>
+          <div class="stat-card"><div class="stat-val" id="stat-vowels">0</div><div class="stat-label">Vowels</div></div>
+          <div class="stat-card"><div class="stat-val" id="stat-subscripts">0</div><div class="stat-label">Coeng Subscripts</div></div>
+          <div class="stat-card"><div class="stat-val" id="stat-symbols">0</div><div class="stat-label">Symbols</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: CURRENCY & WORDS -->
+    <div id="tab-currency" class="tab-content" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="card-title">Currency & Fiscal Formatting</div>
+        <div class="form-group">
+          <label>Numeric Amount:</label>
+          <input type="number" id="curr-amount" value="25000" oninput="runCurrency()">
+        </div>
+        <div class="form-group">
+          <label>Currency:</label>
+          <select id="curr-select" onchange="runCurrency()">
+            <option value="KHR">Cambodian Riel (KHR / ៛) - Whole Integer</option>
+            <option value="USD">US Dollar (USD / $) - 2 Decimals</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Formatted Monetary Display:</label>
+          <div id="curr-formatted" class="result-box">25,000 ៛</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Spelled-Out Khmer Words (GDT Fiscal Invoice)</div>
+        <div class="form-group">
+          <label>Official Tax Invoice Words (អក្សរខ្មែរផ្លូវការ):</label>
+          <div id="curr-words" class="result-box" style="font-family: var(--font-khmer); font-size: 16px; line-height: 1.8; color: #60a5fa;">
+            ពីរម៉ឺនប្រាំពាន់រៀលគត់
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Buddhist Era Calendar Conversion (ព.ស.):</label>
+          <div id="date-preview" class="result-box"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: PHONE NORMALIZER -->
+    <div id="tab-phone" class="tab-content" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="card-title">Cambodian Phone Normalizer (+855)</div>
+        <div class="form-group">
+          <label>Enter Raw Phone Number (Mobile, Fixed-Line, or Short Code):</label>
+          <input type="text" id="phone-input" value="012 345 678" oninput="runPhone()">
+        </div>
+        <div class="form-group">
+          <button class="btn" onclick="runPhone()">Validate & Normalize</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Canonical Normalization Result</div>
+        <div id="phone-result" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- TAB 4: BAKONG KHQR -->
+    <div id="tab-khqr" class="tab-content" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="card-title">Bakong KHQR EMVCo CRC16 Checksum</div>
+        <div class="form-group">
+          <label>KHQR Payload (Ending with '6304' or full payload):</label>
+          <textarea id="khqr-input" rows="4" oninput="runKhqr()">00020101021229200016sokha_store@aclb52045999530311654061738005802KH5918SOKHA STORE ONLINE6010Phnom Penh6304</textarea>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Computed CRC16 & Verification</div>
+        <div id="khqr-result" class="result-box"></div>
+      </div>
+    </div>
+
+    <!-- TAB 5: UI TERMS -->
+    <div id="tab-dictionary" class="tab-content" style="grid-template-columns: 1fr;">
+      <div class="card">
+        <div class="card-title">
+          <span>Standard Khmer UI Terms Catalog (100+ Vetted Terms)</span>
+          <input type="text" id="term-search" placeholder="Search by English, Khmer, or key..." style="max-width: 300px;" oninput="filterTerms()">
+        </div>
+        <div class="table-container">
+          <table id="terms-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>English</th>
+                <th>Khmer Standard (ត្រឹមត្រូវ)</th>
+                <th>Category</th>
+                <th>Avoid / Red-Flags (ជៀសវាង)</th>
+              </tr>
+            </thead>
+            <tbody id="terms-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Embedded UI terms catalog subset for instant offline interactive search
+    const UI_TERMS = [
+      { key: "auth.sign_in", en: "Sign In / Log In", km: "ចូលគណនី", category: "authentication", avoid: "យាងចូល (royal) or ចុះឈ្មោះចូល" },
+      { key: "auth.sign_up", en: "Sign Up / Register", km: "ចុះឈ្មោះ", category: "authentication", avoid: "បង្កើតគណនីថ្មី (wordy) or ចុះបញ្ជី" },
+      { key: "auth.log_out", en: "Log Out / Sign Out", km: "ចាកចេញ", category: "authentication", avoid: "យាងចេញ (royal) or ដើរចេញ" },
+      { key: "auth.forgot_password", en: "Forgot Password?", km: "ភ្លេចពាក្យសម្ងាត់?", category: "authentication", avoid: "ភ្លេចលេខកូដសម្ងាត់" },
+      { key: "nav.settings", en: "Settings", km: "ការកំណត់", category: "navigation", avoid: "កំណត់ or ការតំរៀប" },
+      { key: "actions.save", en: "Save", km: "រក្សាទុក", category: "actions", avoid: "សន្សំ (saving money) or កត់ត្រា" },
+      { key: "actions.search", en: "Search", km: "ស្វែងរក", category: "actions", avoid: "រាវរក" },
+      { key: "actions.cancel", en: "Cancel", km: "បោះបង់", category: "actions", avoid: "ឈប់ or ផ្តាច់" },
+      { key: "actions.delete", en: "Delete", km: "លុប", category: "actions", avoid: "សម្លាប់ or កម្ទេច" },
+      { key: "actions.confirm", en: "Confirm", km: "បញ្ជាក់", category: "actions", avoid: "យល់ព្រម (Agree)" },
+      { key: "commerce.total_price", en: "Total Price", km: "តម្លៃសរុប", category: "commerce_payments", avoid: "សរុបតម្លៃ (inverted word order)" },
+      { key: "commerce.checkout", en: "Checkout", km: "ទូទាត់ប្រាក់", category: "commerce_payments", avoid: "គិតលុយ" },
+      { key: "commerce.invoice", en: "Tax Invoice", km: "វិក្កយបត្រ", category: "commerce_payments", avoid: "ក្រដាសគិតលុយ" },
+      { key: "status.success", en: "Successful", km: "ជោគជ័យ", category: "status_feedback", avoid: "សម្រេច" },
+      { key: "status.failed", en: "Failed", km: "បរាជ័យ", category: "status_feedback", avoid: "ខកខាន" }
+    ];
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('tab-' + tabId).classList.add('active');
+    }
+
+    function updatePreviewStyle() {
+      const font = document.getElementById('font-select').value;
+      const lh = document.getElementById('line-height-range').value;
+      document.getElementById('line-height-val').innerText = lh;
+      const prev = document.getElementById('preview-render');
+      prev.style.fontFamily = font;
+      prev.style.lineHeight = lh;
+    }
+
+    function runLint() {
+      const text = document.getElementById('lint-input').value;
+      document.getElementById('preview-render').innerText = text;
+
+      const warnings = [];
+      const errors = [];
+      if (text.includes('\uFFFD')) errors.push("Unicode Replacement Character (U+FFFD) detected");
+      if (text.includes('\u25CC')) warnings.push("Literal dotted circle (U+25CC) detected: glyph rendering broken");
+      if (text.endsWith('\u17D2')) warnings.push("Trailing Coeng subscript sign (U+17D2) at end of text");
+      if (text.includes("សរុបតម្លៃ")) warnings.push("Inverted word order: use 'តម្លៃសរុប' (Total Price)");
+      if (text.includes("យាង") || text.includes("សោយ") || text.includes("ព្រះរាជ")) warnings.push("Prohibited royal vocabulary detected (use neutral digital tone)");
+      if (/\d+\.\d{1,2}\s*(?:៛|KHR|រៀល)/.test(text)) warnings.push("KHR formatted with decimal cents. Use whole-riel integers.");
+
+      let totalKhmer = 0, consonants = 0, vowels = 0, subscripts = 0, symbols = 0;
+      for (let i = 0; i < text.length; i++) {
+        const cp = text.charCodeAt(i);
+        if (cp >= 0x1780 && cp <= 0x17a2) { consonants++; totalKhmer++; }
+        else if (cp >= 0x17b6 && cp <= 0x17c5) { vowels++; totalKhmer++; }
+        else if (cp === 0x17d2) { subscripts++; totalKhmer++; }
+        else if ((cp >= 0x17d4 && cp <= 0x17da) || cp === 0x17db) { symbols++; totalKhmer++; }
+      }
+
+      document.getElementById('stat-total').innerText = totalKhmer;
+      document.getElementById('stat-consonants').innerText = consonants;
+      document.getElementById('stat-vowels').innerText = vowels;
+      document.getElementById('stat-subscripts').innerText = subscripts;
+      document.getElementById('stat-symbols').innerText = symbols;
+
+      const diag = document.getElementById('lint-diagnostics');
+      const badge = document.getElementById('lint-badge');
+      if (errors.length === 0 && warnings.length === 0) {
+        badge.className = "status-badge status-clean";
+        badge.innerText = "✓ Clean Text";
+        diag.innerText = "✓ No Unicode corruption or linguistic defects detected.\n✓ Stacked subscripts and diacritics render cleanly.";
+      } else {
+        badge.className = "status-badge status-warning";
+        badge.innerText = "⚠ Issues Found";
+        diag.innerText = [...errors.map(e => "❌ ERROR: " + e), ...warnings.map(w => "⚠ WARNING: " + w)].join("\n");
+      }
+    }
+
+    const ONES = ["", "មួយ", "ពីរ", "បី", "បួន", "ប្រាំ", "ប្រាំមួយ", "ប្រាំពីរ", "ប្រាំបី", "ប្រាំបួន"];
+    const TENS = ["", "ដប់", "ម្ភៃ", "សាមសិប", "សែសិប", "ហាសិប", "ហុកសិប", "ចិតសិប", "ប៉ែតសិប", "កៅសិប"];
+
+    function integerToKhmerWords(num) {
+      if (num === 0) return "សូន្យ";
+      if (num < 0) return "ដក " + integerToKhmerWords(-num);
+      let res = "";
+      if (num >= 1000000) {
+        res += integerToKhmerWords(Math.floor(num / 1000000)) + "លាន";
+        num %= 1000000;
+      }
+      if (num >= 100000) {
+        res += ONES[Math.floor(num / 100000)] + "សែន";
+        num %= 100000;
+      }
+      if (num >= 10000) {
+        res += ONES[Math.floor(num / 10000)] + "ម៉ឺន";
+        num %= 10000;
+      }
+      if (num >= 1000) {
+        res += ONES[Math.floor(num / 1000)] + "ពាន់";
+        num %= 1000;
+      }
+      if (num >= 100) {
+        res += ONES[Math.floor(num / 100)] + "រយ";
+        num %= 100;
+      }
+      if (num >= 10) {
+        res += TENS[Math.floor(num / 10)];
+        num %= 10;
+      }
+      if (num > 0) res += ONES[num];
+      return res;
+    }
+
+    function runCurrency() {
+      const amt = parseFloat(document.getElementById('curr-amount').value || "0");
+      const curr = document.getElementById('curr-select').value;
+      if (curr === "KHR") {
+        document.getElementById('curr-formatted').innerText = Math.round(amt).toLocaleString('en-US') + " ៛";
+        document.getElementById('curr-words').innerText = integerToKhmerWords(Math.round(amt)) + "រៀលគត់";
+      } else {
+        document.getElementById('curr-formatted').innerText = "$" + amt.toFixed(2);
+        document.getElementById('curr-words').innerText = integerToKhmerWords(Math.floor(amt)) + " ដុល្លារអាមេរិក";
+      }
+
+      const now = new Date();
+      const be = now.getFullYear() + 543;
+      document.getElementById('date-preview').innerText = `កាលបរិច្ឆេទ: ថ្ងៃទី ${now.getDate()} ខែតុលា ឆ្នាំ ${now.getFullYear()} (ព.ស. ${be})`;
+    }
+
+    function runPhone() {
+      const raw = document.getElementById('phone-input').value.replace(/[\s\-\.]/g, "");
+      let nsn = raw;
+      if (nsn.startsWith("+855")) nsn = nsn.slice(4);
+      else if (nsn.startsWith("855")) nsn = nsn.slice(3);
+      else if (nsn.startsWith("0")) nsn = nsn.slice(1);
+
+      const isValid = (nsn.length === 8 || nsn.length === 9) && /^\d+$/.test(nsn);
+      const res = {
+        raw: document.getElementById('phone-input').value,
+        nsn: nsn,
+        canonical_e164: isValid ? "+855" + nsn : "INVALID",
+        domestic_trunk: isValid ? "0" + nsn : "INVALID",
+        is_valid_syntax: isValid,
+        line_type: nsn.startsWith("23") ? "fixed-line (Phnom Penh)" : "mobile",
+        requires_otp_verification: true
+      };
+      document.getElementById('phone-result').innerText = JSON.stringify(res, null, 2);
+    }
+
+    function calculateCrc16(data) {
+      let crc = 0xFFFF;
+      for (let i = 0; i < data.length; i++) {
+        crc ^= (data.charCodeAt(i) << 8);
+        for (let j = 0; j < 8; j++) {
+          if ((crc & 0x8000) !== 0) {
+            crc = ((crc << 1) ^ 0x1021) & 0xFFFF;
+          } else {
+            crc = (crc << 1) & 0xFFFF;
+          }
+        }
+      }
+      return crc.toString(16).toUpperCase().padStart(4, "0");
+    }
+
+    function runKhqr() {
+      const payload = document.getElementById('khqr-input').value.trim();
+      let payloadToCalc = payload;
+      let existingCrc = "";
+      if (!payload.endsWith("6304") && payload.includes("6304")) {
+        const idx = payload.indexOf("6304");
+        payloadToCalc = payload.slice(0, idx + 4);
+        existingCrc = payload.slice(idx + 4, idx + 8);
+      }
+      const crc = calculateCrc16(payloadToCalc);
+      const res = {
+        computed_crc: crc,
+        full_khqr: payloadToCalc + crc,
+        is_valid: existingCrc ? existingCrc.toUpperCase() === crc : true
+      };
+      document.getElementById('khqr-result').innerText = JSON.stringify(res, null, 2);
+    }
+
+    function filterTerms() {
+      const q = document.getElementById('term-search').value.toLowerCase().trim();
+      const tbody = document.getElementById('terms-tbody');
+      tbody.innerHTML = "";
+      UI_TERMS.forEach(item => {
+        if (!q || item.key.toLowerCase().includes(q) || item.en.toLowerCase().includes(q) || item.km.includes(q)) {
+          const row = document.createElement('tr');
+          row.innerHTML = `<td><code>${item.key}</code></td><td>${item.en}</td><td class="term-km">${item.km}</td><td>${item.category}</td><td class="term-avoid">${item.avoid}</td>`;
+          tbody.appendChild(row);
+        }
+      });
+    }
+
+    // Init
+    runLint();
+    runCurrency();
+    runPhone();
+    runKhqr();
+    filterTerms();
+  </script>
+</body>
+</html>

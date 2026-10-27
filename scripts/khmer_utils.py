@@ -18,6 +18,7 @@ import argparse
 import datetime
 import json
 import math
+import os
 import re
 import sys
 import unicodedata
@@ -258,6 +259,12 @@ KHMER_MONTHS = [
 KHMER_DAYS = [
     "ច័ន្ទ", "អង្គារ", "ពុធ", "ព្រហស្បតិ៍", "សុក្រ", "សៅរ៍", "អាទិត្យ"
 ]
+
+
+def to_khmer_digits(value: Any) -> str:
+    """Convert ASCII digits (0-9) to Khmer Unicode numerals (០-៩)."""
+    digit_map = ["០", "១", "២", "៣", "៤", "៥", "៦", "៧", "៨", "៩"]
+    return re.sub(r"[0-9]", lambda m: digit_map[int(m.group(0))], str(value))
 
 
 def to_buddhist_era(year_ce: int) -> int:
@@ -783,6 +790,146 @@ def get_khmer_character_stats(text: str) -> dict:
     return stats
 
 
+# --- 8. UI Terms Catalog Lookup & Fast Text Linter ---
+
+def lookup_ui_term(query: str = "", data_path: Optional[str] = None) -> List[Dict[str, Any]]:
+    """
+    Search data/ui_terms.json for matching English or Khmer UI terms.
+    Matches against 'key', 'en', and 'km' fields (case-insensitive for English/keys).
+    Sorts exact matches before partial matches.
+    """
+    if data_path is None:
+        base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        candidate = os.path.join(base_dir, "data", "ui_terms.json")
+        if os.path.exists(candidate):
+            data_path = candidate
+        else:
+            data_path = os.path.join("data", "ui_terms.json")
+
+    if not os.path.exists(data_path):
+        return []
+
+    with open(data_path, "r", encoding="utf-8") as f:
+        terms: List[Dict[str, Any]] = json.load(f)
+
+    if not query or not query.strip():
+        return terms[:50]
+
+    q_clean = query.strip()
+    q_lower = q_clean.lower()
+    exact_matches: List[Dict[str, Any]] = []
+    partial_matches: List[Dict[str, Any]] = []
+
+    for item in terms:
+        key_lower = item.get("key", "").lower()
+        en_lower = item.get("en", "").lower()
+        km_val = item.get("km", "")
+
+        if q_lower == key_lower or q_lower == en_lower or q_clean == km_val:
+            exact_matches.append(item)
+        elif q_lower in key_lower or q_lower in en_lower or q_clean in km_val:
+            partial_matches.append(item)
+
+    return exact_matches + partial_matches
+
+
+def lint_khmer_text(text: str) -> Dict[str, Any]:
+    """
+    Fast linting inspection of an in-memory Khmer string for common defects:
+    - Unicode corruption: Replacement char U+FFFD, control characters
+    - Broken typography: Literal dotted circle U+25CC
+    - Orphaned combining marks: Vowels or diacritics without a preceding base consonant
+    - Trailing Coeng: U+17D2 at the end of text
+    - Grammatical inversion: Hallucinated [Adj] + [Noun] order
+    - Prohibited royal / monastic register words in consumer UI
+    - Currency format: Decimal KHR notation (e.g. 10.00៛)
+    - Subscript clipping risk: Stacked subscripts without line-height reminder
+    """
+    errors: List[str] = []
+    warnings: List[str] = []
+    suggestions: List[str] = []
+
+    if not text:
+        return {
+            "is_clean": True,
+            "errors": [],
+            "warnings": [],
+            "suggestions": [],
+            "stats": get_khmer_character_stats(""),
+        }
+
+    # 1. Unicode corruption
+    if "\uFFFD" in text:
+        errors.append("Unicode Replacement Character (U+FFFD) detected: text has suffered encoding corruption.")
+
+    # 2. Literal dotted circle
+    if "\u25CC" in text:
+        warnings.append("Literal dotted circle (U+25CC) detected: indicates broken glyph rendering or orphan diacritic.")
+
+    # 3. Trailing Coeng
+    if text.endswith("\u17D2"):
+        warnings.append("Trailing Coeng subscript sign (U+17D2) at end of text without following consonant.")
+
+    # 4. Orphaned combining marks (at index 0, or after space/ZWSP, or after ASCII/Latin)
+    combining_ranges = [
+        (0x17B6, 0x17C5),  # Dependent vowels
+        (0x17C6, 0x17D1),  # Diacritics
+        (0x17DD, 0x17DD),  # Thkeam Khmor
+    ]
+    def is_combining(cp: int) -> bool:
+        return any(start <= cp <= end for start, end in combining_ranges)
+
+    for i, ch in enumerate(text):
+        cp = ord(ch)
+        if is_combining(cp):
+            if i == 0:
+                warnings.append(f"Orphaned combining mark U+{cp:04X} at start of string with no base consonant.")
+            else:
+                prev_ch = text[i - 1]
+                prev_cp = ord(prev_ch)
+                if prev_ch in " \t\r\n\u200B":
+                    warnings.append(f"Orphaned combining mark U+{cp:04X} follows whitespace or ZWSP boundary.")
+                elif prev_cp < 0x80 and prev_ch.isascii() and prev_ch.isalnum():
+                    warnings.append(f"Combining mark U+{cp:04X} follows Latin/ASCII character '{prev_ch}'.")
+
+    # 5. Inverted grammatical word patterns
+    inverted_patterns = [
+        (r"សរុបតម្លៃ", "Inverted word order: use 'តម្លៃសរុប' (Total Price: [Noun] + [Adjective])"),
+        (r"ថ្មីពាក្យសម្ងាត់", "Inverted word order: use 'ពាក្យសម្ងាត់ថ្មី' (New Password: [Noun] + [Adjective])"),
+        (r"ចាស់ពាក្យសម្ងាត់", "Inverted word order: use 'ពាក្យសម្ងាត់ចាស់' (Old Password: [Noun] + [Adjective])"),
+        (r"សកម្មអ្នកប្រើប្រាស់", "Inverted word order: use 'អ្នកប្រើប្រាស់សកម្ម' (Active Users: [Noun] + [Adjective])"),
+    ]
+    for pattern, desc in inverted_patterns:
+        if re.search(pattern, text):
+            warnings.append(desc)
+
+    # 6. Prohibited royal/monastic words
+    royal_terms = ["យាង", "សោយ", "ព្រះរាជ", "ទ្រង់", "សោយទិវង្គត", "និមន្ត", "ឆាន់"]
+    for term in royal_terms:
+        if term in text:
+            warnings.append(f"Prohibited royal/monastic register word '{term}' found. Use modern standard digital terminology.")
+
+    # 7. Decimal KHR currency
+    if re.search(r"\d+\.\d{1,2}\s*(?:៛|KHR|រៀល)", text):
+        warnings.append("Khmer Riel (KHR) formatted with fractional decimal cents. KHR must be formatted as whole-riel integers without decimals.")
+        suggestions.append("Format KHR amounts using whole-riel integers (e.g. '25,000 ៛').")
+
+    # 8. Subscript clipping / line-height check
+    stats = get_khmer_character_stats(text)
+    if stats["coeng_subscripts"] > 0 or stats["dependent_vowels"] > 0:
+        suggestions.append("Khmer text contains stacked subscripts/vowels. Ensure CSS 'line-height: >= 1.6' to prevent diacritic clipping.")
+
+    is_clean = len(errors) == 0 and len(warnings) == 0
+
+    return {
+        "is_clean": is_clean,
+        "errors": errors,
+        "warnings": warnings,
+        "suggestions": suggestions,
+        "stats": stats,
+    }
+
+
 # --- CLI Interface ---
 
 def main() -> int:
@@ -827,6 +974,14 @@ def main() -> int:
     # stats command
     stats_p = subparsers.add_parser("stats", help="Analyze Khmer text character statistics")
     stats_p.add_argument("text", help="Khmer string to analyze")
+
+    # lookup command
+    lookup_p = subparsers.add_parser("lookup", help="Look up standard UI terms in data/ui_terms.json")
+    lookup_p.add_argument("query", nargs="?", default="", help="English, Khmer, or key search term (e.g. 'Settings', 'Save')")
+
+    # lint command
+    lint_p = subparsers.add_parser("lint", help="Lint a Khmer string for Unicode corruption, dotted circles, royal words, or decimal KHR")
+    lint_p.add_argument("text", help="Text string to lint")
 
     args = parser.parse_args()
 
@@ -875,6 +1030,16 @@ def main() -> int:
         stats["is_khmer"] = is_khmer_text(args.text)
         print(json.dumps(stats, indent=2, ensure_ascii=False))
         return 0
+
+    if args.command == "lookup":
+        results = lookup_ui_term(args.query)
+        print(json.dumps(results, indent=2, ensure_ascii=False))
+        return 0
+
+    if args.command == "lint":
+        res = lint_khmer_text(args.text)
+        print(json.dumps(res, indent=2, ensure_ascii=False))
+        return 0 if res["is_clean"] else 1
 
     return 0
 
