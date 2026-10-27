@@ -32,6 +32,7 @@ from scripts.khmer_utils import (
     format_currency_khmer_words,
     format_khr,
     format_usd,
+    insert_khmer_word_breaks,
     integer_to_khmer_words,
     lint_khmer_text,
     lookup_ui_term,
@@ -136,6 +137,17 @@ TOOLS = [
             "required": ["words"],
         },
     },
+    {
+        "name": "khmer_insert_word_breaks",
+        "description": "Inject Zero-Width Space (U+200B) at syllable boundaries to enable clean responsive wrapping on mobile screens and UI containers.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string", "description": "Khmer text string to process"},
+            },
+            "required": ["text"],
+        },
+    },
 ]
 
 
@@ -177,6 +189,11 @@ def handle_tool_call(name: str, arguments: Dict[str, Any]) -> Any:
     if name == "khmer_sort_words":
         words = arguments.get("words", [])
         return {"sorted": sort_khmer_words(words)}
+
+    if name == "khmer_insert_word_breaks":
+        text = arguments.get("text", "")
+        res = insert_khmer_word_breaks(text)
+        return {"text": res, "text_with_breaks": res}
 
     raise ValueError(f"Unknown tool: {name}")
 

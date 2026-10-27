@@ -346,6 +346,57 @@ def safe_truncate_khmer(text: str, max_chars: int) -> str:
     return text[:cut_idx] + "…"
 
 
+KHMER_SYLLABLE_PATTERN = re.compile(
+    r'(?:'
+    r'[\u1780-\u17A2](?:\u17D2[\u1780-\u17A2])?'
+    r'|[\u17A3-\u17B3]'
+    r'|[\u17E0-\u17E9]+'
+    r'|[^\u1780-\u17FF\u19E0-\u19FF\s]+'
+    r'|\s+'
+    r'|[\u17D4-\u17DA\u17DB]'
+    r')'
+    r'(?:'
+    r'\u17D2[\u1780-\u17A2]'
+    r'|[\u17B6-\u17C5]'
+    r'|[\u17C6-\u17D3\u17DD]'
+    r')*',
+    re.UNICODE,
+)
+
+
+def segment_khmer_syllables(text: str) -> List[str]:
+    """
+    Segment Khmer text into orthographic syllables based on script phonotactics.
+    Handles base consonants, independent vowels, Coeng clusters, dependent vowels, and diacritics.
+    """
+    if not text:
+        return []
+    return [m.group(0) for m in KHMER_SYLLABLE_PATTERN.finditer(text) if m.group(0)]
+
+
+def insert_khmer_word_breaks(text: str, break_char: str = "\u200B") -> str:
+    """
+    Inject Zero-Width Space (U+200B) at syllable boundaries to enable clean browser word wrapping.
+    Leaves non-Khmer words, existing whitespace, and punctuation intact without duplicate breaks.
+    """
+    if not text:
+        return ""
+    tokens = segment_khmer_syllables(text)
+    out: List[str] = []
+    khmer_run_re = re.compile(r"[\u1780-\u17FF]")
+
+    for i, tok in enumerate(tokens):
+        out.append(tok)
+        if i < len(tokens) - 1:
+            next_tok = tokens[i + 1]
+            if khmer_run_re.search(tok) and khmer_run_re.search(next_tok):
+                if not tok.endswith(break_char) and not next_tok.startswith(break_char):
+                    out.append(break_char)
+
+    res = "".join(out)
+    return re.sub(f"{re.escape(break_char)}+", break_char, res)
+
+
 # --- 5. Number-to-Words in Khmer (Invoice & Tax Compliance) ---
 
 _KHMER_ONES = ["", "មួយ", "ពីរ", "បី", "បួន", "ប្រាំ", "ប្រាំមួយ", "ប្រាំពីរ", "ប្រាំបី", "ប្រាំបួន"]
@@ -983,6 +1034,18 @@ def main() -> int:
     lint_p = subparsers.add_parser("lint", help="Lint a Khmer string for Unicode corruption, dotted circles, royal words, or decimal KHR")
     lint_p.add_argument("text", help="Text string to lint")
 
+    # break command
+    break_p = subparsers.add_parser("break", help="Inject Zero-Width Space (ZWSP) at syllable boundaries for word wrapping")
+    break_p.add_argument("text", help="Khmer string to break")
+
+    # install-rules command
+    rules_p = subparsers.add_parser("install-rules", help="Install token-efficient Khmer localization guardrails into AI agent configs")
+    rules_p.add_argument("--target", default="cursor", choices=["cursor", "cursor-mdc", "claude", "windsurf", "copilot", "gemini", "agents", "all"])
+    rules_p.add_argument("--tier", default="standard", choices=["nano", "standard", "enterprise"])
+    rules_p.add_argument("--dest", default=".")
+    rules_p.add_argument("--force", action="store_true")
+    rules_p.add_argument("--dry-run", action="store_true")
+
     args = parser.parse_args()
 
     if args.command == "phone":
@@ -1040,6 +1103,19 @@ def main() -> int:
         res = lint_khmer_text(args.text)
         print(json.dumps(res, indent=2, ensure_ascii=False))
         return 0 if res["is_clean"] else 1
+
+    if args.command == "break":
+        print(insert_khmer_word_breaks(args.text))
+        return 0
+
+    if args.command == "install-rules":
+        try:
+            from scripts.install_agent_rules import install_rules
+        except ImportError:
+            from install_agent_rules import install_rules
+        res = install_rules(args.target, args.tier, args.dest, args.force, args.dry_run)
+        print(json.dumps(res, indent=2))
+        return 0
 
     return 0
 

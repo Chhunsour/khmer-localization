@@ -747,5 +747,684 @@
     "km": "ថ្ងៃស្អែក",
     "category": "status_feedback",
     "avoid": "ស្អែកនេះ"
+  },
+  {
+    "key": "auth.change_password",
+    "en": "Change Password",
+    "km": "ប្តូរពាក្យសម្ងាត់",
+    "category": "authentication",
+    "avoid": "កែពាក្យសម្ងាត់ or ផ្លាស់ពាក្យសម្ងាត់"
+  },
+  {
+    "key": "auth.biometrics",
+    "en": "Biometrics / Face ID / Fingerprint",
+    "km": "ស្កេនជីវមាត្រ",
+    "category": "authentication",
+    "avoid": "ស្កេនមុខ or ស្កេនដៃ"
+  },
+  {
+    "key": "auth.security_question",
+    "en": "Security Question",
+    "km": "សំណួរសុវត្ថិភាព",
+    "category": "authentication",
+    "avoid": "សំណួរការពារ"
+  },
+  {
+    "key": "auth.session_expired",
+    "en": "Session Expired",
+    "km": "សម័យការងារផុតកំណត់",
+    "category": "authentication",
+    "avoid": "ផុតម៉ោង"
+  },
+  {
+    "key": "auth.verify_identity",
+    "en": "Verify Identity",
+    "km": "ផ្ទៀងផ្ទាត់អត្តសញ្ញាណ",
+    "category": "authentication",
+    "avoid": "បញ្ជាក់មនុស្ស"
+  },
+  {
+    "key": "auth.account_settings",
+    "en": "Account Settings",
+    "km": "ការកំណត់គណនី",
+    "category": "authentication",
+    "avoid": "ការរៀបចំគណនី"
+  },
+  {
+    "key": "auth.delete_account",
+    "en": "Delete Account",
+    "km": "លុបគណនី",
+    "category": "authentication",
+    "avoid": "សម្លាប់គណនី"
+  },
+  {
+    "key": "auth.login_history",
+    "en": "Login History / Activity",
+    "km": "ប្រវត្តិនៃការចូលគណនី",
+    "category": "authentication",
+    "avoid": "ប្រវត្តិចូល"
+  },
+  {
+    "key": "auth.trusted_devices",
+    "en": "Trusted Devices",
+    "km": "ឧបករណ៍ដែលទុកចិត្ត",
+    "category": "authentication",
+    "avoid": "ម៉ាស៊ីនទុកចិត្ត"
+  },
+  {
+    "key": "auth.resend_otp",
+    "en": "Resend OTP",
+    "km": "ផ្ញើលេខកូដម្តងទៀត",
+    "category": "authentication",
+    "avoid": "ផ្ញើកូដសារជាថ្មី"
+  },
+  {
+    "key": "nav.explore",
+    "en": "Explore",
+    "km": "រុករក",
+    "category": "navigation",
+    "avoid": "ដើរមើល or ស្រាវជ្រាវ"
+  },
+  {
+    "key": "nav.feed",
+    "en": "Activity Feed / Timeline",
+    "km": "មតិព័ត៌មាន",
+    "category": "navigation",
+    "avoid": "ព័ត៌មានហូរ"
+  },
+  {
+    "key": "nav.messages",
+    "en": "Messages",
+    "km": "សារ",
+    "category": "navigation",
+    "avoid": "សំបុត្រ"
+  },
+  {
+    "key": "nav.sidebar",
+    "en": "Sidebar",
+    "km": "របារចំហៀង",
+    "category": "navigation",
+    "avoid": "ផ្ទាំងចំហៀង"
+  },
+  {
+    "key": "nav.footer",
+    "en": "Footer",
+    "km": "ផ្នែកបាតទំព័រ",
+    "category": "navigation",
+    "avoid": "ជើងទំព័រ"
+  },
+  {
+    "key": "nav.breadcrumb",
+    "en": "Breadcrumb Navigation",
+    "km": "ផ្លូវរុករកទំព័រ",
+    "category": "navigation",
+    "avoid": "នំប៉័ង"
+  },
+  {
+    "key": "nav.back_to_top",
+    "en": "Back to Top",
+    "km": "ត្រឡប់ទៅខាងលើ",
+    "category": "navigation",
+    "avoid": "ឡើងលើវិញ"
+  },
+  {
+    "key": "nav.categories",
+    "en": "Categories",
+    "km": "ប្រភេទ",
+    "category": "navigation",
+    "avoid": "ជំពូក"
+  },
+  {
+    "key": "nav.favorites",
+    "en": "Favorites / Wishlist",
+    "km": "បញ្ជីពេញចិត្ត",
+    "category": "navigation",
+    "avoid": "របស់ស្រឡាញ់"
+  },
+  {
+    "key": "nav.bookmarks",
+    "en": "Saved / Bookmarks",
+    "km": "បានរក្សាទុក",
+    "category": "navigation",
+    "avoid": "ចំណាំទុក"
+  },
+  {
+    "key": "action.export",
+    "en": "Export",
+    "km": "នាំចេញ",
+    "category": "actions",
+    "avoid": "បញ្ជូនចេញ"
+  },
+  {
+    "key": "action.import",
+    "en": "Import",
+    "km": "នាំចូល",
+    "category": "actions",
+    "avoid": "បញ្ជូនចូល"
+  },
+  {
+    "key": "action.copy_link",
+    "en": "Copy Link",
+    "km": "ចម្លងតំណ",
+    "category": "actions",
+    "avoid": "កូពីលីង"
+  },
+  {
+    "key": "action.paste",
+    "en": "Paste",
+    "km": "បិទភ្ជាប់",
+    "category": "actions",
+    "avoid": "បិទ"
+  },
+  {
+    "key": "action.cut",
+    "en": "Cut",
+    "km": "កាត់",
+    "category": "actions",
+    "avoid": "ច្រឹប"
+  },
+  {
+    "key": "action.undo",
+    "en": "Undo",
+    "km": "មិនធ្វើវិញ",
+    "category": "actions",
+    "avoid": "ត្រឡប់ក្រោយ"
+  },
+  {
+    "key": "action.redo",
+    "en": "Redo",
+    "km": "ធ្វើឡើងវិញ",
+    "category": "actions",
+    "avoid": "ធ្វើសារជាថ្មី"
+  },
+  {
+    "key": "action.preview",
+    "en": "Preview",
+    "km": "មើលជាមុន",
+    "category": "actions",
+    "avoid": "មើលមុន"
+  },
+  {
+    "key": "action.duplicate",
+    "en": "Duplicate / Clone",
+    "km": "ចម្លងស្ទួន",
+    "category": "actions",
+    "avoid": "បង្កើតមួយទៀត"
+  },
+  {
+    "key": "action.archive",
+    "en": "Archive",
+    "km": "រក្សាទុកក្នុងបណ្ណសារ",
+    "category": "actions",
+    "avoid": "ទុកចោល"
+  },
+  {
+    "key": "action.attach",
+    "en": "Attach File",
+    "km": "ភ្ជាប់ឯកសារ",
+    "category": "actions",
+    "avoid": "ដាក់ឯកសារ"
+  },
+  {
+    "key": "action.search_now",
+    "en": "Search",
+    "km": "ស្វែងរក",
+    "category": "actions",
+    "avoid": "រាវរក"
+  },
+  {
+    "key": "action.filter_results",
+    "en": "Filter",
+    "km": "ត្រង",
+    "category": "actions",
+    "avoid": "ចម្រាញ់"
+  },
+  {
+    "key": "action.sort_items",
+    "en": "Sort",
+    "km": "តម្រៀប",
+    "category": "actions",
+    "avoid": "រៀបលំដាប់"
+  },
+  {
+    "key": "action.drag_drop",
+    "en": "Drag and Drop",
+    "km": "អូសនិងទម្លាក់",
+    "category": "actions",
+    "avoid": "ចាប់ទម្លាក់"
+  },
+  {
+    "key": "action.install",
+    "en": "Install",
+    "km": "ដំឡើង",
+    "category": "actions",
+    "avoid": "ដាក់បញ្ចូល"
+  },
+  {
+    "key": "action.uninstall",
+    "en": "Uninstall / Remove",
+    "km": "លុបការដំឡើង",
+    "category": "actions",
+    "avoid": "ដោះចេញ"
+  },
+  {
+    "key": "action.publish",
+    "en": "Publish",
+    "km": "ផ្សព្វផ្សាយ",
+    "category": "actions",
+    "avoid": "ប្រកាស"
+  },
+  {
+    "key": "action.unpublish",
+    "en": "Unpublish",
+    "km": "ឈប់ផ្សព្វផ្សាយ",
+    "category": "actions",
+    "avoid": "ដកការប្រកាស"
+  },
+  {
+    "key": "action.subscribe",
+    "en": "Subscribe",
+    "km": "ជាវ",
+    "category": "actions",
+    "avoid": "ទិញសេវា"
+  },
+  {
+    "key": "action.unsubscribe",
+    "en": "Unsubscribe",
+    "km": "ឈប់ជាវ",
+    "category": "actions",
+    "avoid": "ផ្តាច់ការជាវ"
+  },
+  {
+    "key": "action.like",
+    "en": "Like",
+    "km": "ចូលចិត្ត",
+    "category": "actions",
+    "avoid": "ពេញចិត្ត"
+  },
+  {
+    "key": "action.comment",
+    "en": "Comment",
+    "km": "បញ្ចេញមតិ",
+    "category": "actions",
+    "avoid": "ផ្តល់យោបល់"
+  },
+  {
+    "key": "action.expand",
+    "en": "Expand / Show More",
+    "km": "ពង្រីក",
+    "category": "actions",
+    "avoid": "បើកមើល"
+  },
+  {
+    "key": "action.collapse",
+    "en": "Collapse / Show Less",
+    "km": "បង្រួម",
+    "category": "actions",
+    "avoid": "បិទវិញ"
+  },
+  {
+    "key": "commerce.tax_vat",
+    "en": "VAT / Tax",
+    "km": "អាករលើតម្លៃបន្ថែម (អ.ត.ប)",
+    "category": "commerce_payments",
+    "avoid": "ពន្ធទំនិញ"
+  },
+  {
+    "key": "commerce.shipping_fee",
+    "en": "Shipping Fee",
+    "km": "ថ្លៃដឹកជញ្ជូន",
+    "category": "commerce_payments",
+    "avoid": "សេវាដឹក"
+  },
+  {
+    "key": "commerce.delivery_method",
+    "en": "Delivery Method",
+    "km": "វិធីសាស្ត្រដឹកជញ្ជូន",
+    "category": "commerce_payments",
+    "avoid": "របៀបដឹក"
+  },
+  {
+    "key": "commerce.gift_card",
+    "en": "Gift Card",
+    "km": "កាតកាដូ",
+    "category": "commerce_payments",
+    "avoid": "ប័ណ្ណអំណោយ"
+  },
+  {
+    "key": "commerce.bank_transfer",
+    "en": "Bank Transfer",
+    "km": "ផ្ទេរប្រាក់តាមធនាគារ",
+    "category": "commerce_payments",
+    "avoid": "ផ្ញើលុយធនាគារ"
+  },
+  {
+    "key": "commerce.cash_on_delivery",
+    "en": "Cash on Delivery (COD)",
+    "km": "ទូទាត់ប្រាក់ពេលទទួលទំនិញ",
+    "category": "commerce_payments",
+    "avoid": "យកអីវ៉ាន់ឲ្យលុយ"
+  },
+  {
+    "key": "commerce.refund",
+    "en": "Refund",
+    "km": "ការសងប្រាក់វិញ",
+    "category": "commerce_payments",
+    "avoid": "ដកលុយវិញ"
+  },
+  {
+    "key": "commerce.due_date",
+    "en": "Due Date",
+    "km": "កាលបរិច្ឆេទកំណត់បង់",
+    "category": "commerce_payments",
+    "avoid": "ថ្ងៃដល់កំណត់"
+  },
+  {
+    "key": "commerce.subscription",
+    "en": "Subscription Plan",
+    "km": "គម្រោងជាវ",
+    "category": "commerce_payments",
+    "avoid": "កញ្ចប់ជាវ"
+  },
+  {
+    "key": "commerce.auto_renew",
+    "en": "Auto Renewal",
+    "km": "បន្តស្វ័យប្រវត្តិ",
+    "category": "commerce_payments",
+    "avoid": "បន្តដោយខ្លួនឯង"
+  },
+  {
+    "key": "commerce.billing_cycle",
+    "en": "Billing Cycle",
+    "km": "វដ្តនៃការទូទាត់",
+    "category": "commerce_payments",
+    "avoid": "ជុំគិតលុយ"
+  },
+  {
+    "key": "commerce.pay_now",
+    "en": "Pay Now",
+    "km": "បង់ប្រាក់ឥឡូវនេះ",
+    "category": "commerce_payments",
+    "avoid": "គិតលុយភ្លាម"
+  },
+  {
+    "key": "commerce.currency_converter",
+    "en": "Currency Exchange",
+    "km": "ការប្តូរប្រាក់",
+    "category": "commerce_payments",
+    "avoid": "ដូរលុយ"
+  },
+  {
+    "key": "commerce.credit_debit_card",
+    "en": "Credit / Debit Card",
+    "km": "កាតឥណទាន/ឥណពន្ធ",
+    "category": "commerce_payments",
+    "avoid": "កាតធនាគារ"
+  },
+  {
+    "key": "commerce.bakong_khqr",
+    "en": "Bakong KHQR Payment",
+    "km": "ទូទាត់តាមបាគង KHQR",
+    "category": "commerce_payments",
+    "avoid": "ស្កេនបាគង"
+  },
+  {
+    "key": "status.processing",
+    "en": "Processing...",
+    "km": "កំពុងដំណើរការ...",
+    "category": "status_feedback",
+    "avoid": "កំពុងធ្វើ..."
+  },
+  {
+    "key": "status.approved",
+    "en": "Approved",
+    "km": "អនុម័ត",
+    "category": "status_feedback",
+    "avoid": "យល់ព្រម"
+  },
+  {
+    "key": "status.rejected",
+    "en": "Rejected",
+    "km": "បដិសេធ",
+    "category": "status_feedback",
+    "avoid": "មិនព្រម"
+  },
+  {
+    "key": "status.offline",
+    "en": "Offline",
+    "km": "គ្មានការតភ្ជាប់បណ្តាញ",
+    "category": "status_feedback",
+    "avoid": "ដាច់អ៊ីនធឺណិត"
+  },
+  {
+    "key": "status.online",
+    "en": "Online",
+    "km": "បានតភ្ជាប់បណ្តាញ",
+    "category": "status_feedback",
+    "avoid": "ភ្ជាប់អ៊ីនធឺណិត"
+  },
+  {
+    "key": "status.no_data",
+    "en": "No Data Available",
+    "km": "មិនមានទិន្នន័យ",
+    "category": "status_feedback",
+    "avoid": "គ្មានទិន្នន័យ"
+  },
+  {
+    "key": "status.page_not_found",
+    "en": "Page Not Found (404)",
+    "km": "រកមិនឃើញទំព័រ",
+    "category": "status_feedback",
+    "avoid": "បាត់ទំព័រ"
+  },
+  {
+    "key": "status.server_error",
+    "en": "Server Error (500)",
+    "km": "បញ្ហាម៉ាស៊ីនមេ",
+    "category": "status_feedback",
+    "avoid": "កុំព្យូទ័រខូច"
+  },
+  {
+    "key": "status.synced",
+    "en": "Synchronized",
+    "km": "បានធ្វើសមកាលកម្ម",
+    "category": "status_feedback",
+    "avoid": "ធ្វើឲ្យដូចគ្នា"
+  },
+  {
+    "key": "status.syncing",
+    "en": "Syncing...",
+    "km": "កំពុងធ្វើសមកាលកម្ម...",
+    "category": "status_feedback",
+    "avoid": "កំពុងតភ្ជាប់"
+  },
+  {
+    "key": "status.canceled",
+    "en": "Canceled",
+    "km": "បានបោះបង់",
+    "category": "status_feedback",
+    "avoid": "បានឈប់"
+  },
+  {
+    "key": "status.expired",
+    "en": "Expired",
+    "km": "ផុតកំណត់",
+    "category": "status_feedback",
+    "avoid": "ហួសពេល"
+  },
+  {
+    "key": "form.address_street",
+    "en": "Street Address",
+    "km": "អាសយដ្ឋានផ្លូវ",
+    "category": "forms_inputs",
+    "avoid": "ផ្ទះនិងផ្លូវ"
+  },
+  {
+    "key": "form.address_province",
+    "en": "Capital / Province",
+    "km": "រាជធានី/ខេត្ត",
+    "category": "forms_inputs",
+    "avoid": "ខេត្ត"
+  },
+  {
+    "key": "form.address_district",
+    "en": "District / Khan",
+    "km": "ក្រុង/ស្រុក/ខណ្ឌ",
+    "category": "forms_inputs",
+    "avoid": "ស្រុក"
+  },
+  {
+    "key": "form.address_commune",
+    "en": "Commune / Sangkat",
+    "km": "ឃុំ/សង្កាត់",
+    "category": "forms_inputs",
+    "avoid": "ឃុំ"
+  },
+  {
+    "key": "form.address_village",
+    "en": "Village",
+    "km": "ភូមិ",
+    "category": "forms_inputs",
+    "avoid": "ភូមិដ្ឋាន"
+  },
+  {
+    "key": "form.postal_code",
+    "en": "Postal Code",
+    "km": "លេខកូដប្រៃសណីយ៍",
+    "category": "forms_inputs",
+    "avoid": "កូដសំបុត្រ"
+  },
+  {
+    "key": "form.id_card_number",
+    "en": "National ID / Passport Number",
+    "km": "លេខអត្តសញ្ញាណប័ណ្ណ/លិខិតឆ្លងដែន",
+    "category": "forms_inputs",
+    "avoid": "លេខកាត"
+  },
+  {
+    "key": "form.search_placeholder",
+    "en": "Search here...",
+    "km": "ស្វែងរកនៅទីនេះ...",
+    "category": "forms_inputs",
+    "avoid": "រាវរកនៅទីនេះ"
+  },
+  {
+    "key": "form.enter_amount",
+    "en": "Enter Amount",
+    "km": "បញ្ចូលចំនួនទឹកប្រាក់",
+    "category": "forms_inputs",
+    "avoid": "ដាក់លុយ"
+  },
+  {
+    "key": "form.remarks",
+    "en": "Remarks / Description",
+    "km": "ការពិពណ៌នា",
+    "category": "forms_inputs",
+    "avoid": "សេចក្តីអធិប្បាយ"
+  },
+  {
+    "key": "form.file_size_limit",
+    "en": "Maximum File Size",
+    "km": "ទំហំឯកសារអតិបរមា",
+    "category": "forms_inputs",
+    "avoid": "ឯកសារធំបំផុត"
+  },
+  {
+    "key": "form.select_all_items",
+    "en": "Select All",
+    "km": "ជ្រើសរើសទាំងអស់",
+    "category": "forms_inputs",
+    "avoid": "យកទាំងអស់"
+  },
+  {
+    "key": "legal.cookie_policy",
+    "en": "Cookie Policy",
+    "km": "គោលការណ៍ឃុកឃី (Cookies)",
+    "category": "privacy_terms",
+    "avoid": "នំឃុកឃី"
+  },
+  {
+    "key": "legal.copyright",
+    "en": "All Rights Reserved",
+    "km": "រក្សាសិទ្ធិគ្រប់យ៉ាង",
+    "category": "privacy_terms",
+    "avoid": "សិទ្ធិទាំងអស់"
+  },
+  {
+    "key": "legal.disclaimer",
+    "en": "Legal Disclaimer",
+    "km": "ការមិនទទួលខុសត្រូវផ្លូវច្បាប់",
+    "category": "privacy_terms",
+    "avoid": "ការមិនធានា"
+  },
+  {
+    "key": "legal.user_agreement",
+    "en": "User Agreement",
+    "km": "កិច្ចព្រមព្រៀងអ្នកប្រើប្រាស់",
+    "category": "privacy_terms",
+    "avoid": "កិច្ចសន្យា"
+  },
+  {
+    "key": "settings.dark_mode",
+    "en": "Dark Mode",
+    "km": "រូបរាងងងឹត",
+    "category": "privacy_terms",
+    "avoid": "ម៉ូដងងឹត"
+  },
+  {
+    "key": "settings.light_mode",
+    "en": "Light Mode",
+    "km": "រូបរាងភ្លឺ",
+    "category": "privacy_terms",
+    "avoid": "ម៉ូដភ្លឺ"
+  },
+  {
+    "key": "settings.system_theme",
+    "en": "Follow System Theme",
+    "km": "ស្របតាមប្រព័ន្ធ",
+    "category": "privacy_terms",
+    "avoid": "តាមម៉ាស៊ីន"
+  },
+  {
+    "key": "settings.language",
+    "en": "Language",
+    "km": "ភាសា",
+    "category": "privacy_terms",
+    "avoid": "អក្សរ"
+  },
+  {
+    "key": "settings.font_size",
+    "en": "Font Size",
+    "km": "ទំហំអក្សរ",
+    "category": "privacy_terms",
+    "avoid": "ទំហំតួអក្សរ"
+  },
+  {
+    "key": "settings.sound",
+    "en": "Sound / Audio",
+    "km": "សំឡេង",
+    "category": "privacy_terms",
+    "avoid": "សំឡេងឮ"
+  },
+  {
+    "key": "settings.clear_cache",
+    "en": "Clear Cache",
+    "km": "សម្អាតទិន្នន័យផ្ទុកបណ្តោះអាសន្ន",
+    "category": "privacy_terms",
+    "avoid": "លុបខេស"
+  },
+  {
+    "key": "settings.auto_update",
+    "en": "Auto Update",
+    "km": "ធ្វើបច្ចុប្បន្នភាពស្វ័យប្រវត្តិ",
+    "category": "privacy_terms",
+    "avoid": "អាប់ដេតឯកឯង"
+  },
+  {
+    "key": "settings.version",
+    "en": "App Version",
+    "km": "កំណែកម្មវិធី",
+    "category": "privacy_terms",
+    "avoid": "ជំនាន់កម្មវិធី"
   }
 ]

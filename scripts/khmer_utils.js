@@ -452,6 +452,50 @@ function safeTruncateKhmer(text, maxGraphemes) {
   return text.slice(0, cutIdx) + "…";
 }
 
+const KHMER_SYLLABLE_REGEX = /(?:[\u1780-\u17A2](?:\u17D2[\u1780-\u17A2])?|[\u17A3-\u17B3]|[\u17E0-\u17E9]+|[^\u1780-\u17FF\u19E0-\u19FF\s]+|\s+|[\u17D4-\u17DA\u17DB])(?:[\u17D2][\u1780-\u17A2]|[\u17B6-\u17C5]|[\u17C6-\u17D3\u17DD])*/gu;
+
+/**
+ * Segment Khmer text into orthographic syllables based on script phonotactics.
+ *
+ * @param {string} text
+ * @returns {string[]}
+ */
+function segmentKhmerSyllables(text) {
+  if (!text) return [];
+  const matches = text.match(KHMER_SYLLABLE_REGEX);
+  return matches || [];
+}
+
+/**
+ * Inject Zero-Width Space (U+200B) at syllable boundaries to enable clean browser word wrapping.
+ *
+ * @param {string} text
+ * @param {string} [breakChar="\u200B"]
+ * @returns {string}
+ */
+function insertKhmerWordBreaks(text, breakChar = "\u200B") {
+  if (!text) return "";
+  const tokens = segmentKhmerSyllables(text);
+  const out = [];
+  const khmerRunRegex = /[\u1780-\u17FF]/;
+
+  for (let i = 0; i < tokens.length; i++) {
+    const tok = tokens[i];
+    out.push(tok);
+    if (i < tokens.length - 1) {
+      const nextTok = tokens[i + 1];
+      if (khmerRunRegex.test(tok) && khmerRunRegex.test(nextTok)) {
+        if (!tok.endsWith(breakChar) && !nextTok.startsWith(breakChar)) {
+          out.push(breakChar);
+        }
+      }
+    }
+  }
+
+  const res = out.join("");
+  return res.replace(new RegExp(`${breakChar}+`, "g"), breakChar);
+}
+
 // --- 5. Number-to-Words in Khmer (Invoice & Tax Compliance) ---
 
 const _KHMER_ONES = [
@@ -1067,6 +1111,8 @@ const khmerUtils = {
   getKhmerCharacterStats,
   lookupUiTerm,
   lintKhmerText,
+  segmentKhmerSyllables,
+  insertKhmerWordBreaks,
 };
 
 if (typeof module !== "undefined" && module.exports) {
@@ -1095,6 +1141,8 @@ Commands:
   stats <text>                 Analyze Khmer character counts and script metrics
   lookup [term]                Search standard UI terms in data/ui_terms.json
   lint <text>                  Lint Khmer string for corruption, dotted circles, etc.
+  break <text>                 Inject Zero-Width Space (ZWSP) for word wrapping
+  install-rules [--target T]   Install agent rules (cursor, claude, windsurf, copilot)
   --help, -h                   Show this help message
 `);
   }
@@ -1175,6 +1223,36 @@ Commands:
       const res = lintKhmerText(str);
       console.log(JSON.stringify(res, null, 2));
       process.exit(res.is_clean ? 0 : 1);
+    }
+    case "break": {
+      const str = args[1] || "";
+      console.log(insertKhmerWordBreaks(str));
+      break;
+    }
+    case "install-rules": {
+      const path = require("path");
+      const { spawnSync } = require("child_process");
+      const targetIdx = args.indexOf("--target");
+      const target = targetIdx !== -1 ? args[targetIdx + 1] : "cursor";
+      const tierIdx = args.indexOf("--tier");
+      const tier = tierIdx !== -1 ? args[tierIdx + 1] : "standard";
+      const dryRun = args.includes("--dry-run");
+      const force = args.includes("--force");
+      const destIdx = args.indexOf("--dest");
+      const dest = destIdx !== -1 ? args[destIdx + 1] : ".";
+
+      const pyScript = path.join(__dirname, "install_agent_rules.py");
+      const pyArgs = [pyScript, "--target", target, "--tier", tier, "--dest", dest];
+      if (dryRun) pyArgs.push("--dry-run");
+      if (force) pyArgs.push("--force");
+
+      const proc = spawnSync("python3", pyArgs, { encoding: "utf8" });
+      if (proc.error) {
+        console.error("Failed to run installer:", proc.error.message);
+        process.exit(1);
+      }
+      process.stdout.write(proc.stdout);
+      process.exit(proc.status || 0);
     }
     default:
       console.error(`Unknown command: ${cmd}`);

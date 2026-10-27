@@ -19,9 +19,9 @@
       --error: #ef4444;
       --text: #f3f4f6;
       --text-muted: #9ca3af;
-      --font-ui: 'Plus Jakarta Sans', system-ui, sans-serif;
-      --font-khmer: 'Kantumruy Pro', 'Hanuman', 'Noto Sans Khmer', system-ui;
-      --font-mono: 'JetBrains Mono', monospace;
+      --font-ui: "Plus Jakarta Sans", system-ui, sans-serif;
+      --font-khmer: "Kantumruy Pro", "Hanuman", "Noto Sans Khmer", system-ui;
+      --font-mono: "JetBrains Mono", monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -123,13 +123,18 @@
       color: white;
       border: none;
       border-radius: 8px;
-      padding: 10px 18px;
+      padding: 8px 14px;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       cursor: pointer;
       transition: background 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
     .btn:hover { background: #2563eb; }
+    .btn-secondary { background: #1f2937; color: var(--text); }
+    .btn-secondary:hover { background: #374151; }
 
     .status-badge {
       padding: 4px 10px;
@@ -152,6 +157,7 @@
       font-size: 13px;
       white-space: pre-wrap;
       word-break: break-all;
+      position: relative;
     }
 
     .stat-grid {
@@ -183,7 +189,7 @@
 
     .table-container {
       overflow-x: auto;
-      max-height: 420px;
+      max-height: 500px;
       border: 1px solid var(--card-border);
       border-radius: 8px;
     }
@@ -193,6 +199,34 @@
     tr:hover { background: rgba(255, 255, 255, 0.02); }
     .term-km { font-family: var(--font-khmer); font-weight: 600; color: #60a5fa; font-size: 14px; }
     .term-avoid { color: #f87171; font-size: 12px; }
+
+    .zwsp-pill {
+      background: #0284c7;
+      color: white;
+      font-size: 10px;
+      padding: 1px 4px;
+      border-radius: 3px;
+      margin: 0 1px;
+      user-select: none;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10b981;
+      color: white;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      z-index: 1000;
+    }
+    .toast.show { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
@@ -202,15 +236,17 @@
         <h1>🇰🇭 Khmer Localization Engineering</h1>
         <span class="brand-badge">Playground v2.1</span>
       </div>
-      <div class="subtitle">Interactive Unicode Linter, Banking & Currency Math, KHQR & UI Terms</div>
+      <div class="subtitle">Interactive Unicode Linter, Syllable Breaker, 4-Tier Addresses, Banking & UI Terms</div>
     </header>
 
     <div class="tabs">
       <button class="tab-btn active" onclick="switchTab('linter')">🔍 Text & Unicode Linter</button>
+      <button class="tab-btn" onclick="switchTab('breaker')">✂️ Syllable Breaker & ZWSP</button>
       <button class="tab-btn" onclick="switchTab('currency')">💵 Currency & Words (GDT)</button>
       <button class="tab-btn" onclick="switchTab('phone')">📱 Phone Normalizer (+855)</button>
       <button class="tab-btn" onclick="switchTab('khqr')">💳 Bakong KHQR & CRC16</button>
-      <button class="tab-btn" onclick="switchTab('dictionary')">📖 Standard UI Terms</button>
+      <button class="tab-btn" onclick="switchTab('address')">🗺️ 4-Tier Address Builder</button>
+      <button class="tab-btn" onclick="switchTab('dictionary')">📖 Standard UI Terms (204)</button>
     </div>
 
     <!-- TAB 1: LINTER & TYPOGRAPHY -->
@@ -254,10 +290,39 @@
       </div>
     </div>
 
-    <!-- TAB 2: CURRENCY & WORDS -->
+    <!-- TAB 2: SYLLABLE BREAKER & ZWSP -->
+    <div id="tab-breaker" class="tab-content" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="card-title">Syllable Segmentation & Zero-Width Space Injection</div>
+        <div class="form-group">
+          <label>Enter Khmer sentence or paragraph to segment:</label>
+          <textarea id="breaker-input" class="khmer-input" rows="4" oninput="runBreaker()">សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រងការទូទាត់ប្រាក់បាគង</textarea>
+        </div>
+        <div class="form-group" style="display: flex; gap: 10px;">
+          <button class="btn" onclick="copyBreakerResult()">📋 Copy with ZWSP</button>
+          <button class="btn btn-secondary" onclick="toggleZwspVisual()">👁️ Toggle Visible Break Pills</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Responsive Container Wrapping & Syllables</div>
+        <div class="form-group">
+          <label>Syllables Segmented (<span id="syllables-count">0</span> syllables):</label>
+          <div id="breaker-syllables" class="result-box" style="margin-bottom: 14px;"></div>
+        </div>
+        <div class="form-group">
+          <label>Container Word Wrap Preview (300px narrow mobile card):</label>
+          <div id="breaker-preview" class="preview-box" style="max-width: 300px; line-height: 1.8;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: CURRENCY & WORDS -->
     <div id="tab-currency" class="tab-content" style="grid-template-columns: 1fr 1fr;">
       <div class="card">
-        <div class="card-title">Currency & Fiscal Formatting</div>
+        <div class="card-title">
+          <span>Currency & Fiscal Formatting</span>
+          <button class="btn btn-secondary" onclick="copyText('curr-formatted')">📋 Copy</button>
+        </div>
         <div class="form-group">
           <label>Numeric Amount:</label>
           <input type="number" id="curr-amount" value="25000" oninput="runCurrency()">
@@ -276,7 +341,10 @@
       </div>
 
       <div class="card">
-        <div class="card-title">Spelled-Out Khmer Words (GDT Fiscal Invoice)</div>
+        <div class="card-title">
+          <span>Spelled-Out Khmer Words (GDT Fiscal Invoice)</span>
+          <button class="btn btn-secondary" onclick="copyText('curr-words')">📋 Copy</button>
+        </div>
         <div class="form-group">
           <label>Official Tax Invoice Words (អក្សរខ្មែរផ្លូវការ):</label>
           <div id="curr-words" class="result-box" style="font-family: var(--font-khmer); font-size: 16px; line-height: 1.8; color: #60a5fa;">
@@ -290,7 +358,7 @@
       </div>
     </div>
 
-    <!-- TAB 3: PHONE NORMALIZER -->
+    <!-- TAB 4: PHONE NORMALIZER -->
     <div id="tab-phone" class="tab-content" style="grid-template-columns: 1fr 1fr;">
       <div class="card">
         <div class="card-title">Cambodian Phone Normalizer (+855)</div>
@@ -298,17 +366,22 @@
           <label>Enter Raw Phone Number (Mobile, Fixed-Line, or Short Code):</label>
           <input type="text" id="phone-input" value="012 345 678" oninput="runPhone()">
         </div>
-        <div class="form-group">
-          <button class="btn" onclick="runPhone()">Validate & Normalize</button>
+        <div class="form-group" style="display: flex; gap: 8px;">
+          <button class="btn btn-secondary" onclick="setPhonePreset('012 889 977')">012 (Mobitel)</button>
+          <button class="btn btn-secondary" onclick="setPhonePreset('096 123 4567')">096 (Smart)</button>
+          <button class="btn btn-secondary" onclick="setPhonePreset('023 210 022')">023 (Phnom Penh Landline)</button>
         </div>
       </div>
       <div class="card">
-        <div class="card-title">Canonical Normalization Result</div>
+        <div class="card-title">
+          <span>Canonical Normalization Result</span>
+          <button class="btn btn-secondary" onclick="copyText('phone-result')">📋 Copy JSON</button>
+        </div>
         <div id="phone-result" class="result-box"></div>
       </div>
     </div>
 
-    <!-- TAB 4: BAKONG KHQR -->
+    <!-- TAB 5: BAKONG KHQR -->
     <div id="tab-khqr" class="tab-content" style="grid-template-columns: 1fr 1fr;">
       <div class="card">
         <div class="card-title">Bakong KHQR EMVCo CRC16 Checksum</div>
@@ -318,16 +391,56 @@
         </div>
       </div>
       <div class="card">
-        <div class="card-title">Computed CRC16 & Verification</div>
+        <div class="card-title">
+          <span>Computed CRC16 & Verification</span>
+          <button class="btn btn-secondary" onclick="copyText('khqr-result')">📋 Copy JSON</button>
+        </div>
         <div id="khqr-result" class="result-box"></div>
       </div>
     </div>
 
-    <!-- TAB 5: UI TERMS -->
+    <!-- TAB 6: 4-TIER ADDRESS BUILDER -->
+    <div id="tab-address" class="tab-content" style="grid-template-columns: 1fr 1fr;">
+      <div class="card">
+        <div class="card-title">Cambodian 4-Tier Address Selector</div>
+        <div class="form-group">
+          <label>Province / Capital (រាជធានី/ខេត្ត):</label>
+          <select id="addr-province" onchange="onProvinceChange()"></select>
+        </div>
+        <div class="form-group">
+          <label>District / Khan (ក្រុង/ស្រុក/ខណ្ឌ):</label>
+          <select id="addr-district" onchange="updateAddressPreview()"></select>
+        </div>
+        <div class="form-group">
+          <label>Commune / Sangkat (ឃុំ/សង្កាត់):</label>
+          <input type="text" id="addr-sangkat" value="សង្កាត់បឹងកេងកងទី១" oninput="updateAddressPreview()">
+        </div>
+        <div class="form-group">
+          <label>Street & Building (ផ្លូវ/ផ្ទះលេខ):</label>
+          <input type="text" id="addr-street" value="ផ្ទះលេខ 42, ផ្លូវ 310" oninput="updateAddressPreview()">
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">
+          <span>Canonical Shipping Address</span>
+          <button class="btn btn-secondary" onclick="copyText('addr-output-km')">📋 Copy</button>
+        </div>
+        <div class="form-group">
+          <label>Khmer Standard Address Format:</label>
+          <div id="addr-output-km" class="result-box" style="font-family: var(--font-khmer); font-size: 15px; line-height: 1.8;"></div>
+        </div>
+        <div class="form-group">
+          <label>Bilingual Delivery Label:</label>
+          <div id="addr-output-en" class="result-box"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 7: UI TERMS -->
     <div id="tab-dictionary" class="tab-content" style="grid-template-columns: 1fr;">
       <div class="card">
         <div class="card-title">
-          <span>Standard Khmer UI Terms Catalog (100+ Vetted Terms)</span>
+          <span>Standard Khmer UI Terms Catalog (204 Vetted Terms)</span>
           <input type="text" id="term-search" placeholder="Search by English, Khmer, or key..." style="max-width: 300px;" oninput="filterTerms()">
         </div>
         <div class="table-container">
@@ -348,51 +461,51 @@
     </div>
   </div>
 
+  <div id="toast" class="toast">Copied to clipboard!</div>
+
   <script>
-    // Embedded UI terms catalog subset for instant offline interactive search
-    const UI_TERMS = [
-      { key: "auth.sign_in", en: "Sign In / Log In", km: "ចូលគណនី", category: "authentication", avoid: "យាងចូល (royal) or ចុះឈ្មោះចូល" },
-      { key: "auth.sign_up", en: "Sign Up / Register", km: "ចុះឈ្មោះ", category: "authentication", avoid: "បង្កើតគណនីថ្មី (wordy) or ចុះបញ្ជី" },
-      { key: "auth.log_out", en: "Log Out / Sign Out", km: "ចាកចេញ", category: "authentication", avoid: "យាងចេញ (royal) or ដើរចេញ" },
-      { key: "auth.forgot_password", en: "Forgot Password?", km: "ភ្លេចពាក្យសម្ងាត់?", category: "authentication", avoid: "ភ្លេចលេខកូដសម្ងាត់" },
-      { key: "nav.settings", en: "Settings", km: "ការកំណត់", category: "navigation", avoid: "កំណត់ or ការតំរៀប" },
-      { key: "actions.save", en: "Save", km: "រក្សាទុក", category: "actions", avoid: "សន្សំ (saving money) or កត់ត្រា" },
-      { key: "actions.search", en: "Search", km: "ស្វែងរក", category: "actions", avoid: "រាវរក" },
-      { key: "actions.cancel", en: "Cancel", km: "បោះបង់", category: "actions", avoid: "ឈប់ or ផ្តាច់" },
-      { key: "actions.delete", en: "Delete", km: "លុប", category: "actions", avoid: "សម្លាប់ or កម្ទេច" },
-      { key: "actions.confirm", en: "Confirm", km: "បញ្ជាក់", category: "actions", avoid: "យល់ព្រម (Agree)" },
-      { key: "commerce.total_price", en: "Total Price", km: "តម្លៃសរុប", category: "commerce_payments", avoid: "សរុបតម្លៃ (inverted word order)" },
-      { key: "commerce.checkout", en: "Checkout", km: "ទូទាត់ប្រាក់", category: "commerce_payments", avoid: "គិតលុយ" },
-      { key: "commerce.invoice", en: "Tax Invoice", km: "វិក្កយបត្រ", category: "commerce_payments", avoid: "ក្រដាសគិតលុយ" },
-      { key: "status.success", en: "Successful", km: "ជោគជ័យ", category: "status_feedback", avoid: "សម្រេច" },
-      { key: "status.failed", en: "Failed", km: "បរាជ័យ", category: "status_feedback", avoid: "ខកខាន" }
-    ];
+    const UI_TERMS = [{"key": "auth.sign_in", "en": "Sign In / Log In", "km": "ចូលគណនី", "category": "authentication", "avoid": "យាងចូល (royal register) or ចុះឈ្មោះចូល"}, {"key": "auth.sign_up", "en": "Sign Up / Register", "km": "ចុះឈ្មោះ", "category": "authentication", "avoid": "បង្កើតគណនីថ្មី (overly wordy for buttons) or ចុះបញ្ជី"}, {"key": "auth.log_out", "en": "Log Out / Sign Out", "km": "ចាកចេញ", "category": "authentication", "avoid": "យាងចេញ (royal register) or ដើរចេញ"}, {"key": "auth.forgot_password", "en": "Forgot Password?", "km": "ភ្លេចពាក្យសម្ងាត់?", "category": "authentication", "avoid": "ភ្លេចលេខកូដសម្ងាត់"}, {"key": "auth.reset_password", "en": "Reset Password", "km": "កំណត់ពាក្យសម្ងាត់ឡើងវិញ", "category": "authentication", "avoid": "កំណត់ឡើងវិញនូវពាក្យសម្ងាត់ (unnatural syntax)"}, {"key": "auth.email", "en": "Email Address", "km": "អ៊ីមែល", "category": "authentication", "avoid": "សំបុត្រអេឡិចត្រូនិច (archaic/unnatural)"}, {"key": "auth.phone_number", "en": "Phone Number", "km": "លេខទូរស័ព្ទ", "category": "authentication", "avoid": "ទូរស័ព្ទលេខ (inverted word order)"}, {"key": "auth.password", "en": "Password", "km": "ពាក្យសម្ងាត់", "category": "authentication", "avoid": "លេខកូដឆ្លងកាត់ (literal translation)"}, {"key": "auth.confirm_password", "en": "Confirm Password", "km": "បញ្ជាក់ពាក្យសម្ងាត់", "category": "authentication", "avoid": "ពាក្យសម្ងាត់បញ្ជាក់ (inverted word order)"}, {"key": "auth.otp_code", "en": "OTP Code", "km": "លេខកូដផ្ទៀងផ្ទាត់ (OTP)", "category": "authentication", "avoid": "កូដមួយដង"}, {"key": "auth.remember_me", "en": "Remember Me", "km": "ចងចាំខ្ញុំ", "category": "authentication", "avoid": "ចងចាំគណនីខ្ញុំលើឧបករណ៍នេះ (too long)"}, {"key": "auth.profile", "en": "User Profile", "km": "ព័ត៌មានផ្ទាល់ខ្លួន", "category": "authentication", "avoid": "ប្រវត្តិរូប (often confused with CV/resume)"}, {"key": "auth.two_factor", "en": "Two-Factor Authentication (2FA)", "km": "ការផ្ទៀងផ្ទាត់ពីរជំហាន", "category": "authentication", "avoid": "ការបញ្ជាក់ពីរកត្តា"}, {"key": "nav.home", "en": "Home", "km": "ទំព័រដើម", "category": "navigation", "avoid": "ផ្ទះ (literal translation)"}, {"key": "nav.dashboard", "en": "Dashboard", "km": "ផ្ទាំងគ្រប់គ្រង", "category": "navigation", "avoid": "ក្ដារគ្រប់គ្រង"}, {"key": "nav.settings", "en": "Settings", "km": "ការកំណត់", "category": "navigation", "avoid": "កំណត់ (verb only) or ការតំរៀប"}, {"key": "nav.notifications", "en": "Notifications", "km": "ការជូនដំណឹង", "category": "navigation", "avoid": "ដំណឹង (lacks noun prefix) or ការប្រកាស"}, {"key": "nav.menu", "en": "Menu", "km": "ម៉ឺនុយ", "category": "navigation", "avoid": "បញ្ជីមុខម្ហូប (restaurant food menu)"}, {"key": "nav.back", "en": "Back", "km": "ថយក្រោយ", "category": "navigation", "avoid": "ត្រឡប់ (ambiguous without context) or ខ្នង (anatomy)"}, {"key": "nav.next", "en": "Next", "km": "បន្ទាប់", "category": "navigation", "avoid": "ទៅមុខបន្ទាប់"}, {"key": "nav.previous", "en": "Previous", "km": "មុន", "category": "navigation", "avoid": "ពីមុនមក"}, {"key": "nav.search", "en": "Search", "km": "ស្វែងរក", "category": "navigation", "avoid": "រុករក (sounds like exploring/jungle trek)"}, {"key": "nav.filter", "en": "Filter", "km": "ចម្រាញ់", "category": "navigation", "avoid": "ត្រង (water filtering)"}, {"key": "nav.sort", "en": "Sort", "km": "តម្រៀប", "category": "navigation", "avoid": "រៀបចំ"}, {"key": "nav.close", "en": "Close", "km": "បិទ", "category": "navigation", "avoid": "បិទទ្វារ"}, {"key": "nav.help", "en": "Help & Support", "km": "ជំនួយ", "category": "navigation", "avoid": "ជួយសង្គ្រោះ (emergency rescue)"}, {"key": "nav.about_us", "en": "About Us", "km": "អំពីយើង", "category": "navigation", "avoid": "អំពីពួកយើងខ្ញុំ"}, {"key": "nav.contact", "en": "Contact Us", "km": "ទំនាក់ទំនង", "category": "navigation", "avoid": "ទាក់ទងមកពួកយើង"}, {"key": "nav.faq", "en": "FAQ (Frequently Asked Questions)", "km": "សំណួរញឹកញាប់", "category": "navigation", "avoid": "សំណួរដែលបានសួរញឹកញាប់"}, {"key": "action.save", "en": "Save", "km": "រក្សាទុក", "category": "actions", "avoid": "សង្គ្រោះ (saving a life) or សន្សំ (saving money)"}, {"key": "action.cancel", "en": "Cancel", "km": "បោះបង់", "category": "actions", "avoid": "លុបចោល (delete/destroy)"}, {"key": "action.confirm", "en": "Confirm", "km": "បញ្ជាក់", "category": "actions", "avoid": "យល់ព្រម (agree) or ទទួលស្គាល់"}, {"key": "action.delete", "en": "Delete / Remove", "km": "លុប", "category": "actions", "avoid": "បំផ្លាញ (destroy physically)"}, {"key": "action.edit", "en": "Edit", "km": "កែសម្រួល", "category": "actions", "avoid": "កែប្រែ (change drastically) or ជួសជុល (repair hardware)"}, {"key": "action.update", "en": "Update", "km": "ធ្វើបច្ចុប្បន្នភាព", "category": "actions", "avoid": "កែថ្មី or ធ្វើឱ្យទាន់សម័យ"}, {"key": "action.submit", "en": "Submit", "km": "បញ្ជូន", "category": "actions", "avoid": "ដាក់ស្នើ (formal proposal) or ប្រគល់"}, {"key": "action.apply", "en": "Apply", "km": "អនុវត្ត", "category": "actions", "avoid": "ដាក់ពាក្យ (job application only)"}, {"key": "action.reset", "en": "Reset", "km": "កំណត់ឡើងវិញ", "category": "actions", "avoid": "លុបចោលទាំងអស់"}, {"key": "action.download", "en": "Download", "km": "ទាញយក", "category": "actions", "avoid": "ដោនឡូត (colloquial transliteration in formal UI)"}, {"key": "action.upload", "en": "Upload", "km": "ផ្ទុកឡើង", "category": "actions", "avoid": "អាប់ឡូត (colloquial transliteration in formal UI)"}, {"key": "action.share", "en": "Share", "km": "ចែករំលែក", "category": "actions", "avoid": "ចែកគ្នា"}, {"key": "action.copy", "en": "Copy", "km": "ចម្លង", "category": "actions", "avoid": "កូពី (slang)"}, {"key": "action.print", "en": "Print", "km": "បោះពុម្ព", "category": "actions", "avoid": "ព្រីន (slang)"}, {"key": "action.refresh", "en": "Refresh", "km": "ផ្ទុកឡើងវិញ", "category": "actions", "avoid": "ធ្វើឱ្យស្រស់ស្រាយ (refreshing drink)"}, {"key": "action.add", "en": "Add", "km": "បន្ថែម", "category": "actions", "avoid": "បូក"}, {"key": "action.view", "en": "View / See Details", "km": "មើលលម្អិត", "category": "actions", "avoid": "ទស្សនា (watching a spectacle/movie)"}, {"key": "action.retry", "en": "Try Again / Retry", "km": "ព្យាយាមម្តងទៀត", "category": "actions", "avoid": "សាកល្បងសារជាថ្មី (overly formal)"}, {"key": "action.continue", "en": "Continue", "km": "បន្ត", "category": "actions", "avoid": "ទៅមុខទៀត"}, {"key": "action.select_all", "en": "Select All", "km": "ជ្រើសរើសទាំងអស់", "category": "actions", "avoid": "យកទាំងអស់"}, {"key": "action.clear", "en": "Clear", "km": "សម្អាត", "category": "actions", "avoid": "លុបចេញ"}, {"key": "commerce.cart", "en": "Shopping Cart", "km": "កន្ត្រកទំនិញ", "category": "commerce_payments", "avoid": "រទេះទំនិញ (shopping trolley, unnatural on small apps)"}, {"key": "commerce.checkout", "en": "Checkout", "km": "ទូទាត់ប្រាក់", "category": "commerce_payments", "avoid": "ឆែកចេញ (hotel checkout) or ពិនិត្យចេញ"}, {"key": "commerce.total_price", "en": "Total Price", "km": "តម្លៃសរុប", "category": "commerce_payments", "avoid": "សរុបតម្លៃ (inverted word order hallucination)"}, {"key": "commerce.subtotal", "en": "Subtotal", "km": "តម្លៃរងសរុប", "category": "commerce_payments", "avoid": "អនុសរុប"}, {"key": "commerce.price", "en": "Price", "km": "តម្លៃ", "category": "commerce_payments", "avoid": "ថ្លៃ (adjective only)"}, {"key": "commerce.discount", "en": "Discount", "km": "បញ្ចុះតម្លៃ", "category": "commerce_payments", "avoid": "ការបញ្ចុះថ្លៃ"}, {"key": "commerce.payment_method", "en": "Payment Method", "km": "វិធីសាស្ត្រទូទាត់", "category": "commerce_payments", "avoid": "ទូទាត់វិធីសាស្ត្រ (inverted word order)"}, {"key": "commerce.transfer", "en": "Transfer Money", "km": "ផ្ទេរប្រាក់", "category": "commerce_payments", "avoid": "ផ្ទេរលុយ (colloquial for banking)"}, {"key": "commerce.account_balance", "en": "Account Balance", "km": "សមតុល្យគណនី", "category": "commerce_payments", "avoid": "តុល្យភាពគណនី (physics balance)"}, {"key": "commerce.transaction_history", "en": "Transaction History", "km": "ប្រវត្តិប្រតិបត្តិការ", "category": "commerce_payments", "avoid": "ប្រតិបត្តិការប្រវត្តិ (inverted word order)"}, {"key": "commerce.invoice", "en": "Invoice", "km": "វិក្កយបត្រ", "category": "commerce_payments", "avoid": "ប័ណ្ណទូទាត់"}, {"key": "commerce.receipt", "en": "Receipt", "km": "បង្កាន់ដៃទទួលប្រាក់", "category": "commerce_payments", "avoid": "វិក្កយបត្រទទួល"}, {"key": "commerce.shipping_address", "en": "Shipping Address", "km": "អាសយដ្ឋានដឹកជញ្ជូន", "category": "commerce_payments", "avoid": "អាសយដ្ឋានដឹក (incomplete)"}, {"key": "commerce.delivery_fee", "en": "Delivery Fee", "km": "ថ្លៃដឹកជញ្ជូន", "category": "commerce_payments", "avoid": "ថ្លៃដឹក (too colloquial for receipts)"}, {"key": "commerce.order_status", "en": "Order Status", "km": "ស្ថានភាពការបញ្ជាទិញ", "category": "commerce_payments", "avoid": "ស្ថានភាពលំដាប់ (mathematical order)"}, {"key": "commerce.currency_khr", "en": "Khmer Riel", "km": "រៀល", "category": "commerce_payments", "avoid": "ប្រាក់រៀលខ្មែរ (redundant in app context)"}, {"key": "commerce.currency_usd", "en": "US Dollar", "km": "ដុល្លារអាមេរិក", "category": "commerce_payments", "avoid": "ដុល្លារ (without country specification when disambiguation needed)"}, {"key": "commerce.quantity", "en": "Quantity", "km": "ចំនួន", "category": "commerce_payments", "avoid": "បរិមាណ (volume/mass scientific)"}, {"key": "commerce.promocode", "en": "Promo Code / Voucher", "km": "កូដប្រូម៉ូសិន", "category": "commerce_payments", "avoid": "លេខកូដផ្សព្វផ្សាយ"}, {"key": "status.loading", "en": "Loading...", "km": "កំពុងផ្ទុក...", "category": "status_feedback", "avoid": "កំពុងផ្ទុកទិន្នន័យ (too verbose)"}, {"key": "status.success", "en": "Successful", "km": "ជោគជ័យ", "category": "status_feedback", "avoid": "បានសម្រេច (okay but ជោគជ័យ is standard in mobile UI)"}, {"key": "status.failed", "en": "Failed", "km": "បរាជ័យ", "category": "status_feedback", "avoid": "មិនជោគជ័យ (passive phrasing)"}, {"key": "status.error", "en": "Error", "km": "កំហុស", "category": "status_feedback", "avoid": "កំហុសឆ្គង (moral mistake/sin)"}, {"key": "status.warning", "en": "Warning", "km": "ការព្រមាន", "category": "status_feedback", "avoid": "ប្រុងប្រយ័ត្ន (caution/watch out)"}, {"key": "status.pending", "en": "Pending", "km": "កំពុងរង់ចាំ", "category": "status_feedback", "avoid": "មិនទាន់សម្រេច"}, {"key": "status.in_progress", "en": "In Progress", "km": "កំពុងដំណើរការ", "category": "status_feedback", "avoid": "កំពុងធ្វើ"}, {"key": "status.completed", "en": "Completed", "km": "បានបញ្ចប់", "category": "status_feedback", "avoid": "រួចរាល់ (ready vs completed)"}, {"key": "status.empty", "en": "No Data / Empty", "km": "គ្មានទិន្នន័យ", "category": "status_feedback", "avoid": "ទទេ (plain empty)"}, {"key": "status.not_found", "en": "Not Found", "km": "រកមិនឃើញ", "category": "status_feedback", "avoid": "មិនបានរកឃើញ"}, {"key": "status.unauthorized", "en": "Unauthorized", "km": "គ្មានការអនុញ្ញាត", "category": "status_feedback", "avoid": "មិនមានសិទ្ធិ"}, {"key": "status.network_error", "en": "Network Connection Error", "km": "បញ្ហាតភ្ជាប់បណ្តាញ", "category": "status_feedback", "avoid": "កំហុសបណ្តាញ"}, {"key": "form.name", "en": "Full Name", "km": "ឈ្មោះពេញ", "category": "forms_inputs", "avoid": "នាមពេញ"}, {"key": "form.first_name", "en": "First Name (Given Name)", "km": "នាមខ្លួន", "category": "forms_inputs", "avoid": "ឈ្មោះដំបូង (literal translation)"}, {"key": "form.last_name", "en": "Last Name (Family Name)", "km": "នាមត្រកូល", "category": "forms_inputs", "avoid": "ឈ្មោះចុងក្រោយ (literal translation)"}, {"key": "form.date_of_birth", "en": "Date of Birth", "km": "ថ្ងៃខែឆ្នាំកំណើត", "category": "forms_inputs", "avoid": "ថ្ងៃកំណើត (birthday celebration)"}, {"key": "form.gender", "en": "Gender", "km": "ភេទ", "category": "forms_inputs", "avoid": "លក្ខណៈភេទ"}, {"key": "form.gender_male", "en": "Male", "km": "ប្រុស", "category": "forms_inputs", "avoid": "បុរស (formal man)"}, {"key": "form.gender_female", "en": "Female", "km": "ស្រី", "category": "forms_inputs", "avoid": "ស្ត្រី (formal woman)"}, {"key": "form.address", "en": "Address", "km": "អាសយដ្ឋាន", "category": "forms_inputs", "avoid": "ទីកន្លែងរស់នៅ"}, {"key": "form.city", "en": "City / Province", "km": "រាជធានី/ខេត្ត", "category": "forms_inputs", "avoid": "ទីក្រុង (misses provinces in Cambodia)"}, {"key": "form.country", "en": "Country", "km": "ប្រទេស", "category": "forms_inputs", "avoid": "រដ្ឋ (state)"}, {"key": "form.notes", "en": "Notes / Remarks", "km": "កំណត់សម្គាល់", "category": "forms_inputs", "avoid": "កំណត់ត្រា"}, {"key": "form.optional", "en": "Optional", "km": "មិនតម្រូវ", "category": "forms_inputs", "avoid": "ស្រេចចិត្ត"}, {"key": "form.required", "en": "Required", "km": "តម្រូវឱ្យបំពេញ", "category": "forms_inputs", "avoid": "ចាំបាច់"}, {"key": "form.select_option", "en": "Select an Option", "km": "សូមជ្រើសរើស", "category": "forms_inputs", "avoid": "ជ្រើសរើសជម្រើសមួយ"}, {"key": "legal.terms_of_service", "en": "Terms of Service", "km": "លក្ខខណ្ឌប្រើប្រាស់", "category": "privacy_terms", "avoid": "លក្ខខណ្ឌនៃសេវាកម្ម"}, {"key": "legal.privacy_policy", "en": "Privacy Policy", "km": "គោលការណ៍ឯកជនភាព", "category": "privacy_terms", "avoid": "គោលនយោបាយភាពឯកជន"}, {"key": "legal.agree", "en": "I Agree", "km": "ខ្ញុំយល់ព្រម", "category": "privacy_terms", "avoid": "ខ្ញុំឯកភាព"}, {"key": "legal.decline", "en": "Decline", "km": "បដិសេធ", "category": "privacy_terms", "avoid": "មិនយល់ព្រម"}, {"key": "legal.security", "en": "Security", "km": "សុវត្ថិភាព", "category": "privacy_terms", "avoid": "សន្តិសុខ (security guard)"}, {"key": "legal.permissions", "en": "Permissions", "km": "ការអនុញ្ញាត", "category": "privacy_terms", "avoid": "សិទ្ធិអំណាច"}, {"key": "user.active_users", "en": "Active Users", "km": "អ្នកប្រើប្រាស់សកម្ម", "category": "navigation", "avoid": "សកម្មអ្នកប្រើប្រាស់ (inverted word order hallucination)"}, {"key": "user.new_password", "en": "New Password", "km": "ពាក្យសម្ងាត់ថ្មី", "category": "authentication", "avoid": "ថ្មីពាក្យសម្ងាត់ (inverted word order hallucination)"}, {"key": "user.old_password", "en": "Current / Old Password", "km": "ពាក្យសម្ងាត់ចាស់", "category": "authentication", "avoid": "ចាស់ពាក្យសម្ងាត់ (inverted word order hallucination)"}, {"key": "time.today", "en": "Today", "km": "ថ្ងៃនេះ", "category": "status_feedback", "avoid": "ថ្ងៃបច្ចុប្បន្ន"}, {"key": "time.yesterday", "en": "Yesterday", "km": "ម្សិលមិញ", "category": "status_feedback", "avoid": "ថ្ងៃម្សិលមិញ (redundant)"}, {"key": "time.tomorrow", "en": "Tomorrow", "km": "ថ្ងៃស្អែក", "category": "status_feedback", "avoid": "ស្អែកនេះ"}, {"key": "auth.change_password", "en": "Change Password", "km": "ប្តូរពាក្យសម្ងាត់", "category": "authentication", "avoid": "កែពាក្យសម្ងាត់ or ផ្លាស់ពាក្យសម្ងាត់"}, {"key": "auth.biometrics", "en": "Biometrics / Face ID / Fingerprint", "km": "ស្កេនជីវមាត្រ", "category": "authentication", "avoid": "ស្កេនមុខ or ស្កេនដៃ"}, {"key": "auth.security_question", "en": "Security Question", "km": "សំណួរសុវត្ថិភាព", "category": "authentication", "avoid": "សំណួរការពារ"}, {"key": "auth.session_expired", "en": "Session Expired", "km": "សម័យការងារផុតកំណត់", "category": "authentication", "avoid": "ផុតម៉ោង"}, {"key": "auth.verify_identity", "en": "Verify Identity", "km": "ផ្ទៀងផ្ទាត់អត្តសញ្ញាណ", "category": "authentication", "avoid": "បញ្ជាក់មនុស្ស"}, {"key": "auth.account_settings", "en": "Account Settings", "km": "ការកំណត់គណនី", "category": "authentication", "avoid": "ការរៀបចំគណនី"}, {"key": "auth.delete_account", "en": "Delete Account", "km": "លុបគណនី", "category": "authentication", "avoid": "សម្លាប់គណនី"}, {"key": "auth.login_history", "en": "Login History / Activity", "km": "ប្រវត្តិនៃការចូលគណនី", "category": "authentication", "avoid": "ប្រវត្តិចូល"}, {"key": "auth.trusted_devices", "en": "Trusted Devices", "km": "ឧបករណ៍ដែលទុកចិត្ត", "category": "authentication", "avoid": "ម៉ាស៊ីនទុកចិត្ត"}, {"key": "auth.resend_otp", "en": "Resend OTP", "km": "ផ្ញើលេខកូដម្តងទៀត", "category": "authentication", "avoid": "ផ្ញើកូដសារជាថ្មី"}, {"key": "nav.explore", "en": "Explore", "km": "រុករក", "category": "navigation", "avoid": "ដើរមើល or ស្រាវជ្រាវ"}, {"key": "nav.feed", "en": "Activity Feed / Timeline", "km": "មតិព័ត៌មាន", "category": "navigation", "avoid": "ព័ត៌មានហូរ"}, {"key": "nav.messages", "en": "Messages", "km": "សារ", "category": "navigation", "avoid": "សំបុត្រ"}, {"key": "nav.sidebar", "en": "Sidebar", "km": "របារចំហៀង", "category": "navigation", "avoid": "ផ្ទាំងចំហៀង"}, {"key": "nav.footer", "en": "Footer", "km": "ផ្នែកបាតទំព័រ", "category": "navigation", "avoid": "ជើងទំព័រ"}, {"key": "nav.breadcrumb", "en": "Breadcrumb Navigation", "km": "ផ្លូវរុករកទំព័រ", "category": "navigation", "avoid": "នំប៉័ង"}, {"key": "nav.back_to_top", "en": "Back to Top", "km": "ត្រឡប់ទៅខាងលើ", "category": "navigation", "avoid": "ឡើងលើវិញ"}, {"key": "nav.categories", "en": "Categories", "km": "ប្រភេទ", "category": "navigation", "avoid": "ជំពូក"}, {"key": "nav.favorites", "en": "Favorites / Wishlist", "km": "បញ្ជីពេញចិត្ត", "category": "navigation", "avoid": "របស់ស្រឡាញ់"}, {"key": "nav.bookmarks", "en": "Saved / Bookmarks", "km": "បានរក្សាទុក", "category": "navigation", "avoid": "ចំណាំទុក"}, {"key": "action.export", "en": "Export", "km": "នាំចេញ", "category": "actions", "avoid": "បញ្ជូនចេញ"}, {"key": "action.import", "en": "Import", "km": "នាំចូល", "category": "actions", "avoid": "បញ្ជូនចូល"}, {"key": "action.copy_link", "en": "Copy Link", "km": "ចម្លងតំណ", "category": "actions", "avoid": "កូពីលីង"}, {"key": "action.paste", "en": "Paste", "km": "បិទភ្ជាប់", "category": "actions", "avoid": "បិទ"}, {"key": "action.cut", "en": "Cut", "km": "កាត់", "category": "actions", "avoid": "ច្រឹប"}, {"key": "action.undo", "en": "Undo", "km": "មិនធ្វើវិញ", "category": "actions", "avoid": "ត្រឡប់ក្រោយ"}, {"key": "action.redo", "en": "Redo", "km": "ធ្វើឡើងវិញ", "category": "actions", "avoid": "ធ្វើសារជាថ្មី"}, {"key": "action.preview", "en": "Preview", "km": "មើលជាមុន", "category": "actions", "avoid": "មើលមុន"}, {"key": "action.duplicate", "en": "Duplicate / Clone", "km": "ចម្លងស្ទួន", "category": "actions", "avoid": "បង្កើតមួយទៀត"}, {"key": "action.archive", "en": "Archive", "km": "រក្សាទុកក្នុងបណ្ណសារ", "category": "actions", "avoid": "ទុកចោល"}, {"key": "action.attach", "en": "Attach File", "km": "ភ្ជាប់ឯកសារ", "category": "actions", "avoid": "ដាក់ឯកសារ"}, {"key": "action.search_now", "en": "Search", "km": "ស្វែងរក", "category": "actions", "avoid": "រាវរក"}, {"key": "action.filter_results", "en": "Filter", "km": "ត្រង", "category": "actions", "avoid": "ចម្រាញ់"}, {"key": "action.sort_items", "en": "Sort", "km": "តម្រៀប", "category": "actions", "avoid": "រៀបលំដាប់"}, {"key": "action.drag_drop", "en": "Drag and Drop", "km": "អូសនិងទម្លាក់", "category": "actions", "avoid": "ចាប់ទម្លាក់"}, {"key": "action.install", "en": "Install", "km": "ដំឡើង", "category": "actions", "avoid": "ដាក់បញ្ចូល"}, {"key": "action.uninstall", "en": "Uninstall / Remove", "km": "លុបការដំឡើង", "category": "actions", "avoid": "ដោះចេញ"}, {"key": "action.publish", "en": "Publish", "km": "ផ្សព្វផ្សាយ", "category": "actions", "avoid": "ប្រកាស"}, {"key": "action.unpublish", "en": "Unpublish", "km": "ឈប់ផ្សព្វផ្សាយ", "category": "actions", "avoid": "ដកការប្រកាស"}, {"key": "action.subscribe", "en": "Subscribe", "km": "ជាវ", "category": "actions", "avoid": "ទិញសេវា"}, {"key": "action.unsubscribe", "en": "Unsubscribe", "km": "ឈប់ជាវ", "category": "actions", "avoid": "ផ្តាច់ការជាវ"}, {"key": "action.like", "en": "Like", "km": "ចូលចិត្ត", "category": "actions", "avoid": "ពេញចិត្ត"}, {"key": "action.comment", "en": "Comment", "km": "បញ្ចេញមតិ", "category": "actions", "avoid": "ផ្តល់យោបល់"}, {"key": "action.expand", "en": "Expand / Show More", "km": "ពង្រីក", "category": "actions", "avoid": "បើកមើល"}, {"key": "action.collapse", "en": "Collapse / Show Less", "km": "បង្រួម", "category": "actions", "avoid": "បិទវិញ"}, {"key": "commerce.tax_vat", "en": "VAT / Tax", "km": "អាករលើតម្លៃបន្ថែម (អ.ត.ប)", "category": "commerce_payments", "avoid": "ពន្ធទំនិញ"}, {"key": "commerce.shipping_fee", "en": "Shipping Fee", "km": "ថ្លៃដឹកជញ្ជូន", "category": "commerce_payments", "avoid": "សេវាដឹក"}, {"key": "commerce.delivery_method", "en": "Delivery Method", "km": "វិធីសាស្ត្រដឹកជញ្ជូន", "category": "commerce_payments", "avoid": "របៀបដឹក"}, {"key": "commerce.gift_card", "en": "Gift Card", "km": "កាតកាដូ", "category": "commerce_payments", "avoid": "ប័ណ្ណអំណោយ"}, {"key": "commerce.bank_transfer", "en": "Bank Transfer", "km": "ផ្ទេរប្រាក់តាមធនាគារ", "category": "commerce_payments", "avoid": "ផ្ញើលុយធនាគារ"}, {"key": "commerce.cash_on_delivery", "en": "Cash on Delivery (COD)", "km": "ទូទាត់ប្រាក់ពេលទទួលទំនិញ", "category": "commerce_payments", "avoid": "យកអីវ៉ាន់ឲ្យលុយ"}, {"key": "commerce.refund", "en": "Refund", "km": "ការសងប្រាក់វិញ", "category": "commerce_payments", "avoid": "ដកលុយវិញ"}, {"key": "commerce.due_date", "en": "Due Date", "km": "កាលបរិច្ឆេទកំណត់បង់", "category": "commerce_payments", "avoid": "ថ្ងៃដល់កំណត់"}, {"key": "commerce.subscription", "en": "Subscription Plan", "km": "គម្រោងជាវ", "category": "commerce_payments", "avoid": "កញ្ចប់ជាវ"}, {"key": "commerce.auto_renew", "en": "Auto Renewal", "km": "បន្តស្វ័យប្រវត្តិ", "category": "commerce_payments", "avoid": "បន្តដោយខ្លួនឯង"}, {"key": "commerce.billing_cycle", "en": "Billing Cycle", "km": "វដ្តនៃការទូទាត់", "category": "commerce_payments", "avoid": "ជុំគិតលុយ"}, {"key": "commerce.pay_now", "en": "Pay Now", "km": "បង់ប្រាក់ឥឡូវនេះ", "category": "commerce_payments", "avoid": "គិតលុយភ្លាម"}, {"key": "commerce.currency_converter", "en": "Currency Exchange", "km": "ការប្តូរប្រាក់", "category": "commerce_payments", "avoid": "ដូរលុយ"}, {"key": "commerce.credit_debit_card", "en": "Credit / Debit Card", "km": "កាតឥណទាន/ឥណពន្ធ", "category": "commerce_payments", "avoid": "កាតធនាគារ"}, {"key": "commerce.bakong_khqr", "en": "Bakong KHQR Payment", "km": "ទូទាត់តាមបាគង KHQR", "category": "commerce_payments", "avoid": "ស្កេនបាគង"}, {"key": "status.processing", "en": "Processing...", "km": "កំពុងដំណើរការ...", "category": "status_feedback", "avoid": "កំពុងធ្វើ..."}, {"key": "status.approved", "en": "Approved", "km": "អនុម័ត", "category": "status_feedback", "avoid": "យល់ព្រម"}, {"key": "status.rejected", "en": "Rejected", "km": "បដិសេធ", "category": "status_feedback", "avoid": "មិនព្រម"}, {"key": "status.offline", "en": "Offline", "km": "គ្មានការតភ្ជាប់បណ្តាញ", "category": "status_feedback", "avoid": "ដាច់អ៊ីនធឺណិត"}, {"key": "status.online", "en": "Online", "km": "បានតភ្ជាប់បណ្តាញ", "category": "status_feedback", "avoid": "ភ្ជាប់អ៊ីនធឺណិត"}, {"key": "status.no_data", "en": "No Data Available", "km": "មិនមានទិន្នន័យ", "category": "status_feedback", "avoid": "គ្មានទិន្នន័យ"}, {"key": "status.page_not_found", "en": "Page Not Found (404)", "km": "រកមិនឃើញទំព័រ", "category": "status_feedback", "avoid": "បាត់ទំព័រ"}, {"key": "status.server_error", "en": "Server Error (500)", "km": "បញ្ហាម៉ាស៊ីនមេ", "category": "status_feedback", "avoid": "កុំព្យូទ័រខូច"}, {"key": "status.synced", "en": "Synchronized", "km": "បានធ្វើសមកាលកម្ម", "category": "status_feedback", "avoid": "ធ្វើឲ្យដូចគ្នា"}, {"key": "status.syncing", "en": "Syncing...", "km": "កំពុងធ្វើសមកាលកម្ម...", "category": "status_feedback", "avoid": "កំពុងតភ្ជាប់"}, {"key": "status.canceled", "en": "Canceled", "km": "បានបោះបង់", "category": "status_feedback", "avoid": "បានឈប់"}, {"key": "status.expired", "en": "Expired", "km": "ផុតកំណត់", "category": "status_feedback", "avoid": "ហួសពេល"}, {"key": "form.address_street", "en": "Street Address", "km": "អាសយដ្ឋានផ្លូវ", "category": "forms_inputs", "avoid": "ផ្ទះនិងផ្លូវ"}, {"key": "form.address_province", "en": "Capital / Province", "km": "រាជធានី/ខេត្ត", "category": "forms_inputs", "avoid": "ខេត្ត"}, {"key": "form.address_district", "en": "District / Khan", "km": "ក្រុង/ស្រុក/ខណ្ឌ", "category": "forms_inputs", "avoid": "ស្រុក"}, {"key": "form.address_commune", "en": "Commune / Sangkat", "km": "ឃុំ/សង្កាត់", "category": "forms_inputs", "avoid": "ឃុំ"}, {"key": "form.address_village", "en": "Village", "km": "ភូមិ", "category": "forms_inputs", "avoid": "ភូមិដ្ឋាន"}, {"key": "form.postal_code", "en": "Postal Code", "km": "លេខកូដប្រៃសណីយ៍", "category": "forms_inputs", "avoid": "កូដសំបុត្រ"}, {"key": "form.id_card_number", "en": "National ID / Passport Number", "km": "លេខអត្តសញ្ញាណប័ណ្ណ/លិខិតឆ្លងដែន", "category": "forms_inputs", "avoid": "លេខកាត"}, {"key": "form.search_placeholder", "en": "Search here...", "km": "ស្វែងរកនៅទីនេះ...", "category": "forms_inputs", "avoid": "រាវរកនៅទីនេះ"}, {"key": "form.enter_amount", "en": "Enter Amount", "km": "បញ្ចូលចំនួនទឹកប្រាក់", "category": "forms_inputs", "avoid": "ដាក់លុយ"}, {"key": "form.remarks", "en": "Remarks / Description", "km": "ការពិពណ៌នា", "category": "forms_inputs", "avoid": "សេចក្តីអធិប្បាយ"}, {"key": "form.file_size_limit", "en": "Maximum File Size", "km": "ទំហំឯកសារអតិបរមា", "category": "forms_inputs", "avoid": "ឯកសារធំបំផុត"}, {"key": "form.select_all_items", "en": "Select All", "km": "ជ្រើសរើសទាំងអស់", "category": "forms_inputs", "avoid": "យកទាំងអស់"}, {"key": "legal.cookie_policy", "en": "Cookie Policy", "km": "គោលការណ៍ឃុកឃី (Cookies)", "category": "privacy_terms", "avoid": "នំឃុកឃី"}, {"key": "legal.copyright", "en": "All Rights Reserved", "km": "រក្សាសិទ្ធិគ្រប់យ៉ាង", "category": "privacy_terms", "avoid": "សិទ្ធិទាំងអស់"}, {"key": "legal.disclaimer", "en": "Legal Disclaimer", "km": "ការមិនទទួលខុសត្រូវផ្លូវច្បាប់", "category": "privacy_terms", "avoid": "ការមិនធានា"}, {"key": "legal.user_agreement", "en": "User Agreement", "km": "កិច្ចព្រមព្រៀងអ្នកប្រើប្រាស់", "category": "privacy_terms", "avoid": "កិច្ចសន្យា"}, {"key": "settings.dark_mode", "en": "Dark Mode", "km": "រូបរាងងងឹត", "category": "privacy_terms", "avoid": "ម៉ូដងងឹត"}, {"key": "settings.light_mode", "en": "Light Mode", "km": "រូបរាងភ្លឺ", "category": "privacy_terms", "avoid": "ម៉ូដភ្លឺ"}, {"key": "settings.system_theme", "en": "Follow System Theme", "km": "ស្របតាមប្រព័ន្ធ", "category": "privacy_terms", "avoid": "តាមម៉ាស៊ីន"}, {"key": "settings.language", "en": "Language", "km": "ភាសា", "category": "privacy_terms", "avoid": "អក្សរ"}, {"key": "settings.font_size", "en": "Font Size", "km": "ទំហំអក្សរ", "category": "privacy_terms", "avoid": "ទំហំតួអក្សរ"}, {"key": "settings.sound", "en": "Sound / Audio", "km": "សំឡេង", "category": "privacy_terms", "avoid": "សំឡេងឮ"}, {"key": "settings.clear_cache", "en": "Clear Cache", "km": "សម្អាតទិន្នន័យផ្ទុកបណ្តោះអាសន្ន", "category": "privacy_terms", "avoid": "លុបខេស"}, {"key": "settings.auto_update", "en": "Auto Update", "km": "ធ្វើបច្ចុប្បន្នភាពស្វ័យប្រវត្តិ", "category": "privacy_terms", "avoid": "អាប់ដេតឯកឯង"}, {"key": "settings.version", "en": "App Version", "km": "កំណែកម្មវិធី", "category": "privacy_terms", "avoid": "ជំនាន់កម្មវិធី"}];
+    const PROVINCES = [{"code": "KH-12", "name_en": "Phnom Penh", "name_km": "រាជធានីភ្នំពេញ", "type": "Autonomous Municipality", "districts": 14}, {"code": "KH-1", "name_en": "Banteay Meanchey", "name_km": "ខេត្តបន្ទាយមានជ័យ", "type": "Province", "districts": 9}, {"code": "KH-2", "name_en": "Battambang", "name_km": "ខេត្តបាត់ដំបង", "type": "Province", "districts": 14}, {"code": "KH-3", "name_en": "Kampong Cham", "name_km": "ខេត្តកំពង់ចាម", "type": "Province", "districts": 10}, {"code": "KH-4", "name_en": "Kampong Chhnang", "name_km": "ខេត្តកំពង់ឆ្នាំង", "type": "Province", "districts": 8}, {"code": "KH-5", "name_en": "Kampong Speu", "name_km": "ខេត្តកំពង់ស្ពឺ", "type": "Province", "districts": 9}, {"code": "KH-6", "name_en": "Kampong Thom", "name_km": "ខេត្តកំពង់ធំ", "type": "Province", "districts": 9}, {"code": "KH-7", "name_en": "Kampot", "name_km": "ខេត្តកំពត", "type": "Province", "districts": 9}, {"code": "KH-8", "name_en": "Kandal", "name_km": "ខេត្តកណ្តាល", "type": "Province", "districts": 13}, {"code": "KH-9", "name_en": "Koh Kong", "name_km": "ខេត្តកោះកុង", "type": "Province", "districts": 7}, {"code": "KH-10", "name_en": "Kratie", "name_km": "ខេត្តក្រចេះ", "type": "Province", "districts": 7}, {"code": "KH-11", "name_en": "Mondulkiri", "name_km": "ខេត្តមណ្ឌលគិរី", "type": "Province", "districts": 5}, {"code": "KH-13", "name_en": "Preah Vihear", "name_km": "ខេត្តព្រះវិហារ", "type": "Province", "districts": 8}, {"code": "KH-14", "name_en": "Prey Veng", "name_km": "ខេត្តព្រៃវែង", "type": "Province", "districts": 13}, {"code": "KH-15", "name_en": "Pursat", "name_km": "ខេត្តពោធិ៍សាត់", "type": "Province", "districts": 7}, {"code": "KH-16", "name_en": "Ratanakiri", "name_km": "ខេត្តរតនគិរី", "type": "Province", "districts": 9}, {"code": "KH-17", "name_en": "Siem Reap", "name_km": "ខេត្តសៀមរាប", "type": "Province", "districts": 13}, {"code": "KH-18", "name_en": "Preah Sihanouk", "name_km": "ខេត្តព្រះសីហនុ", "type": "Province", "districts": 5}, {"code": "KH-19", "name_en": "Stung Treng", "name_km": "ខេត្តស្ទឹងត្រែង", "type": "Province", "districts": 6}, {"code": "KH-20", "name_en": "Svay Rieng", "name_km": "ខេត្តស្វាយរៀង", "type": "Province", "districts": 8}, {"code": "KH-21", "name_en": "Takeo", "name_km": "ខេត្តតាកែវ", "type": "Province", "districts": 10}, {"code": "KH-22", "name_en": "Oddar Meanchey", "name_km": "ខេត្តឧត្តរមានជ័យ", "type": "Province", "districts": 5}, {"code": "KH-23", "name_en": "Kep", "name_km": "ខេត្តកែប", "type": "Province", "districts": 2}, {"code": "KH-24", "name_en": "Pailin", "name_km": "ខេត្តប៉ៃលិន", "type": "Province", "districts": 2}, {"code": "KH-25", "name_en": "Tboung Khmum", "name_km": "ខេត្តត្បូងឃ្មុំ", "type": "Province", "districts": 7}];
+    const PP_DISTRICTS = [{"code": "1201", "name_en": "Chamkar Mon", "name_km": "ខណ្ឌចំការមន", "type": "Khan", "sangkats": 5}, {"code": "1202", "name_en": "Doun Penh", "name_km": "ខណ្ឌដូនពេញ", "type": "Khan", "sangkats": 11}, {"code": "1203", "name_en": "Prampir Meakkakra (7 Makara)", "name_km": "ខណ្ឌ៧មករា", "type": "Khan", "sangkats": 8}, {"code": "1204", "name_en": "Tuol Kouk", "name_km": "ខណ្ឌទួលគោក", "type": "Khan", "sangkats": 10}, {"code": "1205", "name_en": "Dangkao", "name_km": "ខណ្ឌដង្កោ", "type": "Khan", "sangkats": 13}, {"code": "1206", "name_en": "Mean Chey", "name_km": "ខណ្ឌមានជ័យ", "type": "Khan", "sangkats": 7}, {"code": "1207", "name_en": "Ruessei Kaev", "name_km": "ខណ្ឌឫស្សីកែវ", "type": "Khan", "sangkats": 7}, {"code": "1208", "name_en": "Saensokh", "name_km": "ខណ្ឌសែនសុខ", "type": "Khan", "sangkats": 6}, {"code": "1209", "name_en": "Pur SenChey", "name_km": "ខណ្ឌពោធិ៍សែនជ័យ", "type": "Khan", "sangkats": 7}, {"code": "1210", "name_en": "Chrouy Changva", "name_km": "ខណ្ឌជ្រោយចង្វារ", "type": "Khan", "sangkats": 5}, {"code": "1211", "name_en": "Praek Pnov", "name_km": "ខណ្ឌព្រែកព្នៅ", "type": "Khan", "sangkats": 5}, {"code": "1212", "name_en": "Chbar Ampov", "name_km": "ខណ្ឌច្បារអំពៅ", "type": "Khan", "sangkats": 8}, {"code": "1213", "name_en": "Boeng Keng Kang", "name_km": "ខណ្ឌបឹងកេងកង", "type": "Khan", "sangkats": 7}, {"code": "1214", "name_en": "Kamboul", "name_km": "ខណ្ឌកំបូល", "type": "Khan", "sangkats": 7}];
+
+    function showToast(msg = "Copied to clipboard!") {
+      const t = document.getElementById("toast");
+      t.innerText = msg;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2000);
+    }
+
+    function copyText(elemId) {
+      const el = document.getElementById(elemId);
+      const text = el.innerText;
+      navigator.clipboard.writeText(text).then(() => showToast());
+    }
 
     function switchTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById('tab-' + tabId).classList.add('active');
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+      event.target.classList.add("active");
+      document.getElementById("tab-" + tabId).classList.add("active");
     }
 
     function updatePreviewStyle() {
-      const font = document.getElementById('font-select').value;
-      const lh = document.getElementById('line-height-range').value;
-      document.getElementById('line-height-val').innerText = lh;
-      const prev = document.getElementById('preview-render');
+      const font = document.getElementById("font-select").value;
+      const lh = document.getElementById("line-height-range").value;
+      document.getElementById("line-height-val").innerText = lh;
+      const prev = document.getElementById("preview-render");
       prev.style.fontFamily = font;
       prev.style.lineHeight = lh;
     }
 
     function runLint() {
-      const text = document.getElementById('lint-input').value;
-      document.getElementById('preview-render').innerText = text;
+      const text = document.getElementById("lint-input").value;
+      document.getElementById("preview-render").innerText = text;
 
       const warnings = [];
       const errors = [];
-      if (text.includes('\uFFFD')) errors.push("Unicode Replacement Character (U+FFFD) detected");
-      if (text.includes('\u25CC')) warnings.push("Literal dotted circle (U+25CC) detected: glyph rendering broken");
-      if (text.endsWith('\u17D2')) warnings.push("Trailing Coeng subscript sign (U+17D2) at end of text");
+      if (text.includes("\uFFFD")) errors.push("Unicode Replacement Character (U+FFFD) detected");
+      if (text.includes("\u25CC")) warnings.push("Literal dotted circle (U+25CC) detected: glyph rendering broken");
+      if (text.endsWith("\u17D2")) warnings.push("Trailing Coeng subscript sign (U+17D2) at end of text");
       if (text.includes("សរុបតម្លៃ")) warnings.push("Inverted word order: use 'តម្លៃសរុប' (Total Price)");
       if (text.includes("យាង") || text.includes("សោយ") || text.includes("ព្រះរាជ")) warnings.push("Prohibited royal vocabulary detected (use neutral digital tone)");
       if (/\d+\.\d{1,2}\s*(?:៛|KHR|រៀល)/.test(text)) warnings.push("KHR formatted with decimal cents. Use whole-riel integers.");
@@ -406,14 +519,14 @@
         else if ((cp >= 0x17d4 && cp <= 0x17da) || cp === 0x17db) { symbols++; totalKhmer++; }
       }
 
-      document.getElementById('stat-total').innerText = totalKhmer;
-      document.getElementById('stat-consonants').innerText = consonants;
-      document.getElementById('stat-vowels').innerText = vowels;
-      document.getElementById('stat-subscripts').innerText = subscripts;
-      document.getElementById('stat-symbols').innerText = symbols;
+      document.getElementById("stat-total").innerText = totalKhmer;
+      document.getElementById("stat-consonants").innerText = consonants;
+      document.getElementById("stat-vowels").innerText = vowels;
+      document.getElementById("stat-subscripts").innerText = subscripts;
+      document.getElementById("stat-symbols").innerText = symbols;
 
-      const diag = document.getElementById('lint-diagnostics');
-      const badge = document.getElementById('lint-badge');
+      const diag = document.getElementById("lint-diagnostics");
+      const badge = document.getElementById("lint-badge");
       if (errors.length === 0 && warnings.length === 0) {
         badge.className = "status-badge status-clean";
         badge.innerText = "✓ Clean Text";
@@ -423,6 +536,43 @@
         badge.innerText = "⚠ Issues Found";
         diag.innerText = [...errors.map(e => "❌ ERROR: " + e), ...warnings.map(w => "⚠ WARNING: " + w)].join("\n");
       }
+    }
+
+    const KHMER_SYLLABLE_REGEX = /(?:[\u1780-\u17A2](?:\u17D2[\u1780-\u17A2])?|[\u17A3-\u17B3]|[\u17E0-\u17E9]+|[^\u1780-\u17FF\u19E0-\u19FF\s]+|\s+|[\u17D4-\u17DA\u17DB])(?:\u17D2[\u1780-\u17A2]|[\u17B6-\u17C5]|[\u17C6-\u17D3\u17DD])*/gu;
+    let showZwspVisual = true;
+
+    function segmentKhmerSyllables(text) {
+      if (!text) return [];
+      const matches = text.match(KHMER_SYLLABLE_REGEX);
+      return matches || [];
+    }
+
+    function runBreaker() {
+      const text = document.getElementById("breaker-input").value;
+      const syllables = segmentKhmerSyllables(text);
+      document.getElementById("syllables-count").innerText = syllables.length;
+
+      const sylDiv = document.getElementById("breaker-syllables");
+      sylDiv.innerHTML = syllables.map(s => `<span style="background: rgba(59,130,246,0.15); padding: 2px 6px; border-radius: 4px; margin: 2px; display: inline-block;">${s}</span>`).join(" ");
+
+      const prev = document.getElementById("breaker-preview");
+      if (showZwspVisual) {
+        prev.innerHTML = syllables.join('<span class="zwsp-pill">ZWSP</span>');
+      } else {
+        prev.innerText = syllables.join("\u200B");
+      }
+    }
+
+    function toggleZwspVisual() {
+      showZwspVisual = !showZwspVisual;
+      runBreaker();
+    }
+
+    function copyBreakerResult() {
+      const text = document.getElementById("breaker-input").value;
+      const syllables = segmentKhmerSyllables(text);
+      const withZwsp = syllables.join("\u200B");
+      navigator.clipboard.writeText(withZwsp).then(() => showToast("Copied text with ZWSP!"));
     }
 
     const ONES = ["", "មួយ", "ពីរ", "បី", "បួន", "ប្រាំ", "ប្រាំមួយ", "ប្រាំពីរ", "ប្រាំបី", "ប្រាំបួន"];
@@ -461,23 +611,28 @@
     }
 
     function runCurrency() {
-      const amt = parseFloat(document.getElementById('curr-amount').value || "0");
-      const curr = document.getElementById('curr-select').value;
+      const amt = parseFloat(document.getElementById("curr-amount").value || "0");
+      const curr = document.getElementById("curr-select").value;
       if (curr === "KHR") {
-        document.getElementById('curr-formatted').innerText = Math.round(amt).toLocaleString('en-US') + " ៛";
-        document.getElementById('curr-words').innerText = integerToKhmerWords(Math.round(amt)) + "រៀលគត់";
+        document.getElementById("curr-formatted").innerText = Math.round(amt).toLocaleString("en-US") + " ៛";
+        document.getElementById("curr-words").innerText = integerToKhmerWords(Math.round(amt)) + "រៀលគត់";
       } else {
-        document.getElementById('curr-formatted').innerText = "$" + amt.toFixed(2);
-        document.getElementById('curr-words').innerText = integerToKhmerWords(Math.floor(amt)) + " ដុល្លារអាមេរិក";
+        document.getElementById("curr-formatted").innerText = "$" + amt.toFixed(2);
+        document.getElementById("curr-words").innerText = integerToKhmerWords(Math.floor(amt)) + " ដុល្លារអាមេរិក";
       }
 
       const now = new Date();
       const be = now.getFullYear() + 543;
-      document.getElementById('date-preview').innerText = `កាលបរិច្ឆេទ: ថ្ងៃទី ${now.getDate()} ខែតុលា ឆ្នាំ ${now.getFullYear()} (ព.ស. ${be})`;
+      document.getElementById("date-preview").innerText = `កាលបរិច្ឆេទ: ថ្ងៃទី ${now.getDate()} ខែតុលា ឆ្នាំ ${now.getFullYear()} (ព.ស. ${be})`;
+    }
+
+    function setPhonePreset(num) {
+      document.getElementById("phone-input").value = num;
+      runPhone();
     }
 
     function runPhone() {
-      const raw = document.getElementById('phone-input').value.replace(/[\s\-\.]/g, "");
+      const raw = document.getElementById("phone-input").value.replace(/[\s\-\.]/g, "");
       let nsn = raw;
       if (nsn.startsWith("+855")) nsn = nsn.slice(4);
       else if (nsn.startsWith("855")) nsn = nsn.slice(3);
@@ -485,7 +640,7 @@
 
       const isValid = (nsn.length === 8 || nsn.length === 9) && /^\d+$/.test(nsn);
       const res = {
-        raw: document.getElementById('phone-input').value,
+        raw: document.getElementById("phone-input").value,
         nsn: nsn,
         canonical_e164: isValid ? "+855" + nsn : "INVALID",
         domestic_trunk: isValid ? "0" + nsn : "INVALID",
@@ -493,7 +648,7 @@
         line_type: nsn.startsWith("23") ? "fixed-line (Phnom Penh)" : "mobile",
         requires_otp_verification: true
       };
-      document.getElementById('phone-result').innerText = JSON.stringify(res, null, 2);
+      document.getElementById("phone-result").innerText = JSON.stringify(res, null, 2);
     }
 
     function calculateCrc16(data) {
@@ -512,7 +667,7 @@
     }
 
     function runKhqr() {
-      const payload = document.getElementById('khqr-input').value.trim();
+      const payload = document.getElementById("khqr-input").value.trim();
       let payloadToCalc = payload;
       let existingCrc = "";
       if (!payload.endsWith("6304") && payload.includes("6304")) {
@@ -526,16 +681,53 @@
         full_khqr: payloadToCalc + crc,
         is_valid: existingCrc ? existingCrc.toUpperCase() === crc : true
       };
-      document.getElementById('khqr-result').innerText = JSON.stringify(res, null, 2);
+      document.getElementById("khqr-result").innerText = JSON.stringify(res, null, 2);
+    }
+
+    function initAddressTab() {
+      const pSel = document.getElementById("addr-province");
+      pSel.innerHTML = PROVINCES.map(p => `<option value="${p.name_km}" data-en="${p.name_en}">${p.name_km} (${p.name_en})</option>`).join("");
+      onProvinceChange();
+    }
+
+    function onProvinceChange() {
+      const pSel = document.getElementById("addr-province");
+      const dSel = document.getElementById("addr-district");
+      const selName = pSel.value;
+
+      if (selName.includes("ភ្នំពេញ")) {
+        dSel.innerHTML = PP_DISTRICTS.map(d => `<option value="${d.name_km}" data-en="${d.name_en}">${d.name_km} (${d.name_en})</option>`).join("");
+      } else {
+        dSel.innerHTML = `<option value="ក្រុង/ស្រុកកណ្តាល" data-en="Central District">ក្រុង/ស្រុកកណ្តាល (Central District)</option>`;
+      }
+      updateAddressPreview();
+    }
+
+    function updateAddressPreview() {
+      const street = document.getElementById("addr-street").value;
+      const sangkat = document.getElementById("addr-sangkat").value;
+      const district = document.getElementById("addr-district").value;
+      const province = document.getElementById("addr-province").value;
+
+      const pOpt = document.getElementById("addr-province").selectedOptions[0];
+      const dOpt = document.getElementById("addr-district").selectedOptions[0];
+      const pEn = pOpt ? pOpt.dataset.en : "";
+      const dEn = dOpt ? dOpt.dataset.en : "";
+
+      const addrKm = `${street}, ${sangkat}, ${district}, ${province}`;
+      const addrEn = `${street}, Sangkat, ${dEn}, ${pEn}, Cambodia`;
+
+      document.getElementById("addr-output-km").innerText = addrKm;
+      document.getElementById("addr-output-en").innerText = addrEn;
     }
 
     function filterTerms() {
-      const q = document.getElementById('term-search').value.toLowerCase().trim();
-      const tbody = document.getElementById('terms-tbody');
+      const q = document.getElementById("term-search").value.toLowerCase().trim();
+      const tbody = document.getElementById("terms-tbody");
       tbody.innerHTML = "";
       UI_TERMS.forEach(item => {
         if (!q || item.key.toLowerCase().includes(q) || item.en.toLowerCase().includes(q) || item.km.includes(q)) {
-          const row = document.createElement('tr');
+          const row = document.createElement("tr");
           row.innerHTML = `<td><code>${item.key}</code></td><td>${item.en}</td><td class="term-km">${item.km}</td><td>${item.category}</td><td class="term-avoid">${item.avoid}</td>`;
           tbody.appendChild(row);
         }
@@ -544,9 +736,11 @@
 
     // Init
     runLint();
+    runBreaker();
     runCurrency();
     runPhone();
     runKhqr();
+    initAddressTab();
     filterTerms();
   </script>
 </body>

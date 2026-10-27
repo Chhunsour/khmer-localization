@@ -490,6 +490,44 @@ export function safeTruncateKhmer(text: string, maxGraphemes: number): string {
   return text.slice(0, cutIdx) + "…";
 }
 
+export const KHMER_SYLLABLE_REGEX =
+  /(?:[\u1780-\u17A2](?:\u17D2[\u1780-\u17A2])?|[\u17A3-\u17B3]|[\u17E0-\u17E9]+|[^\u1780-\u17FF\u19E0-\u19FF\s]+|\s+|[\u17D4-\u17DA\u17DB])(?:[\u17D2][\u1780-\u17A2]|[\u17B6-\u17C5]|[\u17C6-\u17D3\u17DD])*/gu;
+
+/**
+ * Segment Khmer text into orthographic syllables based on script phonotactics.
+ */
+export function segmentKhmerSyllables(text: string): string[] {
+  if (!text) return [];
+  const matches = text.match(KHMER_SYLLABLE_REGEX);
+  return matches || [];
+}
+
+/**
+ * Inject Zero-Width Space (U+200B) at syllable boundaries to enable clean browser word wrapping.
+ */
+export function insertKhmerWordBreaks(text: string, breakChar = "\u200B"): string {
+  if (!text) return "";
+  const tokens = segmentKhmerSyllables(text);
+  const out: string[] = [];
+  const khmerRunRegex = /[\u1780-\u17FF]/;
+
+  for (let i = 0; i < tokens.length; i++) {
+    const tok = tokens[i];
+    out.push(tok);
+    if (i < tokens.length - 1) {
+      const nextTok = tokens[i + 1];
+      if (khmerRunRegex.test(tok) && khmerRunRegex.test(nextTok)) {
+        if (!tok.endsWith(breakChar) && !nextTok.startsWith(breakChar)) {
+          out.push(breakChar);
+        }
+      }
+    }
+  }
+
+  const res = out.join("");
+  return res.replace(new RegExp(`${breakChar}+`, "g"), breakChar);
+}
+
 // --- 5. Number-to-Words in Khmer (Invoice & Tax Compliance) ---
 
 const _KHMER_ONES: readonly string[] = [

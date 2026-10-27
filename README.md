@@ -7,7 +7,7 @@
 
 [![Author: Seng Chhunsour](https://img.shields.io/badge/Author-Seng%20Chhunsour-FF5A1F?style=flat-square&logo=github&logoColor=white)](https://github.com/Chhunsour)
 [![Tests](https://github.com/Chhunsour/khmer-localization/actions/workflows/tests.yml/badge.svg)](https://github.com/Chhunsour/khmer-localization/actions)
-[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-127%20Passed-brightgreen.svg)](#-test-suite--quality-assurance-matrix)
+[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-133%20Passed-brightgreen.svg)](#-test-suite--quality-assurance-matrix)
 [![MCP Server](https://img.shields.io/badge/MCP-Python%20%7C%20Node.js-orange.svg)](#-native-model-context-protocol-mcp-server)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Dependencies: 0](https://img.shields.io/badge/Dependencies-Zero%20External-success.svg)](#-zero-dependency-isomorphic-api-reference)
@@ -21,14 +21,14 @@
 
 | Strategic Dimension | Engineering Metric | Verification Methodology | Production Benchmark Standard |
 | :--- | :---: | :--- | :--- |
-| **Deterministic Reliability** | **127 / 127 Passing** | 14 test suites in Python & Node.js | 100% deterministic CI coverage |
-| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 14,900+ Khmer characters |
+| **Deterministic Reliability** | **133 / 133 Passing** | 15 test suites in Python & Node.js | 100% deterministic CI coverage |
+| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 22,000+ Khmer characters |
 | **Localization Quality Engine** | **4 Governance Layers** | `scripts/audit_khmer_i18n.py` CLI scanner | Automated, Human, Visual, External |
 | **Zero-Token AI Tools & MCP** | **Native JSON-RPC** | `khmer_mcp_server.py` & `khmer_mcp_server.js` | Zero LLM token generation overhead |
 | **Supply-Chain Security** | **0 (Zero External Deps)** | Pure standard library & native Web APIs | Zero CVE surface, zero npm install lag |
 | **AI Token Optimization** | **Up to 99.0% Reduction** | 80% leaner `SKILL.md` + 45t/120t/250t prompts | Eradicates exploratory prompt loops |
 | **Curated Offline Data** | **21 JSON Catalogs** | Verified via `data/METADATA.json` | Official authorities, sources & licenses |
-| **UI Dictionary Coverage** | **107 Standard Terms** | Fast zero-token CLI & MCP term lookup | Auth, commerce, actions, navigation |
+| **UI Dictionary Coverage** | **204 Standard Terms** | Fast zero-token CLI & MCP term lookup | Auth, commerce, actions, navigation |
 | **Interactive Visual Tester** | **Zero-Dep HTML** | `playground/index.html` standalone app | Real-time Unicode, fonts & line-height |
 | **Cross-Platform Parity** | **TypeScript, JS, Python** | Isomorphic dual implementation | Node 18+, Bun, Deno, iOS, Android, Web |
 
@@ -53,13 +53,15 @@ flowchart TD
         KHQR["Bakong KHQR Engine<br>EMVCo TLV Generator + CRC16 Parser"]
         CALENDAR["Calendar & Buddhist Era<br>Solar months: BE = CE + 543"]
         COLLATION["Khmer Collation Engine<br>Chuon Nath alphabetical sorting"]
+        BREAK["Syllable Breaker & ZWSP<br>Orthographic text wrapping & soft breaks"]
+        RULES["Agent Rule Installer<br>Cursor, Claude, Windsurf, Copilot, Gemini"]
     end
 
     subgraph Layer3["3. Quality, Audit & Compliance Layer"]
         AUDIT["I18n Audit Scanner<br>(scripts/audit_khmer_i18n.py)"]
         UNICODE_CHECK["Strict Unicode Checker<br>(scripts/check_khmer_unicode.py)"]
         METADATA["Metadata Registry<br>(data/METADATA.json)"]
-        UI_TERMS["107 UI Terms Catalog<br>(data/ui_terms.json)"]
+        UI_TERMS["204 UI Terms Catalog<br>(data/ui_terms.json)"]
         TRC_DATA["TRC Telecom Plan<br>(data/telecom_operators.json)"]
         NBC_DATA["Bakong Banks & KHQR MCC<br>(data/bakong_members.json)"]
         ADMIN_DATA["ISO 3166-2:KH 25 Provinces<br>(data/provinces.json + 7 districts)"]
@@ -84,13 +86,15 @@ flowchart TD
 | **Save Agent Context Tokens** | Copy-paste 1-page zero-shot snippets for KHR, BE, ZWSP, Phone, CRC16. | [`references/agent-fast-path.md`](./references/agent-fast-path.md) |
 | **Cursor / Claude System Prompts** | Inject pre-tuned 45t, 120t, or 250t prompt blocks into config files. | [`prompts/agent-system-prompts.md`](./prompts/agent-system-prompts.md) |
 | **Prevent AI Hallucinations** | Guard against Top 10 failure modes (royal vocabulary, inverted word order). | [`references/khmer-ai-guardrails.md`](./references/khmer-ai-guardrails.md) |
-| **Standard UI Localization** | Lookup 107 standardized UI strings with explicit "avoid" hallucination lists. | [`data/ui_terms.json`](./data/ui_terms.json) |
+| **Standard UI Localization** | Lookup 204 standardized UI strings with explicit "avoid" hallucination lists. | [`data/ui_terms.json`](./data/ui_terms.json) |
 | **Cambodian Phone Normalization** | Convert any input to E.164 (`+855...`) & domestic format (`0...`) with OTP flag. | [`scripts/khmer_utils.ts`](./scripts/khmer_utils.ts) / [`.py`](./scripts/khmer_utils.py) |
 | **Dual-Currency Minor-Unit Engine** | Format KHR as whole integers (`15,000៛`); calculate totals with zero float drift. | [`scripts/khmer_utils.ts`](./scripts/khmer_utils.ts) / [`.py`](./scripts/khmer_utils.py) |
 | **Bakong KHQR Payments** | Generate & parse EMVCo payloads with CRC16-CCITT checksums. | [`references/khmer-fintech-and-khqr.md`](./references/khmer-fintech-and-khqr.md) |
 | **4-Tier Administrative Address** | Model Province $\rightarrow$ District $\rightarrow$ Sangkat $\rightarrow$ Village delivery addresses. | [`references/cambodia-administrative-divisions.md`](./references/cambodia-administrative-divisions.md) |
 | **GDT Tax Invoices (Spellout)** | Convert numeric amounts into official spelled-out Khmer words (up to trillions). | [`references/khmer-collation-and-number-words.md`](./references/khmer-collation-and-number-words.md) |
 | **Alphabetical Sorting (Collation)** | Sort words per Chuon Nath dictionary order in pure Python & JS `Intl.Collator`. | [`references/khmer-collation-and-number-words.md`](./references/khmer-collation-and-number-words.md) |
+| **Syllable Breaking & ZWSP Wrap** | Segment syllables and inject Zero-Width Space (`\u200B`) for responsive web layouts. | [`scripts/khmer_utils.ts`](./scripts/khmer_utils.ts) / [`.py`](./scripts/khmer_utils.py) |
+| **Install AI Rules in Project** | Auto-configure Cursor, Claude, Windsurf, Copilot, or Gemini with one command. | [`scripts/install_agent_rules.py`](./scripts/install_agent_rules.py) |
 | **Mobile Line-Height & Dotted Circle** | Set `line-height: 1.6+` and use `Intl.Segmenter` to prevent broken Coeng glyphs. | [`references/unicode-and-typography.md`](./references/unicode-and-typography.md) |
 | **Static Code Audit / CI Verification** | Run strict Unicode and UTF-8 scanner with zero exit code on clean repos. | [`scripts/check_khmer_unicode.py`](./scripts/check_khmer_unicode.py) |
 | **Runnable E-Commerce Example** | Complete checkout flow with KHR/USD taxes, phone validation, and KHQR. | [`examples/ecommerce_checkout.py`](./examples/ecommerce_checkout.py) / [`.js`](./examples/ecommerce_checkout.js) |
@@ -217,13 +221,14 @@ Or run via Node.js:
 ```
 
 ### Supported MCP Tools:
-- `khmer_lookup_term`: Query 100+ standard UI terms without loading large catalog files.
+- `khmer_lookup_term`: Query 200+ standard UI terms without loading large catalog files.
 - `khmer_normalize_phone`: Validate & normalize phone numbers to E.164 and domestic formats.
 - `khmer_format_currency`: Format whole-riel KHR or USD without floating-point errors.
 - `khmer_spellout_words`: Convert amounts to formal Khmer words for GDT invoices.
 - `khmer_khqr_crc`: Compute or verify EMVCo CRC16 for Bakong KHQR payloads.
 - `khmer_lint_text`: Lint strings for Unicode corruption, dotted circles, or royal vocabulary.
 - `khmer_sort_words`: Sort arrays of Khmer words per Chuon Nath dictionary order.
+- `khmer_insert_word_breaks`: Inject Zero-Width Space (`\u200B`) for responsive web line wrapping.
 
 ---
 
@@ -231,11 +236,13 @@ Or run via Node.js:
 
 Open [`playground/index.html`](./playground/index.html) directly in any browser (zero dependencies, works completely offline):
 - **Live Text & Unicode Linter:** Real-time detection of dotted circles (`U+25CC`), orphan marks, trailing Coeng, and royal registers.
+- **Syllable Breaker & ZWSP Visualizer:** Real-time orthographic syllable breakdown with interactive ZWSP pill badges.
 - **Font & Line-Height Simulator:** Visual preview across Kantumruy Pro, Hanuman, and system fonts with interactive `line-height` sliders (1.0 vs 1.6 vs 2.0).
 - **Currency & GDT Invoice Speller:** Live KHR/USD formatting and formal Khmer words generation.
 - **Phone Normalizer:** Instant E.164 canonical formatting and operator detection.
 - **Bakong KHQR Validator:** Live CRC16 calculation and QR payload inspection.
-- **Searchable UI Dictionary:** Filter 100+ vetted UI terms instantly.
+- **4-Tier Cambodian Address Cascades:** Interactive Province $\rightarrow$ District/Khan $\rightarrow$ Commune/Sangkat selector.
+- **Searchable UI Dictionary:** Filter 200+ vetted UI terms instantly.
 
 ---
 
@@ -245,7 +252,7 @@ All 21 offline JSON catalogs are cataloged in [`data/METADATA.json`](./data/META
 
 | Dataset Path | Records | Authority / Domain | Primary Engineering Use Case |
 | :--- | :---: | :--- | :--- |
-| [`data/ui_terms.json`](./data/ui_terms.json) | **107** | Digital Software Engineering | Natural UI translations with forbidden hallucination list |
+| [`data/ui_terms.json`](./data/ui_terms.json) | **204** | Digital Software Engineering | Natural UI translations with forbidden hallucination list |
 | [`data/provinces.json`](./data/provinces.json) | **25** | ISO 3166-2:KH / Ministry of Interior | Top-level address cascades and regional localization |
 | [`data/phnom_penh_districts.json`](./data/phnom_penh_districts.json) | **14** | Phnom Penh Capital Administration | Khan administrative division dropdowns and postal routing |
 | [`data/siem_reap_districts.json`](./data/siem_reap_districts.json) | **12** | Siem Reap Administration | Tourism, hospitality, and provincial logistics |
@@ -279,11 +286,11 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
 
 ```
 ========================================================================================
- TEST SUITE EXECUTION REPORT — ALL 127 TESTS DETERMINISTICALLY PASSING
+ TEST SUITE EXECUTION REPORT — ALL 133 TESTS DETERMINISTICALLY PASSING
 ========================================================================================
  Suite File                       | Tests | Scope & Verifications
 ----------------------------------+-------+---------------------------------------------
- test_ui_terms.py                 |   4   | 107 UI terms, unique keys, no royal register
+ test_ui_terms.py                 |   4   | 204 UI terms, unique keys, no royal register
  test_khmer_utils_js.py           |  11   | Node.js execution: phone, KHR, BE, CRC16, collation
  test_check_khmer_unicode.py      |  20   | U+FFFD, control characters, ZWSP, trailing Coeng
  test_khmer_utils.py              |  24   | Python library: phone, currency, words, dates
@@ -296,9 +303,10 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
  test_audit_khmer_i18n.py         |   4   | Missing keys, placeholder mismatch, royal registers
  test_khmer_utils_extended.py     |   5   | Landlines, minor unit math, recursive words, KHQR
  test_data_metadata.py            |   3   | Complete data/METADATA.json verification of 21 files
- test_mcp_and_token_enhancements.py|  7  | Python/Node MCP servers, CLI lookup, lint & help
+ test_mcp_and_token_enhancements.py|  8  | Python/Node MCP servers, CLI lookup, lint, break, rules
+ test_agent_rules_installer.py    |   5   | Agent rule installer across Cursor, Claude, Copilot, etc.
 ----------------------------------+-------+---------------------------------------------
- TOTAL VERIFIED TESTS             |  127  | 100% Deterministic CI Compliance (0 Failures)
+ TOTAL VERIFIED TESTS             |  133  | 100% Deterministic CI Compliance (0 Failures)
 ========================================================================================
 ```
 

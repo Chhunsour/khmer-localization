@@ -23,8 +23,8 @@ class TestUiTermsJson(unittest.TestCase):
             self.terms = json.load(f)
 
     def test_term_count(self):
-        """Must contain at least 100 high-frequency UI terms."""
-        self.assertGreaterEqual(len(self.terms), 100, f"Expected >= 100 terms, got {len(self.terms)}")
+        """Must contain at least 200 high-frequency UI terms."""
+        self.assertGreaterEqual(len(self.terms), 200, f"Expected >= 200 terms, got {len(self.terms)}")
 
     def test_schema_conformance(self):
         """Every entry must contain key, en, km, category, avoid."""

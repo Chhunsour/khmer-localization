@@ -19,7 +19,12 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if REPO_ROOT not in sys.path:
     sys.path.insert(0, REPO_ROOT)
 
-from scripts.khmer_utils import lint_khmer_text, lookup_ui_term
+from scripts.khmer_utils import (
+    insert_khmer_word_breaks,
+    lint_khmer_text,
+    lookup_ui_term,
+    segment_khmer_syllables,
+)
 
 
 class TestTokenEnhancementsPython(unittest.TestCase):
@@ -77,6 +82,20 @@ class TestTokenEnhancementsPython(unittest.TestCase):
         self.assertFalse(res_khr["is_clean"])
         self.assertTrue(any("khr" in w.lower() or "decimal" in w.lower() for w in res_khr["warnings"]))
 
+    def test_segment_khmer_syllables_and_breaks(self):
+        text = "ការកំណត់"
+        syllables = segment_khmer_syllables(text)
+        self.assertEqual(syllables, ["កា", "រ", "កំ", "ណ", "ត់"])
+
+        broken = insert_khmer_word_breaks(text)
+        self.assertEqual(broken, "កា\u200Bរ\u200Bកំ\u200Bណ\u200Bត់")
+
+        # Mixed text
+        mixed = "Sign In: ចូលគណនី"
+        mixed_broken = insert_khmer_word_breaks(mixed)
+        self.assertIn("ចូ\u200Bល\u200Bគ\u200Bណ\u200Bនី", mixed_broken)
+        self.assertTrue(mixed_broken.startswith("Sign In: "))
+
 
 class TestTokenEnhancementsCli(unittest.TestCase):
     def test_python_cli_lookup_and_lint(self):
@@ -107,6 +126,24 @@ class TestTokenEnhancementsCli(unittest.TestCase):
         )
         self.assertEqual(proc_lint_warn.returncode, 1)
 
+        # Python CLI break
+        proc_break = subprocess.run(
+            [sys.executable, os.path.join(REPO_ROOT, "scripts", "khmer_utils.py"), "break", "ចូលគណនី"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        self.assertIn("\u200b", proc_break.stdout.lower())
+
+        # Python CLI install-rules dry-run
+        proc_rules = subprocess.run(
+            [sys.executable, os.path.join(REPO_ROOT, "scripts", "khmer_utils.py"), "install-rules", "--dry-run", "--target", "cursor"],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        self.assertIn(".cursorrules", proc_rules.stdout)
+
     def test_node_cli_help_lookup_lint(self):
         node_script = os.path.join(REPO_ROOT, "scripts", "khmer_utils.js")
 
@@ -125,6 +162,14 @@ class TestTokenEnhancementsCli(unittest.TestCase):
         proc_lint = subprocess.run(["node", node_script, "lint", "រក្សាទុក"], capture_output=True, text=True)
         self.assertEqual(proc_lint.returncode, 0)
 
+        # Node CLI break
+        proc_break = subprocess.run(["node", node_script, "break", "ចូលគណនី"], capture_output=True, text=True, check=True)
+        self.assertIn("\u200b", proc_break.stdout.lower())
+
+        # Node CLI install-rules dry-run
+        proc_rules = subprocess.run(["node", node_script, "install-rules", "--dry-run", "--target", "cursor"], capture_output=True, text=True, check=True)
+        self.assertIn(".cursorrules", proc_rules.stdout)
+
 
 class TestMcpServers(unittest.TestCase):
     def test_python_mcp_server(self):
@@ -139,7 +184,13 @@ class TestMcpServers(unittest.TestCase):
             "method": "tools/call",
             "params": {"name": "khmer_spellout_words", "arguments": {"amount": 50000, "currency": "KHR"}},
         })
-        input_data = f"{init_req}\n{tools_req}\n{call_req}\n"
+        call_break = json.dumps({
+            "jsonrpc": "2.0",
+            "id": 4,
+            "method": "tools/call",
+            "params": {"name": "khmer_insert_word_breaks", "arguments": {"text": "ចូលគណនី"}},
+        })
+        input_data = f"{init_req}\n{tools_req}\n{call_req}\n{call_break}\n"
 
         proc = subprocess.run(
             [sys.executable, server_py],
@@ -150,7 +201,7 @@ class TestMcpServers(unittest.TestCase):
         )
 
         lines = [json.loads(line) for line in proc.stdout.strip().split("\n") if line.strip()]
-        self.assertEqual(len(lines), 3)
+        self.assertEqual(len(lines), 4)
 
         # Verify tools/list
         tools = lines[1]["result"]["tools"]
@@ -160,10 +211,14 @@ class TestMcpServers(unittest.TestCase):
         self.assertIn("khmer_format_currency", tool_names)
         self.assertIn("khmer_spellout_words", tool_names)
         self.assertIn("khmer_lint_text", tool_names)
+        self.assertIn("khmer_insert_word_breaks", tool_names)
 
         # Verify tools/call result
         call_res = json.loads(lines[2]["result"]["content"][0]["text"])
         self.assertIn("ប្រាំម៉ឺនរៀលគត់", call_res["words"])
+
+        break_res = json.loads(lines[3]["result"]["content"][0]["text"])
+        self.assertIn("\u200b", break_res["text_with_breaks"].lower())
 
     def test_node_mcp_server(self):
         server_js = os.path.join(REPO_ROOT, "scripts", "khmer_mcp_server.js")
@@ -175,7 +230,13 @@ class TestMcpServers(unittest.TestCase):
             "method": "tools/call",
             "params": {"name": "khmer_normalize_phone", "arguments": {"phone": "012 889 977"}},
         })
-        input_data = f"{init_req}\n{call_req}\n"
+        call_break = json.dumps({
+            "jsonrpc": "2.0",
+            "id": 12,
+            "method": "tools/call",
+            "params": {"name": "khmer_insert_word_breaks", "arguments": {"text": "ចូលគណនី"}},
+        })
+        input_data = f"{init_req}\n{call_req}\n{call_break}\n"
 
         proc = subprocess.run(
             ["node", server_js],
@@ -186,10 +247,13 @@ class TestMcpServers(unittest.TestCase):
         )
 
         lines = [json.loads(line) for line in proc.stdout.strip().split("\n") if line.strip()]
-        self.assertEqual(len(lines), 2)
+        self.assertEqual(len(lines), 3)
         phone_res = json.loads(lines[1]["result"]["content"][0]["text"])
         self.assertEqual(phone_res["normalized_e164"], "+85512889977")
         self.assertTrue(phone_res["is_valid_syntax"])
+
+        break_res = json.loads(lines[2]["result"]["content"][0]["text"])
+        self.assertIn("\u200b", break_res["text_with_breaks"].lower())
 
 
 if __name__ == "__main__":

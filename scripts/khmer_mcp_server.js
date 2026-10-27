@@ -110,6 +110,17 @@ const TOOLS = [
       required: ["words"],
     },
   },
+  {
+    name: "khmer_insert_word_breaks",
+    description: "Inject Zero-Width Space (U+200B) at syllable boundaries to enable clean responsive wrapping on mobile screens and UI containers.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        text: { type: "string", description: "Khmer text string to process" },
+      },
+      required: ["text"],
+    },
+  },
 ];
 
 function handleToolCall(name, args = {}) {
@@ -154,6 +165,11 @@ function handleToolCall(name, args = {}) {
     case "khmer_sort_words": {
       const words = Array.isArray(args.words) ? args.words : [];
       return { sorted: utils.sortKhmerWords(words) };
+    }
+    case "khmer_insert_word_breaks": {
+      const text = args.text || "";
+      const res = utils.insertKhmerWordBreaks(text);
+      return { text: res, text_with_breaks: res };
     }
     default:
       throw new Error(`Unknown tool: ${name}`);

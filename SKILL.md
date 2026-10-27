@@ -36,8 +36,14 @@ python3 scripts/khmer_utils.py currency 25000 --currency KHR
 # Spelled-out Khmer numbers & currency words for invoices (GDT compliance)
 python3 scripts/khmer_utils.py words 25000 --currency KHR
 
+# Syllable segmentation & Zero-Width Space (U+200B) injection for web word wrapping
+python3 scripts/khmer_utils.py break "ចូលគណនី"
+
 # Calculate or verify Bakong KHQR EMVCo CRC16
 python3 scripts/khmer_utils.py khqr-crc "<payload6304>"
+
+# Auto-install agent rules into Cursor, Claude, Windsurf, Copilot, Gemini, or AGENTS
+python3 scripts/khmer_utils.py install-rules --target all --tier standard
 
 # Native MCP Server (JSON-RPC stdio) for Claude Code, Cursor, Windsurf
 python3 scripts/khmer_mcp_server.py
