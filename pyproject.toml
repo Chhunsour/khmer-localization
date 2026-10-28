@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "khmer-localization"
-version = "2.0.0"
+version = "2.1.0"
 description = "Production-grade Khmer localization skill, utilities, dataset registry, and i18n quality audit engine."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -45,6 +45,7 @@ classifiers = [
 khmer-audit = "scripts.audit_khmer_i18n:main"
 khmer-check = "scripts.check_khmer_unicode:main"
 khmer-utils = "scripts.khmer_utils:main"
+khmer-mcp = "scripts.khmer_mcp_server:main"
 
 [project.urls]
 Homepage = "https://github.com/Chhunsour/khmer-localization"

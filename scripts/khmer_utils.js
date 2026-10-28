@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * khmer_utils.js - Zero-Dependency Isomorphic Khmer Localization Utility
  *
@@ -371,31 +372,88 @@ function formatKhmerDate(date, options = {}) {
 
 /**
  * Format elapsed seconds as natural Khmer relative microcopy.
+ * Supports past (-diffSeconds or positive elapsed seconds) and future timestamps.
  *
  * @param {number} diffSeconds
+ * @param {boolean} [useKhmerDigits=false]
  * @returns {string}
  */
-function formatKhmerRelativeTime(diffSeconds) {
-  if (diffSeconds < 60) {
+function formatKhmerRelativeTime(diffSeconds, useKhmerDigits = false, future = false) {
+  const digits = (n) => {
+    const s = String(n);
+    if (useKhmerDigits) {
+      const map = ["០", "១", "២", "៣", "៤", "៥", "៦", "៧", "៨", "៩"];
+      return s.replace(/[0-9]/g, (d) => map[Number(d)]);
+    }
+    return s;
+  };
+
+  const absSec = Math.abs(diffSeconds);
+
+  if (absSec < 10) {
+    return "អម្បាញ់មិញ";
+  }
+
+  if (future) {
+    if (absSec < 60) {
+      return `ក្នុងរយៈពេល ${digits(absSec)} វិនាទីទៀត`;
+    }
+    const mins = Math.floor(absSec / 60);
+    if (mins < 60) {
+      return `ក្នុងរយៈពេល ${digits(mins)} នាទីទៀត`;
+    }
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) {
+      return `ក្នុងរយៈពេល ${digits(hours)} ម៉ោងទៀត`;
+    }
+    const days = Math.floor(hours / 24);
+    if (days === 1) {
+      return "ថ្ងៃស្អែក";
+    }
+    if (days < 7) {
+      return `ក្នុងរយៈពេល ${digits(days)} ថ្ងៃទៀត`;
+    }
+    if (days < 30) {
+      const weeks = Math.floor(days / 7);
+      return `ក្នុងរយៈពេល ${digits(weeks)} សប្តាហ៍ទៀត`;
+    }
+    if (days < 365) {
+      const months = Math.floor(days / 30);
+      return `ក្នុងរយៈពេល ${digits(months)} ខែទៀត`;
+    }
+    const years = Math.floor(days / 365);
+    return `ក្នុងរយៈពេល ${digits(years)} ឆ្នាំទៀត`;
+  }
+
+  // Past timestamps
+  if (absSec < 60) {
     return "មុននេះបន្តិច";
   }
-  const mins = Math.floor(diffSeconds / 60);
+  const mins = Math.floor(absSec / 60);
   if (mins < 60) {
-    return `${mins} នាទីមុន`;
+    return `${digits(mins)} នាទីមុន`;
   }
   const hours = Math.floor(mins / 60);
   if (hours < 24) {
-    return `${hours} ម៉ោងមុន`;
+    return `${digits(hours)} ម៉ោងមុន`;
   }
   const days = Math.floor(hours / 24);
   if (days === 1) {
     return "ម្សិលមិញ";
   }
   if (days < 7) {
-    return `${days} ថ្ងៃមុន`;
+    return `${digits(days)} ថ្ងៃមុន`;
   }
-  const weeks = Math.floor(days / 7);
-  return `${weeks} សប្តាហ៍មុន`;
+  if (days < 30) {
+    const weeks = Math.floor(days / 7);
+    return `${digits(weeks)} សប្តាហ៍មុន`;
+  }
+  if (days < 365) {
+    const months = Math.floor(days / 30);
+    return `${digits(months)} ខែមុន`;
+  }
+  const years = Math.floor(days / 365);
+  return `${digits(years)} ឆ្នាំមុន`;
 }
 
 // --- 4. Unicode Grapheme Truncation & Word Breaking ---
@@ -449,6 +507,50 @@ function safeTruncateKhmer(text, maxGraphemes) {
   }
 
   return text.slice(0, cutIdx) + "…";
+}
+
+const KHMER_SYLLABLE_REGEX = /(?:[\u1780-\u17A2](?:\u17D2[\u1780-\u17A2])?|[\u17A3-\u17B3]|[\u17E0-\u17E9]+|[^\u1780-\u17FF\u19E0-\u19FF\s]+|\s+|[\u17D4-\u17DA\u17DB])(?:[\u17D2][\u1780-\u17A2]|[\u17B6-\u17C5]|[\u17C6-\u17D3\u17DD])*/gu;
+
+/**
+ * Segment Khmer text into orthographic syllables based on script phonotactics.
+ *
+ * @param {string} text
+ * @returns {string[]}
+ */
+function segmentKhmerSyllables(text) {
+  if (!text) return [];
+  const matches = text.match(KHMER_SYLLABLE_REGEX);
+  return matches || [];
+}
+
+/**
+ * Inject Zero-Width Space (U+200B) at syllable boundaries to enable clean browser word wrapping.
+ *
+ * @param {string} text
+ * @param {string} [breakChar="\u200B"]
+ * @returns {string}
+ */
+function insertKhmerWordBreaks(text, breakChar = "\u200B") {
+  if (!text) return "";
+  const tokens = segmentKhmerSyllables(text);
+  const out = [];
+  const khmerRunRegex = /[\u1780-\u17FF]/;
+
+  for (let i = 0; i < tokens.length; i++) {
+    const tok = tokens[i];
+    out.push(tok);
+    if (i < tokens.length - 1) {
+      const nextTok = tokens[i + 1];
+      if (khmerRunRegex.test(tok) && khmerRunRegex.test(nextTok)) {
+        if (!tok.endsWith(breakChar) && !nextTok.startsWith(breakChar)) {
+          out.push(breakChar);
+        }
+      }
+    }
+  }
+
+  const res = out.join("");
+  return res.replace(new RegExp(`${breakChar}+`, "g"), breakChar);
 }
 
 // --- 5. Number-to-Words in Khmer (Invoice & Tax Compliance) ---
@@ -880,6 +982,342 @@ function getKhmerCharacterStats(text) {
   return stats;
 }
 
+// --- 8. UI Terms Catalog Lookup & Fast Text Linter ---
+
+/**
+ * Search data/ui_terms.json for matching English or Khmer UI terms.
+ * Matches against 'key', 'en', and 'km' fields (case-insensitive for English/keys).
+ *
+ * @param {string} [query=""]
+ * @param {string} [dataPath=null]
+ * @returns {Array<object>}
+ */
+function lookupUiTerm(query = "", dataPath = null) {
+  const fs = require("fs");
+  const path = require("path");
+
+  if (!dataPath) {
+    const baseDir = path.dirname(__dirname);
+    const candidate = path.join(baseDir, "data", "ui_terms.json");
+    if (fs.existsSync(candidate)) {
+      dataPath = candidate;
+    } else {
+      dataPath = path.join("data", "ui_terms.json");
+    }
+  }
+
+  if (!fs.existsSync(dataPath)) {
+    return [];
+  }
+
+  const raw = fs.readFileSync(dataPath, "utf8");
+  const terms = JSON.parse(raw);
+
+  if (!query || !query.trim()) {
+    return terms.slice(0, 50);
+  }
+
+  const qClean = query.trim();
+  const qLower = qClean.toLowerCase();
+  const exactMatches = [];
+  const partialMatches = [];
+
+  for (const item of terms) {
+    const keyLower = (item.key || "").toLowerCase();
+    const enLower = (item.en || "").toLowerCase();
+    const kmVal = item.km || "";
+
+    if (qLower === keyLower || qLower === enLower || qClean === kmVal) {
+      exactMatches.push(item);
+    } else if (keyLower.includes(qLower) || enLower.includes(qLower) || kmVal.includes(qClean)) {
+      partialMatches.push(item);
+    }
+  }
+
+  return exactMatches.concat(partialMatches);
+}
+
+/**
+ * Fast linting inspection of an in-memory Khmer string for common defects:
+ * - Unicode corruption: Replacement char U+FFFD, control characters
+ * - Broken typography: Literal dotted circle U+25CC
+ * - Orphaned combining marks: Vowels or diacritics without a preceding base consonant
+ * - Trailing Coeng: U+17D2 at the end of text
+ * - Grammatical inversion: Hallucinated [Adj] + [Noun] order
+ * - Prohibited royal / monastic register words in consumer UI
+ * - Currency format: Decimal KHR notation (e.g. 10.00៛)
+ * - Subscript clipping risk: Stacked subscripts without line-height reminder
+ *
+ * @param {string} text
+ * @returns {object}
+ */
+function lintKhmerText(text) {
+  const errors = [];
+  const warnings = [];
+  const suggestions = [];
+
+  if (!text) {
+    return {
+      is_clean: true,
+      errors: [],
+      warnings: [],
+      suggestions: [],
+      stats: getKhmerCharacterStats(""),
+    };
+  }
+
+  // 1. Unicode corruption
+  if (text.includes("\uFFFD")) {
+    errors.push("Unicode Replacement Character (U+FFFD) detected: text has suffered encoding corruption.");
+  }
+
+  // 2. Literal dotted circle
+  if (text.includes("\u25CC")) {
+    warnings.push("Literal dotted circle (U+25CC) detected: indicates broken glyph rendering or orphan diacritic.");
+  }
+
+  // 3. Trailing Coeng
+  if (text.endsWith("\u17D2")) {
+    warnings.push("Trailing Coeng subscript sign (U+17D2) at end of text without following consonant.");
+  }
+
+  // 4. Orphaned combining marks
+  for (let i = 0; i < text.length; i++) {
+    const cp = text.charCodeAt(i);
+    const isCombining = (cp >= 0x17B6 && cp <= 0x17C5) || (cp >= 0x17C6 && cp <= 0x17D1) || cp === 0x17DD;
+    if (isCombining) {
+      if (i === 0) {
+        warnings.push(`Orphaned combining mark U+${cp.toString(16).toUpperCase().padStart(4, "0")} at start of string with no base consonant.`);
+      } else {
+        const prevCh = text[i - 1];
+        const prevCp = text.charCodeAt(i - 1);
+        if (" \t\r\n\u200B".includes(prevCh)) {
+          warnings.push(`Orphaned combining mark U+${cp.toString(16).toUpperCase().padStart(4, "0")} follows whitespace or ZWSP boundary.`);
+        } else if (prevCp < 0x80 && /[a-zA-Z0-9]/.test(prevCh)) {
+          warnings.push(`Combining mark U+${cp.toString(16).toUpperCase().padStart(4, "0")} follows Latin/ASCII character '${prevCh}'.`);
+        }
+      }
+    }
+  }
+
+  // 5. Inverted grammatical word patterns
+  const invertedPatterns = [
+    [/សរុបតម្លៃ/, "Inverted word order: use 'តម្លៃសរុប' (Total Price: [Noun] + [Adjective])"],
+    [/ថ្មីពាក្យសម្ងាត់/, "Inverted word order: use 'ពាក្យសម្ងាត់ថ្មី' (New Password: [Noun] + [Adjective])"],
+    [/ចាស់ពាក្យសម្ងាត់/, "Inverted word order: use 'ពាក្យសម្ងាត់ចាស់' (Old Password: [Noun] + [Adjective])"],
+    [/សកម្មអ្នកប្រើប្រាស់/, "Inverted word order: use 'អ្នកប្រើប្រាស់សកម្ម' (Active Users: [Noun] + [Adjective])"],
+  ];
+  for (const [pattern, desc] of invertedPatterns) {
+    if (pattern.test(text)) {
+      warnings.push(desc);
+    }
+  }
+
+  // 6. Prohibited royal/monastic words
+  const royalTerms = ["យាង", "សោយ", "ព្រះរាជ", "ទ្រង់", "សោយទិវង្គត", "និមន្ត", "ឆាន់"];
+  for (const term of royalTerms) {
+    if (text.includes(term)) {
+      warnings.push(`Prohibited royal/monastic register word '${term}' found. Use modern standard digital terminology.`);
+    }
+  }
+
+  // 7. Decimal KHR currency
+  if (/\d+\.\d{1,2}\s*(?:៛|KHR|រៀល)/.test(text)) {
+    warnings.push("Khmer Riel (KHR) formatted with fractional decimal cents. KHR must be formatted as whole-riel integers without decimals.");
+    suggestions.push("Format KHR amounts using whole-riel integers (e.g. '25,000 ៛').");
+  }
+
+  // 8. Subscript clipping / line-height check
+  const stats = getKhmerCharacterStats(text);
+  if (stats.coengSubscripts > 0 || stats.dependentVowels > 0) {
+    suggestions.push("Khmer text contains stacked subscripts/vowels. Ensure CSS 'line-height: >= 1.6' to prevent diacritic clipping.");
+  }
+
+  const isClean = errors.length === 0 && warnings.length === 0;
+
+  return {
+    is_clean: isClean,
+    errors,
+    warnings,
+    suggestions,
+    stats,
+  };
+}
+
+/**
+ * Auto-correct common Khmer localization mistakes:
+ * 1. Inverted word order calques (e.g. 'សរុបតម្លៃ' -> 'តម្លៃសរុប')
+ * 2. Decimal KHR (.00៛ / .00 KHR -> whole riels)
+ * 3. Trailing or dangling Coeng marks (U+17D2)
+ * 4. Royal / monastic vocabulary in UI (e.g. 'យាងចូល' -> 'ចូលគណនី')
+ * 5. Broken dotted circle replacement glyphs (U+25CC)
+ *
+ * @param {string} text
+ * @returns {{ original: string, fixed: string, changes: string[] }}
+ */
+function fixKhmerText(text) {
+  if (!text) return { original: "", fixed: "", changes: [] };
+
+  let fixed = text;
+  const changes = [];
+
+  // 1. Dotted circle removal
+  if (fixed.includes("\u25CC")) {
+    fixed = fixed.replace(/\u25CC/g, "");
+    changes.push("Removed dotted circle glyph (U+25CC)");
+  }
+
+  // 2. Fix inverted word orders
+  const wordOrders = [
+    [/សរុបតម្លៃ/g, "តម្លៃសរុប", "Inverted word order: 'សរុបតម្លៃ' -> 'តម្លៃសរុប' (Total Price)"],
+    [/ថ្មីពាក្យសម្ងាត់/g, "ពាក្យសម្ងាត់ថ្មី", "Inverted word order: 'ថ្មីពាក្យសម្ងាត់' -> 'ពាក្យសម្ងាត់ថ្មី' (New Password)"],
+    [/ចាស់ពាក្យសម្ងាត់/g, "ពាក្យសម្ងាត់ចាស់", "Inverted word order: 'ចាស់ពាក្យសម្ងាត់' -> 'ពាក្យសម្ងាត់ចាស់' (Old Password)"],
+    [/សកម្មអ្នកប្រើប្រាស់/g, "អ្នកប្រើប្រាស់សកម្ម", "Inverted word order: 'សកម្មអ្នកប្រើប្រាស់' -> 'អ្នកប្រើប្រាស់សកម្ម' (Active Users)"],
+    [/ថ្មីសារ/g, "សារថ្មី", "Inverted word order: 'ថ្មីសារ' -> 'សារថ្មី' (New Message)"],
+    [/ចាស់សារ/g, "សារចាស់", "Inverted word order: 'ចាស់សារ' -> 'សារចាស់' (Old Message)"],
+  ];
+  for (const [pattern, repl, desc] of wordOrders) {
+    if (pattern.test(fixed)) {
+      fixed = fixed.replace(pattern, repl);
+      changes.push(desc);
+    }
+  }
+
+  // 3. Fix royal registers
+  const royalRegisters = [
+    [/យាងចូលក្នុង/g, "ចូលក្នុង", "Royal register: 'យាងចូលក្នុង' -> 'ចូលក្នុង'"],
+    [/យាងចូល/g, "ចូលគណនី", "Royal register: 'យាងចូល' -> 'ចូលគណនី' (Sign In)"],
+    [/សោយ/g, "ពិសារ", "Royal register: 'សោយ' -> 'ពិសារ' (Consume/Eat)"],
+    [/ព្រះរាជទ្រព្យ/g, "ទ្រព្យសម្បត្តិ", "Royal register: 'ព្រះរាជទ្រព្យ' -> 'ទ្រព្យសម្បត្តិ'"],
+    [/និមន្ត/g, "អញ្ជើញ", "Monastic register: 'និមន្ត' -> 'អញ្ជើញ' (Invite)"],
+  ];
+  for (const [pattern, repl, desc] of royalRegisters) {
+    if (pattern.test(fixed)) {
+      fixed = fixed.replace(pattern, repl);
+      changes.push(desc);
+    }
+  }
+
+  // 4. Remove decimal cents from KHR (.00 or .XX)
+  const decKhrPattern = /(\d+(?:,\d{3})*)\.\d{2}(\s*(?:៛|KHR|រៀល))/g;
+  if (decKhrPattern.test(fixed)) {
+    fixed = fixed.replace(decKhrPattern, "$1$2");
+    changes.push("Removed fractional decimal cents from Khmer Riel (KHR)");
+  }
+
+  // 5. Fix dangling or trailing Coeng (U+17D2)
+  const trailingCoeng = /\u17D2(?=[\s\.,;!?។៖\)\}\]\"\']|$)/g;
+  if (trailingCoeng.test(fixed)) {
+    fixed = fixed.replace(trailingCoeng, "");
+    changes.push("Removed dangling/trailing Coeng subscript marker (U+17D2)");
+  }
+
+  return {
+    original: text,
+    fixed,
+    changes,
+  };
+}
+
+/**
+ * Format a 4-tier Cambodian address into a standard comma-separated address string.
+ *
+ * @param {object} components
+ * @param {string} [lang="km"]
+ * @returns {string}
+ */
+function formatCambodianAddress(components = {}, lang = "km") {
+  const order = ["street", "village", "sangkat", "commune", "khan", "district", "province", "capital", "postal_code"];
+  const parts = [];
+
+  for (const k of order) {
+    const val = components[k];
+    if (val && typeof val === "string" && val.trim()) {
+      const cleaned = val.trim().replace(/^,|,$/g, "");
+      if (cleaned && !parts.includes(cleaned)) {
+        parts.push(cleaned);
+      }
+    }
+  }
+
+  for (const [k, v] of Object.entries(components)) {
+    if (!order.includes(k) && v && typeof v === "string" && v.trim()) {
+      const cleaned = v.trim().replace(/^,|,$/g, "");
+      if (cleaned && !parts.includes(cleaned)) {
+        parts.push(cleaned);
+      }
+    }
+  }
+
+  return parts.join(", ");
+}
+
+/**
+ * Parse a Cambodian address string into standard administrative components.
+ *
+ * @param {string} text
+ * @returns {object}
+ */
+function parseCambodianAddress(text = "") {
+  if (!text) {
+    return { street: "", village: "", sangkat: "", khan: "", province: "", postal_code: "" };
+  }
+
+  let cleaned = text.trim();
+  const result = {
+    street: "",
+    village: "",
+    sangkat: "",
+    khan: "",
+    province: "",
+    postal_code: "",
+  };
+
+  const postMatch = cleaned.match(/(?:,\s*|\s+)(\b\d{5,6}\b)\s*$/);
+  if (postMatch) {
+    result.postal_code = postMatch[1];
+    cleaned = cleaned.slice(0, postMatch.index).trim().replace(/,$/, "");
+  }
+
+  const parts = cleaned.split(",").map((p) => p.trim()).filter(Boolean);
+  const remainingStreet = [];
+
+  for (const p of parts) {
+    if (["រាជធានី", "ខេត្ត", "Phnom Penh", "Province", "Capital"].some((prov) => p.includes(prov))) {
+      result.province = p;
+    } else if (["ខណ្ឌ", "ស្រុក", "ក្រុង", "Khan", "District", "Krong"].some((d) => p.includes(d))) {
+      result.khan = p;
+    } else if (["សង្កាត់", "ឃុំ", "Sangkat", "Commune"].some((s) => p.includes(s))) {
+      result.sangkat = p;
+    } else if (["ភូមិ", "Village"].some((v) => p.includes(v))) {
+      result.village = p;
+    } else {
+      remainingStreet.push(p);
+    }
+  }
+
+  result.street = remainingStreet.join(", ");
+  return result;
+}
+
+/**
+ * Format a count with a noun and optional Khmer classifier (សង្ខយាសព្ទ).
+ * Khmer word order: [Noun] [Count] [Classifier] (e.g. 'អ្នកប្រើប្រាស់ 3 នាក់').
+ *
+ * @param {string} noun
+ * @param {number} count
+ * @param {string} [classifier]
+ * @param {boolean} [useKhmerDigits=false]
+ * @returns {string}
+ */
+function formatKhmerCount(noun, count, classifier, useKhmerDigits = false) {
+  const cntStr = useKhmerDigits ? toKhmerDigits(count) : String(count);
+  if (classifier && typeof classifier === "string" && classifier.trim()) {
+    return `${noun.trim()} ${cntStr} ${classifier.trim()}`;
+  }
+  return `${noun.trim()} ${cntStr}`;
+}
+
 // --- Module Exports & CLI Handling ---
 
 const khmerUtils = {
@@ -891,6 +1329,9 @@ const khmerUtils = {
   toKhmerDigits,
   formatKhmerDate,
   formatKhmerRelativeTime,
+  formatCambodianAddress,
+  parseCambodianAddress,
+  formatKhmerCount,
   safeTruncateKhmer,
   integerToKhmerWords,
   formatCurrencyKhmerWords,
@@ -902,6 +1343,11 @@ const khmerUtils = {
   sortKhmerWords,
   isKhmerText,
   getKhmerCharacterStats,
+  lookupUiTerm,
+  lintKhmerText,
+  fixKhmerText,
+  segmentKhmerSyllables,
+  insertKhmerWordBreaks,
 };
 
 if (typeof module !== "undefined" && module.exports) {
@@ -913,8 +1359,34 @@ if (typeof require !== "undefined" && require.main === module) {
   const args = process.argv.slice(2);
   const cmd = args[0];
 
-  if (!cmd) {
-    console.log("Usage: node khmer_utils.js <phone|currency|words|date|khqr-crc|khqr-parse|sort|stats> [args...]");
+  function printHelp() {
+    console.log(`khmer-utils (Node.js) - Production Khmer Localization Utilities
+
+Usage:
+  node khmer_utils.js <command> [arguments...]
+
+Commands:
+  phone <number>               Normalize a Cambodian phone number (+855 / domestic)
+  currency <amount> [curr]     Format KHR (whole-riel) or USD currency
+  words <amount> [curr]        Spell out numbers/amounts in formal Khmer words
+  date [iso-date] [--be]       Format date in Khmer solar months & Buddhist Era
+  relative-time <seconds>      Format seconds as natural Khmer relative time
+  khqr-crc <payload>           Calculate EMVCo CRC16 checksum for Bakong KHQR
+  khqr-parse <payload>         Parse EMVCo TLV tags from a raw KHQR string
+  sort <word1> <word2>...      Sort Khmer words in Chuon Nath dictionary order
+  stats <text>                 Analyze Khmer character counts and script metrics
+  lookup [term]                Search standard UI terms in data/ui_terms.json
+  lint <text>                  Lint Khmer string for corruption, dotted circles, etc.
+  fix <text>                   Auto-correct Khmer word order, decimal KHR, and register
+  break <text>                 Inject Zero-Width Space (ZWSP) for word wrapping
+  address <text>               Parse or format a 4-tier Cambodian address
+  install-rules [--target T]   Install agent rules (cursor, claude, windsurf, copilot)
+  --help, -h                   Show this help message
+`);
+  }
+
+  if (!cmd || cmd === "--help" || cmd === "-h") {
+    printHelp();
     process.exit(0);
   }
 
@@ -952,6 +1424,12 @@ if (typeof require !== "undefined" && require.main === module) {
       console.log(formatKhmerDate(d, { includeBE }));
       break;
     }
+    case "relative-time": {
+      const sec = parseInt(args[1] || "0", 10);
+      const useKhmerDigits = args.includes("--khmer-digits");
+      console.log(formatKhmerRelativeTime(sec, useKhmerDigits));
+      break;
+    }
     case "khqr-crc": {
       const payload = args[1] || "";
       const crc = calculateKhqrCrc16(payload);
@@ -978,8 +1456,63 @@ if (typeof require !== "undefined" && require.main === module) {
       console.log(JSON.stringify(stats, null, 2));
       break;
     }
+    case "lookup": {
+      const query = args[1] || "";
+      const results = lookupUiTerm(query);
+      console.log(JSON.stringify(results, null, 2));
+      break;
+    }
+    case "lint": {
+      const str = args[1] || "";
+      const res = lintKhmerText(str);
+      console.log(JSON.stringify(res, null, 2));
+      process.exit(res.is_clean ? 0 : 1);
+    }
+    case "fix": {
+      const str = args[1] || "";
+      const res = fixKhmerText(str);
+      console.log(JSON.stringify(res, null, 2));
+      break;
+    }
+    case "break": {
+      const str = args[1] || "";
+      console.log(insertKhmerWordBreaks(str));
+      break;
+    }
+    case "address": {
+      const str = args[1] || "";
+      const parsed = parseCambodianAddress(str);
+      console.log(JSON.stringify(parsed, null, 2));
+      break;
+    }
+    case "install-rules": {
+      const path = require("path");
+      const { spawnSync } = require("child_process");
+      const targetIdx = args.indexOf("--target");
+      const target = targetIdx !== -1 ? args[targetIdx + 1] : "cursor";
+      const tierIdx = args.indexOf("--tier");
+      const tier = tierIdx !== -1 ? args[tierIdx + 1] : "standard";
+      const dryRun = args.includes("--dry-run");
+      const force = args.includes("--force");
+      const destIdx = args.indexOf("--dest");
+      const dest = destIdx !== -1 ? args[destIdx + 1] : ".";
+
+      const pyScript = path.join(__dirname, "install_agent_rules.py");
+      const pyArgs = [pyScript, "--target", target, "--tier", tier, "--dest", dest];
+      if (dryRun) pyArgs.push("--dry-run");
+      if (force) pyArgs.push("--force");
+
+      const proc = spawnSync("python3", pyArgs, { encoding: "utf8" });
+      if (proc.error) {
+        console.error("Failed to run installer:", proc.error.message);
+        process.exit(1);
+      }
+      process.stdout.write(proc.stdout);
+      process.exit(proc.status || 0);
+    }
     default:
       console.error(`Unknown command: ${cmd}`);
+      console.error("Run with --help to see available commands.");
       process.exit(1);
   }
 }

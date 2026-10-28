@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Cambodian Data Catalogs Provenance and Maintenance Registry",
-  "description": "Authoritative metadata, regulatory provenance, update procedures, and validation schemas for all 21 offline datasets.",
+  "description": "Authoritative metadata, regulatory provenance, update procedures, and validation schemas for all 22 offline datasets.",
   "last_audit_date": "2026-10-26",
   "maintainer": "khmer-localization open-source project",
   "datasets": [
@@ -9,11 +9,11 @@
       "id": "ui_terms",
       "file": "data/ui_terms.json",
       "title": "Standard Digital Software Engineering UI Localization Dictionary",
-      "records": 107,
+      "records": 254,
       "source_authority": "Digital Economy and Telecommunication Localization Standards & Field Industry Practices",
       "source_url": "https://github.com/Chhunsour/khmer-localization",
-      "last_verified": "2026-10-26",
-      "version": "1.1.0",
+      "last_verified": "2026-10-28",
+      "version": "2.2.0",
       "license": "MIT",
       "known_gaps": "Focuses on high-frequency mobile and web UI; specialized medical or military jargon is out of scope.",
       "update_procedure": "Propose additions via pull request; must include en, km, category, and prohibited hallucination terms; tested via tests/test_ui_terms.py.",
@@ -298,6 +298,20 @@
       "known_gaps": "Excludes archaic ligature forms deprecated in modern spelling.",
       "update_procedure": "Verify with Unicode Consortium updates.",
       "validation_rules": "Exact 14 records; codepoints in U+17A3..U+17B3."
+    },
+    {
+      "id": "khmer_classifiers",
+      "file": "data/khmer_classifiers.json",
+      "title": "Standard Khmer Noun Classifiers and Counting Word Standards",
+      "records": 16,
+      "source_authority": "National Institute of Linguistics & Standard Khmer Grammar",
+      "source_url": "https://github.com/Chhunsour/khmer-localization",
+      "last_verified": "2026-10-28",
+      "version": "1.0.0",
+      "license": "Public Domain / MIT",
+      "known_gaps": "Focuses on high-frequency countable nouns in digital, commerce, and legal software.",
+      "update_procedure": "Propose additions via pull request with examples and linguistic category.",
+      "validation_rules": "Exact 16 records; fields [classifier_km, classifier_en, category, example_km]."
     }
   ]
 }
