@@ -1,0 +1,146 @@
+[
+  {
+    "classifier_km": "នាក់",
+    "classifier_en": "Neak",
+    "category": "persons",
+    "applies_to_km": "មនុស្ស, អ្នកប្រើប្រាស់, អតិថិជន, បុគ្គលិក, សមាជិក",
+    "applies_to_en": "People, users, customers, employees, members",
+    "example_km": "អ្នកប្រើប្រាស់ ៣ នាក់",
+    "example_en": "3 users"
+  },
+  {
+    "classifier_km": "គ្រឿង",
+    "classifier_en": "Kroeung",
+    "category": "devices_machinery",
+    "applies_to_km": "ទូរស័ព្ទ, ឧបករណ៍, កុំព្យូទ័រ, ម៉ាស៊ីន, យានយន្ត",
+    "applies_to_en": "Smartphones, devices, computers, machines, vehicles",
+    "example_km": "ទូរស័ព្ទ ២ គ្រឿង",
+    "example_en": "2 phones"
+  },
+  {
+    "classifier_km": "ក្បាល",
+    "classifier_en": "Kbal",
+    "category": "publications",
+    "applies_to_km": "សៀវភៅ, ទស្សនាវដ្ដី, ឯកសារបោះពុម្ព",
+    "applies_to_en": "Books, magazines, bound publications",
+    "example_km": "សៀវភៅ ១ ក្បាល",
+    "example_en": "1 book"
+  },
+  {
+    "classifier_km": "ច្បាប់",
+    "classifier_en": "Chbab",
+    "category": "legal_documents",
+    "applies_to_km": "ច្បាប់, កិច្ចសន្យា, វិក្កយបត្រ, អាជ្ញាប័ណ្ណ, ឯកសារចម្លង",
+    "applies_to_en": "Laws, contracts, invoices, licenses, copies of documents",
+    "example_km": "កិច្ចសន្យា ២ ច្បាប់",
+    "example_en": "2 copies of contract"
+  },
+  {
+    "classifier_km": "សន្លឹក",
+    "classifier_en": "Sanleuk",
+    "category": "sheets_cards",
+    "applies_to_km": "ក្រដាស, សំបុត្រ, ប័ណ្ណ, ប័ណ្ណបញ្ចុះតម្លៃ, ឆ្នោត",
+    "applies_to_en": "Sheets of paper, tickets, cards, discount coupons, vouchers",
+    "example_km": "ប័ណ្ណបញ្ចុះតម្លៃ ៥ សន្លឹក",
+    "example_en": "5 coupon vouchers"
+  },
+  {
+    "classifier_km": "កន្លែង",
+    "classifier_en": "Kanlaeng",
+    "category": "locations",
+    "applies_to_km": "ទីតាំង, សាខា, ចំណុចទទួលទំនិញ",
+    "applies_to_en": "Places, branches, pickup points",
+    "example_km": "សាខា ៤ កន្លែង",
+    "example_en": "4 branches"
+  },
+  {
+    "classifier_km": "ហាង",
+    "classifier_en": "Hang",
+    "category": "commerce_stores",
+    "applies_to_km": "ហាង, ភោជនីយដ្ឋាន, ដៃគូអាជីវកម្ម",
+    "applies_to_en": "Shops, merchant stores, partner restaurants",
+    "example_km": "ហាងដៃគូ ១០ ហាង",
+    "example_en": "10 partner stores"
+  },
+  {
+    "classifier_km": "ខ្នង",
+    "classifier_en": "Khnaung",
+    "category": "buildings_houses",
+    "applies_to_km": "ផ្ទះ, អាគារ, វីឡា",
+    "applies_to_en": "Houses, buildings, villas",
+    "example_km": "ផ្ទះ ៣ ខ្នង",
+    "example_en": "3 houses"
+  },
+  {
+    "classifier_km": "បន្ទប់",
+    "classifier_en": "Bantoap",
+    "category": "rooms",
+    "applies_to_km": "បន្ទប់, បន្ទប់ប្រជុំ, ខុនដូ",
+    "applies_to_en": "Rooms, meeting rooms, condo units",
+    "example_km": "បន្ទប់ប្រជុំ ២ បន្ទប់",
+    "example_en": "2 meeting rooms"
+  },
+  {
+    "classifier_km": "មុខ",
+    "classifier_en": "Mukh",
+    "category": "items_menu",
+    "applies_to_km": "ទំនិញ, មុខម្ហូប, មុខទំនិញ, តួនាទី",
+    "applies_to_en": "Product items, food menu dishes, SKUs, job roles",
+    "example_km": "មុខម្ហូប ៦ មុខ",
+    "example_en": "6 dishes"
+  },
+  {
+    "classifier_km": "កញ្ចប់",
+    "classifier_en": "Kanchap",
+    "category": "packages_bundles",
+    "applies_to_km": "កញ្ចប់អីវ៉ាន់, កញ្ចប់សេវា, កញ្ចប់ជាវ",
+    "applies_to_en": "Parcels, delivery packages, service subscriptions",
+    "example_km": "កញ្ចប់ដឹកជញ្ជូន ៣ កញ្ចប់",
+    "example_en": "3 delivery parcels"
+  },
+  {
+    "classifier_km": "ប្រអប់",
+    "classifier_en": "Praw-ap",
+    "category": "boxes_containers",
+    "applies_to_km": "ប្រអប់, ប្រអប់សារ",
+    "applies_to_en": "Boxes, inboxes, delivery cartons",
+    "example_km": "ទំនិញ ២ ប្រអប់",
+    "example_en": "2 boxes of goods"
+  },
+  {
+    "classifier_km": "ដប",
+    "classifier_en": "Dawb",
+    "category": "bottles",
+    "applies_to_km": "ទឹក, ភេសជ្ជៈ, ថ្នាំពេទ្យ",
+    "applies_to_en": "Bottles of water, drinks, liquid medicine",
+    "example_km": "ទឹកបរិសុទ្ធ ៤ ដប",
+    "example_en": "4 bottles of water"
+  },
+  {
+    "classifier_km": "ខ្សែ",
+    "classifier_en": "Khsae",
+    "category": "cables_routes",
+    "applies_to_km": "ខ្សែសាក, ខ្សែបណ្តាញ, ខ្សែរថយន្តក្រុង, ជួររង់ចាំ",
+    "applies_to_en": "Charging cables, network lines, bus routes, queues",
+    "example_km": "ខ្សែសាក ១ ខ្សែ",
+    "example_en": "1 charging cable"
+  },
+  {
+    "classifier_km": "ដើម",
+    "classifier_en": "Daeum",
+    "category": "cylindrical_items",
+    "applies_to_km": "ប៊ិច, ខ្មៅដៃ, ដើមឈើ, បង្គោល",
+    "applies_to_en": "Pens, pencils, trees, poles",
+    "example_km": "ប៊ិច ៥ ដើម",
+    "example_en": "5 pens"
+  },
+  {
+    "classifier_km": "គូ",
+    "classifier_en": "Kuu",
+    "category": "pairs",
+    "applies_to_km": "ស្បែកជើង, ស្រោមជើង, ក្រវិល",
+    "applies_to_en": "Shoes, socks, earrings, matching pairs",
+    "example_km": "ស្បែកជើង ១ គូ",
+    "example_en": "1 pair of shoes"
+  }
+]

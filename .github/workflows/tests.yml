@@ -2,9 +2,9 @@ name: Tests
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "improve-skill-token-usage" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "improve-skill-token-usage" ]
 
 jobs:
   test:
@@ -39,6 +39,12 @@ jobs:
         node scripts/khmer_utils.js --help
         python scripts/khmer_utils.py lookup "Settings"
         node scripts/khmer_utils.js lookup "Settings"
+        python scripts/khmer_utils.py fix "សរុបតម្លៃ 25.00៛"
+        node scripts/khmer_utils.js fix "សរុបតម្លៃ 25.00៛"
+        python scripts/khmer_utils.py relative-time 300
+        node scripts/khmer_utils.js relative-time 300
+        python scripts/khmer_utils.py address "ផ្ទះលេខ 42, ផ្លូវ 310, បឹងកេងកង, ភ្នំពេញ"
+        node scripts/khmer_utils.js address "ផ្ទះលេខ 42, ផ្លូវ 310, បឹងកេងកង, ភ្នំពេញ"
         python scripts/khmer_utils.py break "ចូលគណនី"
         node scripts/khmer_utils.js break "ចូលគណនី"
         python scripts/install_agent_rules.py --dry-run --target all

@@ -1426,5 +1426,355 @@
     "km": "កំណែកម្មវិធី",
     "category": "privacy_terms",
     "avoid": "ជំនាន់កម្មវិធី"
+  },
+  {
+    "key": "auth.face_id",
+    "en": "Face ID",
+    "km": "ស្កេនផ្ទៃមុខ",
+    "category": "authentication",
+    "avoid": "សម្គាល់មុខ"
+  },
+  {
+    "key": "auth.fingerprint",
+    "en": "Fingerprint Authentication",
+    "km": "ស្កេនស្នាមម្រាមដៃ",
+    "category": "authentication",
+    "avoid": "ស្នាមដៃ"
+  },
+  {
+    "key": "auth.sms_code",
+    "en": "SMS Verification Code",
+    "km": "លេខកូដផ្ទៀងផ្ទាត់តាមសារ SMS",
+    "category": "authentication",
+    "avoid": "កូដសារ"
+  },
+  {
+    "key": "auth.request_new_code",
+    "en": "Request New Code",
+    "km": "ស្នើសុំលេខកូដថ្មី",
+    "category": "authentication",
+    "avoid": "សុំកូដទៀត"
+  },
+  {
+    "key": "auth.biometric_prompt",
+    "en": "Use Biometrics",
+    "km": "ប្រើប្រាស់ជីវមាត្រ",
+    "category": "authentication",
+    "avoid": "ប្រើស្នាមដៃ"
+  },
+  {
+    "key": "auth.session_timeout",
+    "en": "Session Timeout Notice",
+    "km": "ការជូនដំណឹងអំពីការផុតកំណត់",
+    "category": "authentication",
+    "avoid": "ផុតម៉ោង"
+  },
+  {
+    "key": "auth.two_factor_auth",
+    "en": "Two-Factor Authentication (2FA)",
+    "km": "ការផ្ទៀងផ្ទាត់ពីរជំហាន",
+    "category": "authentication",
+    "avoid": "ការការពារពីរកម្រិត"
+  },
+  {
+    "key": "auth.trust_device",
+    "en": "Trust this device",
+    "km": "ទុកចិត្តឧបករណ៍នេះ",
+    "category": "authentication",
+    "avoid": "ជឿឧបករណ៍"
+  },
+  {
+    "key": "nav.discover",
+    "en": "Discover",
+    "km": "ស្វែងរកអ្វីដែលថ្មី",
+    "category": "navigation",
+    "avoid": "រកថ្មី"
+  },
+  {
+    "key": "nav.timeline",
+    "en": "Timeline",
+    "km": "បន្ទាត់ពេលវេលា",
+    "category": "navigation",
+    "avoid": "ពេល"
+  },
+  {
+    "key": "nav.scan_qr",
+    "en": "Scan QR",
+    "km": "ស្កេន QR",
+    "category": "navigation",
+    "avoid": "ថត QR"
+  },
+  {
+    "key": "nav.inbox",
+    "en": "Inbox",
+    "km": "ប្រអប់សារ",
+    "category": "navigation",
+    "avoid": "កន្លែងសារ"
+  },
+  {
+    "key": "nav.wishlist",
+    "en": "Wishlist",
+    "km": "បញ្ជីចង់បាន",
+    "category": "navigation",
+    "avoid": "ចង់ទិញ"
+  },
+  {
+    "key": "nav.help_center",
+    "en": "Help Center",
+    "km": "មជ្ឈមណ្ឌលជំនួយ",
+    "category": "navigation",
+    "avoid": "កន្លែងជួយ"
+  },
+  {
+    "key": "nav.user_guide",
+    "en": "User Guide",
+    "km": "សៀវភៅណែនាំអ្នកប្រើប្រាស់",
+    "category": "navigation",
+    "avoid": "មគ្គុទ្ទេសក៍"
+  },
+  {
+    "key": "action.swipe_to_confirm",
+    "en": "Swipe to Confirm",
+    "km": "អូសដើម្បីបញ្ជាក់",
+    "category": "actions",
+    "avoid": "រុញដើម្បីព្រម"
+  },
+  {
+    "key": "action.pull_to_refresh",
+    "en": "Pull down to refresh",
+    "km": "ទាញចុះក្រោមដើម្បីផ្ទុកឡើងវិញ",
+    "category": "actions",
+    "avoid": "ទាញអាប់ដេត"
+  },
+  {
+    "key": "action.pinch_to_zoom",
+    "en": "Pinch to Zoom",
+    "km": "ពង្រីក ឬបង្រួម",
+    "category": "actions",
+    "avoid": "ចាប់ពង្រីក"
+  },
+  {
+    "key": "action.drag_and_drop",
+    "en": "Drag and drop",
+    "km": "អូស និងទម្លាក់",
+    "category": "actions",
+    "avoid": "ចាប់បោះ"
+  },
+  {
+    "key": "action.skip",
+    "en": "Skip",
+    "km": "រំលង",
+    "category": "actions",
+    "avoid": "ផ្លោះ"
+  },
+  {
+    "key": "action.revert_changes",
+    "en": "Revert Changes",
+    "km": "ត្រឡប់ទៅសភាពដើមវិញ",
+    "category": "actions",
+    "avoid": "ថយក្រោយ"
+  },
+  {
+    "key": "action.reapply",
+    "en": "Reapply",
+    "km": "អនុវត្តឡើងវិញ",
+    "category": "actions",
+    "avoid": "ទៅមុខ"
+  },
+  {
+    "key": "action.paste_clipboard",
+    "en": "Paste from Clipboard",
+    "km": "បិទភ្ជាប់ពីក្តារតម្បៀតខ្ទាស់",
+    "category": "actions",
+    "avoid": "ដាក់ចូល"
+  },
+  {
+    "key": "action.share_link",
+    "en": "Share Link",
+    "km": "ចែករំលែកតំណភ្ជាប់",
+    "category": "actions",
+    "avoid": "កូពីលីង"
+  },
+  {
+    "key": "action.bookmark",
+    "en": "Bookmark / Save",
+    "km": "ចំណាំទុក",
+    "category": "actions",
+    "avoid": "កត់ទុក"
+  },
+  {
+    "key": "action.mute",
+    "en": "Mute",
+    "km": "បិទសំឡេង",
+    "category": "actions",
+    "avoid": "ធ្វើឱ្យស្ងាត់"
+  },
+  {
+    "key": "action.unmute",
+    "en": "Unmute",
+    "km": "បើកសំឡេង",
+    "category": "actions",
+    "avoid": "ឮសំឡេង"
+  },
+  {
+    "key": "action.report_issue",
+    "en": "Report Issue",
+    "km": "រាយការណ៍បញ្ហា",
+    "category": "actions",
+    "avoid": "ប្រាប់បញ្ហា"
+  },
+  {
+    "key": "commerce.khqr_scan_pay",
+    "en": "Scan & Pay with KHQR",
+    "km": "ស្កេន និងទូទាត់ជាមួយ KHQR",
+    "category": "commerce_payments",
+    "avoid": "QR បាគង"
+  },
+  {
+    "key": "commerce.top_up",
+    "en": "Top Up / Add Money",
+    "km": "បញ្ចូលលុយ",
+    "category": "commerce_payments",
+    "avoid": "ថែមប្រាក់"
+  },
+  {
+    "key": "commerce.withdraw",
+    "en": "Withdraw",
+    "km": "ដកប្រាក់",
+    "category": "commerce_payments",
+    "avoid": "យកលុយចេញ"
+  },
+  {
+    "key": "commerce.exchange_rate",
+    "en": "Exchange Rate",
+    "km": "អត្រាប្តូរប្រាក់",
+    "category": "commerce_payments",
+    "avoid": "តម្លៃប្តូរ"
+  },
+  {
+    "key": "commerce.pay_upon_delivery",
+    "en": "Pay upon Arrival",
+    "km": "បង់ប្រាក់នៅពេលទំនិញមកដល់",
+    "category": "commerce_payments",
+    "avoid": "បង់លុយតាមក្រោយ"
+  },
+  {
+    "key": "commerce.shipping_insurance",
+    "en": "Shipping Insurance",
+    "km": "ការធានារ៉ាប់រងលើការដឹកជញ្ជូន",
+    "category": "commerce_payments",
+    "avoid": "សេវាដឹក"
+  },
+  {
+    "key": "commerce.express_delivery",
+    "en": "Express Delivery",
+    "km": "សេវាដឹកជញ្ជូនរហ័ស",
+    "category": "commerce_payments",
+    "avoid": "ដឹកលឿន"
+  },
+  {
+    "key": "commerce.standard_delivery",
+    "en": "Standard Delivery",
+    "km": "សេវាដឹកជញ្ជូនធម្មតា",
+    "category": "commerce_payments",
+    "avoid": "ដឹកធម្មតា"
+  },
+  {
+    "key": "commerce.driver_tip",
+    "en": "Tip Driver",
+    "km": "ប្រាក់ឧបត្ថម្ភអ្នកដឹក",
+    "category": "commerce_payments",
+    "avoid": "លុយធីប"
+  },
+  {
+    "key": "commerce.tax_invoice",
+    "en": "Tax Invoice",
+    "km": "វិក្កយបត្រពន្ធ",
+    "category": "commerce_payments",
+    "avoid": "ប័ណ្ណបង់ពន្ធ"
+  },
+  {
+    "key": "status.no_internet",
+    "en": "No Internet Connection",
+    "km": "គ្មានការតភ្ជាប់អ៊ីនធឺណិត",
+    "category": "status_feedback",
+    "avoid": "ដាច់ណេត"
+  },
+  {
+    "key": "status.timeout",
+    "en": "Request Timeout",
+    "km": "ផុតកំណត់ពេលវេលា",
+    "category": "status_feedback",
+    "avoid": "ហួសពេល"
+  },
+  {
+    "key": "status.connecting",
+    "en": "Connecting...",
+    "km": "កំពុងតភ្ជាប់...",
+    "category": "status_feedback",
+    "avoid": "កំពុងភ្ជាប់"
+  },
+  {
+    "key": "status.payment_pending",
+    "en": "Payment Pending",
+    "km": "កំពុងរង់ចាំការទូទាត់",
+    "category": "status_feedback",
+    "avoid": "មិនទាន់បង់"
+  },
+  {
+    "key": "status.verifying",
+    "en": "Verifying...",
+    "km": "កំពុងផ្ទៀងផ្ទាត់...",
+    "category": "status_feedback",
+    "avoid": "កំពុងឆែក"
+  },
+  {
+    "key": "forms.delivery_address",
+    "en": "Delivery Address",
+    "km": "អាសយដ្ឋានដឹកជញ្ជូន",
+    "category": "forms_inputs",
+    "avoid": "កន្លែងទទួល"
+  },
+  {
+    "key": "forms.street_building",
+    "en": "Street & Building Number",
+    "km": "ផ្លូវ និងផ្ទះលេខ",
+    "category": "forms_inputs",
+    "avoid": "ផ្លូវផ្ទះ"
+  },
+  {
+    "key": "forms.sangkat_commune",
+    "en": "Sangkat / Commune",
+    "km": "សង្កាត់/ឃុំ",
+    "category": "forms_inputs",
+    "avoid": "សង្កាត់ឃុំ"
+  },
+  {
+    "key": "forms.khan_district",
+    "en": "Khan / District",
+    "km": "ខណ្ឌ/ស្រុក",
+    "category": "forms_inputs",
+    "avoid": "ខណ្ឌស្រុក"
+  },
+  {
+    "key": "forms.province_capital",
+    "en": "Province / Capital",
+    "km": "រាជធានី/ខេត្ត",
+    "category": "forms_inputs",
+    "avoid": "ខេត្តក្រុង"
+  },
+  {
+    "key": "forms.postal_code",
+    "en": "Postal Code",
+    "km": "លេខកូដប្រៃសណីយ៍",
+    "category": "forms_inputs",
+    "avoid": "កូដប្រៃសណីយ៍"
+  },
+  {
+    "key": "forms.order_note",
+    "en": "Order Note / Instructions",
+    "km": "កំណត់ចំណាំការបញ្ជាទិញ",
+    "category": "forms_inputs",
+    "avoid": "ចំណាំ"
   }
 ]

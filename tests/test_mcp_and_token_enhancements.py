@@ -190,7 +190,13 @@ class TestMcpServers(unittest.TestCase):
             "method": "tools/call",
             "params": {"name": "khmer_insert_word_breaks", "arguments": {"text": "ចូលគណនី"}},
         })
-        input_data = f"{init_req}\n{tools_req}\n{call_req}\n{call_break}\n"
+        call_fix = json.dumps({
+            "jsonrpc": "2.0",
+            "id": 5,
+            "method": "tools/call",
+            "params": {"name": "khmer_fix_text", "arguments": {"text": "សរុបតម្លៃ 25.00៛"}},
+        })
+        input_data = f"{init_req}\n{tools_req}\n{call_req}\n{call_break}\n{call_fix}\n"
 
         proc = subprocess.run(
             [sys.executable, server_py],
@@ -201,7 +207,7 @@ class TestMcpServers(unittest.TestCase):
         )
 
         lines = [json.loads(line) for line in proc.stdout.strip().split("\n") if line.strip()]
-        self.assertEqual(len(lines), 4)
+        self.assertEqual(len(lines), 5)
 
         # Verify tools/list
         tools = lines[1]["result"]["tools"]
@@ -212,6 +218,7 @@ class TestMcpServers(unittest.TestCase):
         self.assertIn("khmer_spellout_words", tool_names)
         self.assertIn("khmer_lint_text", tool_names)
         self.assertIn("khmer_insert_word_breaks", tool_names)
+        self.assertIn("khmer_fix_text", tool_names)
 
         # Verify tools/call result
         call_res = json.loads(lines[2]["result"]["content"][0]["text"])
@@ -219,6 +226,9 @@ class TestMcpServers(unittest.TestCase):
 
         break_res = json.loads(lines[3]["result"]["content"][0]["text"])
         self.assertIn("\u200b", break_res["text_with_breaks"].lower())
+
+        fix_res = json.loads(lines[4]["result"]["content"][0]["text"])
+        self.assertIn("តម្លៃសរុប 25៛", fix_res["fixed"])
 
     def test_node_mcp_server(self):
         server_js = os.path.join(REPO_ROOT, "scripts", "khmer_mcp_server.js")
@@ -236,7 +246,13 @@ class TestMcpServers(unittest.TestCase):
             "method": "tools/call",
             "params": {"name": "khmer_insert_word_breaks", "arguments": {"text": "ចូលគណនី"}},
         })
-        input_data = f"{init_req}\n{call_req}\n{call_break}\n"
+        call_fix = json.dumps({
+            "jsonrpc": "2.0",
+            "id": 13,
+            "method": "tools/call",
+            "params": {"name": "khmer_fix_text", "arguments": {"text": "សរុបតម្លៃ 25.00៛"}},
+        })
+        input_data = f"{init_req}\n{call_req}\n{call_break}\n{call_fix}\n"
 
         proc = subprocess.run(
             ["node", server_js],
@@ -247,13 +263,16 @@ class TestMcpServers(unittest.TestCase):
         )
 
         lines = [json.loads(line) for line in proc.stdout.strip().split("\n") if line.strip()]
-        self.assertEqual(len(lines), 3)
+        self.assertEqual(len(lines), 4)
         phone_res = json.loads(lines[1]["result"]["content"][0]["text"])
         self.assertEqual(phone_res["normalized_e164"], "+85512889977")
         self.assertTrue(phone_res["is_valid_syntax"])
 
         break_res = json.loads(lines[2]["result"]["content"][0]["text"])
         self.assertIn("\u200b", break_res["text_with_breaks"].lower())
+
+        fix_res = json.loads(lines[3]["result"]["content"][0]["text"])
+        self.assertIn("តម្លៃសរុប 25៛", fix_res["fixed"])
 
 
 if __name__ == "__main__":

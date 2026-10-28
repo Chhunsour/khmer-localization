@@ -372,31 +372,88 @@ function formatKhmerDate(date, options = {}) {
 
 /**
  * Format elapsed seconds as natural Khmer relative microcopy.
+ * Supports past (-diffSeconds or positive elapsed seconds) and future timestamps.
  *
  * @param {number} diffSeconds
+ * @param {boolean} [useKhmerDigits=false]
  * @returns {string}
  */
-function formatKhmerRelativeTime(diffSeconds) {
-  if (diffSeconds < 60) {
+function formatKhmerRelativeTime(diffSeconds, useKhmerDigits = false, future = false) {
+  const digits = (n) => {
+    const s = String(n);
+    if (useKhmerDigits) {
+      const map = ["០", "១", "២", "៣", "៤", "៥", "៦", "៧", "៨", "៩"];
+      return s.replace(/[0-9]/g, (d) => map[Number(d)]);
+    }
+    return s;
+  };
+
+  const absSec = Math.abs(diffSeconds);
+
+  if (absSec < 10) {
+    return "អម្បាញ់មិញ";
+  }
+
+  if (future) {
+    if (absSec < 60) {
+      return `ក្នុងរយៈពេល ${digits(absSec)} វិនាទីទៀត`;
+    }
+    const mins = Math.floor(absSec / 60);
+    if (mins < 60) {
+      return `ក្នុងរយៈពេល ${digits(mins)} នាទីទៀត`;
+    }
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) {
+      return `ក្នុងរយៈពេល ${digits(hours)} ម៉ោងទៀត`;
+    }
+    const days = Math.floor(hours / 24);
+    if (days === 1) {
+      return "ថ្ងៃស្អែក";
+    }
+    if (days < 7) {
+      return `ក្នុងរយៈពេល ${digits(days)} ថ្ងៃទៀត`;
+    }
+    if (days < 30) {
+      const weeks = Math.floor(days / 7);
+      return `ក្នុងរយៈពេល ${digits(weeks)} សប្តាហ៍ទៀត`;
+    }
+    if (days < 365) {
+      const months = Math.floor(days / 30);
+      return `ក្នុងរយៈពេល ${digits(months)} ខែទៀត`;
+    }
+    const years = Math.floor(days / 365);
+    return `ក្នុងរយៈពេល ${digits(years)} ឆ្នាំទៀត`;
+  }
+
+  // Past timestamps
+  if (absSec < 60) {
     return "មុននេះបន្តិច";
   }
-  const mins = Math.floor(diffSeconds / 60);
+  const mins = Math.floor(absSec / 60);
   if (mins < 60) {
-    return `${mins} នាទីមុន`;
+    return `${digits(mins)} នាទីមុន`;
   }
   const hours = Math.floor(mins / 60);
   if (hours < 24) {
-    return `${hours} ម៉ោងមុន`;
+    return `${digits(hours)} ម៉ោងមុន`;
   }
   const days = Math.floor(hours / 24);
   if (days === 1) {
     return "ម្សិលមិញ";
   }
   if (days < 7) {
-    return `${days} ថ្ងៃមុន`;
+    return `${digits(days)} ថ្ងៃមុន`;
   }
-  const weeks = Math.floor(days / 7);
-  return `${weeks} សប្តាហ៍មុន`;
+  if (days < 30) {
+    const weeks = Math.floor(days / 7);
+    return `${digits(weeks)} សប្តាហ៍មុន`;
+  }
+  if (days < 365) {
+    const months = Math.floor(days / 30);
+    return `${digits(months)} ខែមុន`;
+  }
+  const years = Math.floor(days / 365);
+  return `${digits(years)} ឆ្នាំមុន`;
 }
 
 // --- 4. Unicode Grapheme Truncation & Word Breaking ---
@@ -1087,6 +1144,180 @@ function lintKhmerText(text) {
   };
 }
 
+/**
+ * Auto-correct common Khmer localization mistakes:
+ * 1. Inverted word order calques (e.g. 'សរុបតម្លៃ' -> 'តម្លៃសរុប')
+ * 2. Decimal KHR (.00៛ / .00 KHR -> whole riels)
+ * 3. Trailing or dangling Coeng marks (U+17D2)
+ * 4. Royal / monastic vocabulary in UI (e.g. 'យាងចូល' -> 'ចូលគណនី')
+ * 5. Broken dotted circle replacement glyphs (U+25CC)
+ *
+ * @param {string} text
+ * @returns {{ original: string, fixed: string, changes: string[] }}
+ */
+function fixKhmerText(text) {
+  if (!text) return { original: "", fixed: "", changes: [] };
+
+  let fixed = text;
+  const changes = [];
+
+  // 1. Dotted circle removal
+  if (fixed.includes("\u25CC")) {
+    fixed = fixed.replace(/\u25CC/g, "");
+    changes.push("Removed dotted circle glyph (U+25CC)");
+  }
+
+  // 2. Fix inverted word orders
+  const wordOrders = [
+    [/សរុបតម្លៃ/g, "តម្លៃសរុប", "Inverted word order: 'សរុបតម្លៃ' -> 'តម្លៃសរុប' (Total Price)"],
+    [/ថ្មីពាក្យសម្ងាត់/g, "ពាក្យសម្ងាត់ថ្មី", "Inverted word order: 'ថ្មីពាក្យសម្ងាត់' -> 'ពាក្យសម្ងាត់ថ្មី' (New Password)"],
+    [/ចាស់ពាក្យសម្ងាត់/g, "ពាក្យសម្ងាត់ចាស់", "Inverted word order: 'ចាស់ពាក្យសម្ងាត់' -> 'ពាក្យសម្ងាត់ចាស់' (Old Password)"],
+    [/សកម្មអ្នកប្រើប្រាស់/g, "អ្នកប្រើប្រាស់សកម្ម", "Inverted word order: 'សកម្មអ្នកប្រើប្រាស់' -> 'អ្នកប្រើប្រាស់សកម្ម' (Active Users)"],
+    [/ថ្មីសារ/g, "សារថ្មី", "Inverted word order: 'ថ្មីសារ' -> 'សារថ្មី' (New Message)"],
+    [/ចាស់សារ/g, "សារចាស់", "Inverted word order: 'ចាស់សារ' -> 'សារចាស់' (Old Message)"],
+  ];
+  for (const [pattern, repl, desc] of wordOrders) {
+    if (pattern.test(fixed)) {
+      fixed = fixed.replace(pattern, repl);
+      changes.push(desc);
+    }
+  }
+
+  // 3. Fix royal registers
+  const royalRegisters = [
+    [/យាងចូលក្នុង/g, "ចូលក្នុង", "Royal register: 'យាងចូលក្នុង' -> 'ចូលក្នុង'"],
+    [/យាងចូល/g, "ចូលគណនី", "Royal register: 'យាងចូល' -> 'ចូលគណនី' (Sign In)"],
+    [/សោយ/g, "ពិសារ", "Royal register: 'សោយ' -> 'ពិសារ' (Consume/Eat)"],
+    [/ព្រះរាជទ្រព្យ/g, "ទ្រព្យសម្បត្តិ", "Royal register: 'ព្រះរាជទ្រព្យ' -> 'ទ្រព្យសម្បត្តិ'"],
+    [/និមន្ត/g, "អញ្ជើញ", "Monastic register: 'និមន្ត' -> 'អញ្ជើញ' (Invite)"],
+  ];
+  for (const [pattern, repl, desc] of royalRegisters) {
+    if (pattern.test(fixed)) {
+      fixed = fixed.replace(pattern, repl);
+      changes.push(desc);
+    }
+  }
+
+  // 4. Remove decimal cents from KHR (.00 or .XX)
+  const decKhrPattern = /(\d+(?:,\d{3})*)\.\d{2}(\s*(?:៛|KHR|រៀល))/g;
+  if (decKhrPattern.test(fixed)) {
+    fixed = fixed.replace(decKhrPattern, "$1$2");
+    changes.push("Removed fractional decimal cents from Khmer Riel (KHR)");
+  }
+
+  // 5. Fix dangling or trailing Coeng (U+17D2)
+  const trailingCoeng = /\u17D2(?=[\s\.,;!?។៖\)\}\]\"\']|$)/g;
+  if (trailingCoeng.test(fixed)) {
+    fixed = fixed.replace(trailingCoeng, "");
+    changes.push("Removed dangling/trailing Coeng subscript marker (U+17D2)");
+  }
+
+  return {
+    original: text,
+    fixed,
+    changes,
+  };
+}
+
+/**
+ * Format a 4-tier Cambodian address into a standard comma-separated address string.
+ *
+ * @param {object} components
+ * @param {string} [lang="km"]
+ * @returns {string}
+ */
+function formatCambodianAddress(components = {}, lang = "km") {
+  const order = ["street", "village", "sangkat", "commune", "khan", "district", "province", "capital", "postal_code"];
+  const parts = [];
+
+  for (const k of order) {
+    const val = components[k];
+    if (val && typeof val === "string" && val.trim()) {
+      const cleaned = val.trim().replace(/^,|,$/g, "");
+      if (cleaned && !parts.includes(cleaned)) {
+        parts.push(cleaned);
+      }
+    }
+  }
+
+  for (const [k, v] of Object.entries(components)) {
+    if (!order.includes(k) && v && typeof v === "string" && v.trim()) {
+      const cleaned = v.trim().replace(/^,|,$/g, "");
+      if (cleaned && !parts.includes(cleaned)) {
+        parts.push(cleaned);
+      }
+    }
+  }
+
+  return parts.join(", ");
+}
+
+/**
+ * Parse a Cambodian address string into standard administrative components.
+ *
+ * @param {string} text
+ * @returns {object}
+ */
+function parseCambodianAddress(text = "") {
+  if (!text) {
+    return { street: "", village: "", sangkat: "", khan: "", province: "", postal_code: "" };
+  }
+
+  let cleaned = text.trim();
+  const result = {
+    street: "",
+    village: "",
+    sangkat: "",
+    khan: "",
+    province: "",
+    postal_code: "",
+  };
+
+  const postMatch = cleaned.match(/(?:,\s*|\s+)(\b\d{5,6}\b)\s*$/);
+  if (postMatch) {
+    result.postal_code = postMatch[1];
+    cleaned = cleaned.slice(0, postMatch.index).trim().replace(/,$/, "");
+  }
+
+  const parts = cleaned.split(",").map((p) => p.trim()).filter(Boolean);
+  const remainingStreet = [];
+
+  for (const p of parts) {
+    if (["រាជធានី", "ខេត្ត", "Phnom Penh", "Province", "Capital"].some((prov) => p.includes(prov))) {
+      result.province = p;
+    } else if (["ខណ្ឌ", "ស្រុក", "ក្រុង", "Khan", "District", "Krong"].some((d) => p.includes(d))) {
+      result.khan = p;
+    } else if (["សង្កាត់", "ឃុំ", "Sangkat", "Commune"].some((s) => p.includes(s))) {
+      result.sangkat = p;
+    } else if (["ភូមិ", "Village"].some((v) => p.includes(v))) {
+      result.village = p;
+    } else {
+      remainingStreet.push(p);
+    }
+  }
+
+  result.street = remainingStreet.join(", ");
+  return result;
+}
+
+/**
+ * Format a count with a noun and optional Khmer classifier (សង្ខយាសព្ទ).
+ * Khmer word order: [Noun] [Count] [Classifier] (e.g. 'អ្នកប្រើប្រាស់ 3 នាក់').
+ *
+ * @param {string} noun
+ * @param {number} count
+ * @param {string} [classifier]
+ * @param {boolean} [useKhmerDigits=false]
+ * @returns {string}
+ */
+function formatKhmerCount(noun, count, classifier, useKhmerDigits = false) {
+  const cntStr = useKhmerDigits ? toKhmerDigits(count) : String(count);
+  if (classifier && typeof classifier === "string" && classifier.trim()) {
+    return `${noun.trim()} ${cntStr} ${classifier.trim()}`;
+  }
+  return `${noun.trim()} ${cntStr}`;
+}
+
 // --- Module Exports & CLI Handling ---
 
 const khmerUtils = {
@@ -1098,6 +1329,9 @@ const khmerUtils = {
   toKhmerDigits,
   formatKhmerDate,
   formatKhmerRelativeTime,
+  formatCambodianAddress,
+  parseCambodianAddress,
+  formatKhmerCount,
   safeTruncateKhmer,
   integerToKhmerWords,
   formatCurrencyKhmerWords,
@@ -1111,6 +1345,7 @@ const khmerUtils = {
   getKhmerCharacterStats,
   lookupUiTerm,
   lintKhmerText,
+  fixKhmerText,
   segmentKhmerSyllables,
   insertKhmerWordBreaks,
 };
@@ -1135,13 +1370,16 @@ Commands:
   currency <amount> [curr]     Format KHR (whole-riel) or USD currency
   words <amount> [curr]        Spell out numbers/amounts in formal Khmer words
   date [iso-date] [--be]       Format date in Khmer solar months & Buddhist Era
+  relative-time <seconds>      Format seconds as natural Khmer relative time
   khqr-crc <payload>           Calculate EMVCo CRC16 checksum for Bakong KHQR
   khqr-parse <payload>         Parse EMVCo TLV tags from a raw KHQR string
   sort <word1> <word2>...      Sort Khmer words in Chuon Nath dictionary order
   stats <text>                 Analyze Khmer character counts and script metrics
   lookup [term]                Search standard UI terms in data/ui_terms.json
   lint <text>                  Lint Khmer string for corruption, dotted circles, etc.
+  fix <text>                   Auto-correct Khmer word order, decimal KHR, and register
   break <text>                 Inject Zero-Width Space (ZWSP) for word wrapping
+  address <text>               Parse or format a 4-tier Cambodian address
   install-rules [--target T]   Install agent rules (cursor, claude, windsurf, copilot)
   --help, -h                   Show this help message
 `);
@@ -1186,6 +1424,12 @@ Commands:
       console.log(formatKhmerDate(d, { includeBE }));
       break;
     }
+    case "relative-time": {
+      const sec = parseInt(args[1] || "0", 10);
+      const useKhmerDigits = args.includes("--khmer-digits");
+      console.log(formatKhmerRelativeTime(sec, useKhmerDigits));
+      break;
+    }
     case "khqr-crc": {
       const payload = args[1] || "";
       const crc = calculateKhqrCrc16(payload);
@@ -1224,9 +1468,21 @@ Commands:
       console.log(JSON.stringify(res, null, 2));
       process.exit(res.is_clean ? 0 : 1);
     }
+    case "fix": {
+      const str = args[1] || "";
+      const res = fixKhmerText(str);
+      console.log(JSON.stringify(res, null, 2));
+      break;
+    }
     case "break": {
       const str = args[1] || "";
       console.log(insertKhmerWordBreaks(str));
+      break;
+    }
+    case "address": {
+      const str = args[1] || "";
+      const parsed = parseCambodianAddress(str);
+      console.log(JSON.stringify(parsed, null, 2));
       break;
     }
     case "install-rules": {

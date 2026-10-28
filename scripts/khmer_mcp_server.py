@@ -29,14 +29,18 @@ if REPO_ROOT not in sys.path:
 
 from scripts.khmer_utils import (
     calculate_khqr_crc16,
+    fix_khmer_text,
+    format_cambodian_address,
     format_currency_khmer_words,
     format_khr,
+    format_khmer_relative_time,
     format_usd,
     insert_khmer_word_breaks,
     integer_to_khmer_words,
     lint_khmer_text,
     lookup_ui_term,
     normalize_cambodian_phone,
+    parse_cambodian_address,
     sort_khmer_words,
     verify_khqr,
 )
@@ -148,6 +152,44 @@ TOOLS = [
             "required": ["text"],
         },
     },
+    {
+        "name": "khmer_fix_text",
+        "description": "Auto-correct common Khmer localization defects: inverted word order (e.g. 'សរុបតម្លៃ' -> 'តម្លៃសរុប'), decimal KHR (.00៛ -> whole riels), dangling Coeng (U+17D2), dotted circles (U+25CC), and royal registers.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "text": {"type": "string", "description": "Khmer string to auto-fix"},
+            },
+            "required": ["text"],
+        },
+    },
+    {
+        "name": "khmer_format_relative_time",
+        "description": "Format elapsed seconds or time difference as natural Khmer relative microcopy (e.g. 'អម្បាញ់មិញ', '5 នាទីមុន', '2 ម៉ោងមុន', 'ម្សិលមិញ', 'ថ្ងៃស្អែក', 'ក្នុងរយៈពេល 10 នាទីទៀត').",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "seconds": {"type": "integer", "description": "Difference in seconds (negative for past, positive for future)"},
+                "use_khmer_digits": {"type": "boolean", "description": "Whether to use Khmer numerals (០-៩)"},
+            },
+            "required": ["seconds"],
+        },
+    },
+    {
+        "name": "khmer_format_address",
+        "description": "Format a 4-tier Cambodian address (Street, Village, Sangkat, Khan, Province, Postal Code) into standard delivery format.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "street": {"type": "string", "description": "Building and street address"},
+                "sangkat": {"type": "string", "description": "Sangkat / commune"},
+                "khan": {"type": "string", "description": "Khan / district"},
+                "province": {"type": "string", "description": "Capital / province"},
+                "postal_code": {"type": "string", "description": "Postal code (5 or 6 digits)"},
+                "lang": {"type": "string", "enum": ["km", "en"], "description": "Language code (default: km)"},
+            },
+        },
+    },
 ]
 
 
@@ -194,6 +236,21 @@ def handle_tool_call(name: str, arguments: Dict[str, Any]) -> Any:
         text = arguments.get("text", "")
         res = insert_khmer_word_breaks(text)
         return {"text": res, "text_with_breaks": res}
+
+    if name == "khmer_fix_text":
+        text = arguments.get("text", "")
+        return fix_khmer_text(text)
+
+    if name == "khmer_format_relative_time":
+        seconds = arguments.get("seconds", 0)
+        use_khmer_digits = arguments.get("use_khmer_digits", False)
+        formatted = format_khmer_relative_time(seconds, use_khmer_digits=use_khmer_digits)
+        return {"relative_time": formatted, "seconds": seconds}
+
+    if name == "khmer_format_address":
+        lang = arguments.get("lang", "km")
+        formatted = format_cambodian_address(arguments, lang=lang)
+        return {"address": formatted, "lang": lang}
 
     raise ValueError(f"Unknown tool: {name}")
 

@@ -121,6 +121,44 @@ const TOOLS = [
       required: ["text"],
     },
   },
+  {
+    name: "khmer_fix_text",
+    description: "Auto-correct common Khmer localization defects: inverted word order (e.g. 'សរុបតម្លៃ' -> 'តម្លៃសរុប'), decimal KHR (.00៛ -> whole riels), dangling Coeng (U+17D2), dotted circles (U+25CC), and royal registers.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        text: { type: "string", description: "Khmer string to auto-fix" },
+      },
+      required: ["text"],
+    },
+  },
+  {
+    name: "khmer_format_relative_time",
+    description: "Format elapsed seconds or time difference as natural Khmer relative microcopy (e.g. 'អម្បាញ់មិញ', '5 នាទីមុន', '2 ម៉ោងមុន', 'ម្សិលមិញ', 'ថ្ងៃស្អែក', 'ក្នុងរយៈពេល 10 នាទីទៀត').",
+    inputSchema: {
+      type: "object",
+      properties: {
+        seconds: { type: "integer", description: "Difference in seconds (negative for past, positive for future)" },
+        use_khmer_digits: { type: "boolean", description: "Whether to use Khmer numerals (០-៩)" },
+      },
+      required: ["seconds"],
+    },
+  },
+  {
+    name: "khmer_format_address",
+    description: "Format a 4-tier Cambodian address (Street, Village, Sangkat, Khan, Province, Postal Code) into standard delivery format.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        street: { type: "string", description: "Building and street address" },
+        sangkat: { type: "string", description: "Sangkat / commune" },
+        khan: { type: "string", description: "Khan / district" },
+        province: { type: "string", description: "Capital / province" },
+        postal_code: { type: "string", description: "Postal code (5 or 6 digits)" },
+        lang: { type: "string", enum: ["km", "en"], description: "Language code (default: km)" },
+      },
+    },
+  },
 ];
 
 function handleToolCall(name, args = {}) {
@@ -170,6 +208,21 @@ function handleToolCall(name, args = {}) {
       const text = args.text || "";
       const res = utils.insertKhmerWordBreaks(text);
       return { text: res, text_with_breaks: res };
+    }
+    case "khmer_fix_text": {
+      const text = args.text || "";
+      return utils.fixKhmerText(text);
+    }
+    case "khmer_format_relative_time": {
+      const seconds = Number(args.seconds || 0);
+      const useKhmerDigits = Boolean(args.use_khmer_digits);
+      const formatted = utils.formatKhmerRelativeTime(seconds, useKhmerDigits);
+      return { relative_time: formatted, seconds };
+    }
+    case "khmer_format_address": {
+      const lang = args.lang || "km";
+      const formatted = utils.formatCambodianAddress(args, lang);
+      return { address: formatted, lang };
     }
     default:
       throw new Error(`Unknown tool: ${name}`);

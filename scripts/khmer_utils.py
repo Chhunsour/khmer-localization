@@ -298,22 +298,71 @@ def format_khmer_date(
     return formatted
 
 
-def format_khmer_relative_time(diff_seconds: int) -> str:
-    """Format elapsed seconds as natural Khmer relative microcopy."""
-    if diff_seconds < 60:
+def format_khmer_relative_time(
+    diff_seconds: int,
+    use_khmer_digits: bool = False,
+    future: bool = False,
+) -> str:
+    """
+    Format time difference in seconds as natural modern Khmer relative microcopy.
+    Supports past (elapsed seconds or negative) and future timestamps (future=True).
+    """
+    def _digits(n: int) -> str:
+        s = str(n)
+        if use_khmer_digits:
+            return s.translate(str.maketrans("0123456789", "០១២៣៤៥៦៧៨៩"))
+        return s
+
+    abs_sec = abs(diff_seconds)
+
+    if abs_sec < 10:
+        return "អម្បាញ់មិញ"
+
+    if future:
+        if abs_sec < 60:
+            return f"ក្នុងរយៈពេល {_digits(abs_sec)} វិនាទីទៀត"
+        mins = abs_sec // 60
+        if mins < 60:
+            return f"ក្នុងរយៈពេល {_digits(mins)} នាទីទៀត"
+        hours = mins // 60
+        if hours < 24:
+            return f"ក្នុងរយៈពេល {_digits(hours)} ម៉ោងទៀត"
+        days = hours // 24
+        if days == 1:
+            return "ថ្ងៃស្អែក"
+        if days < 7:
+            return f"ក្នុងរយៈពេល {_digits(days)} ថ្ងៃទៀត"
+        if days < 30:
+            weeks = days // 7
+            return f"ក្នុងរយៈពេល {_digits(weeks)} សប្តាហ៍ទៀត"
+        if days < 365:
+            months = days // 30
+            return f"ក្នុងរយៈពេល {_digits(months)} ខែទៀត"
+        years = days // 365
+        return f"ក្នុងរយៈពេល {_digits(years)} ឆ្នាំទៀត"
+
+    # Past timestamps
+    if abs_sec < 60:
         return "មុននេះបន្តិច"
-    mins = diff_seconds // 60
+    mins = abs_sec // 60
     if mins < 60:
-        return f"{mins} នាទីមុន"
+        return f"{_digits(mins)} នាទីមុន"
     hours = mins // 60
     if hours < 24:
-        return f"{hours} ម៉ោងមុន"
+        return f"{_digits(hours)} ម៉ោងមុន"
     days = hours // 24
     if days == 1:
         return "ម្សិលមិញ"
     if days < 7:
-        return f"{days} ថ្ងៃមុន"
-    return f"{days // 7} សប្តាហ៍មុន"
+        return f"{_digits(days)} ថ្ងៃមុន"
+    if days < 30:
+        weeks = days // 7
+        return f"{_digits(weeks)} សប្តាហ៍មុន"
+    if days < 365:
+        months = days // 30
+        return f"{_digits(months)} ខែមុន"
+    years = days // 365
+    return f"{_digits(years)} ឆ្នាំមុន"
 
 
 # --- 4. Unicode Grapheme Truncation & Word Breaking ---
@@ -981,6 +1030,176 @@ def lint_khmer_text(text: str) -> Dict[str, Any]:
     }
 
 
+# --- 10. Translation & Text Auto-Fixer Engine ---
+
+_FIX_WORD_ORDERS: List[Tuple[str, str, str]] = [
+    (r"សរុបតម្លៃ", "តម្លៃសរុប", "Inverted word order: 'សរុបតម្លៃ' -> 'តម្លៃសរុប' (Total Price)"),
+    (r"ថ្មីពាក្យសម្ងាត់", "ពាក្យសម្ងាត់ថ្មី", "Inverted word order: 'ថ្មីពាក្យសម្ងាត់' -> 'ពាក្យសម្ងាត់ថ្មី' (New Password)"),
+    (r"ចាស់ពាក្យសម្ងាត់", "ពាក្យសម្ងាត់ចាស់", "Inverted word order: 'ចាស់ពាក្យសម្ងាត់' -> 'ពាក្យសម្ងាត់ចាស់' (Old Password)"),
+    (r"សកម្មអ្នកប្រើប្រាស់", "អ្នកប្រើប្រាស់សកម្ម", "Inverted word order: 'សកម្មអ្នកប្រើប្រាស់' -> 'អ្នកប្រើប្រាស់សកម្ម' (Active Users)"),
+    (r"ថ្មីសារ", "សារថ្មី", "Inverted word order: 'ថ្មីសារ' -> 'សារថ្មី' (New Message)"),
+    (r"ចាស់សារ", "សារចាស់", "Inverted word order: 'ចាស់សារ' -> 'សារចាស់' (Old Message)"),
+]
+
+_FIX_ROYAL_REGISTER: List[Tuple[str, str, str]] = [
+    (r"យាងចូលក្នុង", "ចូលក្នុង", "Royal register: 'យាងចូលក្នុង' -> 'ចូលក្នុង'"),
+    (r"យាងចូល", "ចូលគណនី", "Royal register: 'យាងចូល' -> 'ចូលគណនី' (Sign In)"),
+    (r"សោយ", "ពិសារ", "Royal register: 'សោយ' -> 'ពិសារ' (Consume/Eat)"),
+    (r"ព្រះរាជទ្រព្យ", "ទ្រព្យសម្បត្តិ", "Royal register: 'ព្រះរាជទ្រព្យ' -> 'ទ្រព្យសម្បត្តិ'"),
+    (r"និមន្ត", "អញ្ជើញ", "Monastic register: 'និមន្ត' -> 'អញ្ជើញ' (Invite)"),
+]
+
+
+def fix_khmer_text(text: str) -> Dict[str, Any]:
+    """
+    Auto-correct common Khmer localization mistakes:
+    1. Inverted word order calques (e.g. 'សរុបតម្លៃ' -> 'តម្លៃសរុប')
+    2. Decimal KHR (.00៛ / .00 KHR -> whole riels)
+    3. Trailing or dangling Coeng marks (U+17D2)
+    4. Royal / monastic vocabulary in UI (e.g. 'យាងចូល' -> 'ចូលគណនី')
+    5. Broken dotted circle replacement glyphs (U+25CC)
+    """
+    if not text:
+        return {"original": "", "fixed": "", "changes": []}
+
+    fixed = text
+    changes: List[str] = []
+
+    # 1. Clean dotted circle (U+25CC)
+    if "\u25CC" in fixed:
+        fixed = fixed.replace("\u25CC", "")
+        changes.append("Removed dotted circle glyph (U+25CC)")
+
+    # 2. Fix inverted word orders
+    for pattern, replacement, desc in _FIX_WORD_ORDERS:
+        if re.search(pattern, fixed):
+            fixed = re.sub(pattern, replacement, fixed)
+            changes.append(desc)
+
+    # 3. Fix royal registers
+    for pattern, replacement, desc in _FIX_ROYAL_REGISTER:
+        if re.search(pattern, fixed):
+            fixed = re.sub(pattern, replacement, fixed)
+            changes.append(desc)
+
+    # 4. Remove decimal cents from KHR (.00 or .XX)
+    # Matches: 25,000.00៛ or 25,000.00 KHR or 25,000.00 ៛
+    def _repl_khr(match: re.Match) -> str:
+        amount_part = match.group(1)
+        suffix = match.group(2)
+        return f"{amount_part}{suffix}"
+
+    dec_khr_pattern = re.compile(r"(\d+(?:,\d{3})*)\.\d{2}(\s*(?:៛|KHR|រៀល))")
+    if dec_khr_pattern.search(fixed):
+        fixed = dec_khr_pattern.sub(_repl_khr, fixed)
+        changes.append("Removed fractional decimal cents from Khmer Riel (KHR)")
+
+    # 5. Fix dangling or trailing Coeng (U+17D2)
+    # Coeng before space, punctuation, or at end of string
+    trailing_coeng_pattern = re.compile(r"\u17D2(?=[\s\.,;!?។៖\)\}\]\"\']|\Z)")
+    if trailing_coeng_pattern.search(fixed):
+        fixed = trailing_coeng_pattern.sub("", fixed)
+        changes.append("Removed dangling/trailing Coeng subscript marker (U+17D2)")
+
+    return {
+        "original": text,
+        "fixed": fixed,
+        "changes": changes,
+    }
+
+
+# --- 11. 4-Tier Cambodian Address Formatter & Parser ---
+
+def format_cambodian_address(components: Dict[str, Any], lang: str = "km") -> str:
+    """
+    Format a 4-tier Cambodian address into a standard comma-separated address string.
+    Keys expected: 'street', 'village', 'sangkat' (or 'commune'), 'khan' (or 'district'), 'province' (or 'capital'), 'postal_code'.
+    """
+    order = ["street", "village", "sangkat", "commune", "khan", "district", "province", "capital", "postal_code"]
+    parts: List[str] = []
+
+    for k in order:
+        val = components.get(k)
+        if val and isinstance(val, str) and val.strip():
+            cleaned = val.strip().strip(",")
+            if cleaned and cleaned not in parts:
+                parts.append(cleaned)
+
+    # Also catch any extra custom keys
+    for k, v in components.items():
+        if k not in order and isinstance(v, str) and v.strip():
+            cleaned = v.strip().strip(",")
+            if cleaned and cleaned not in parts:
+                parts.append(cleaned)
+
+    return ", ".join(parts)
+
+
+def parse_cambodian_address(text: str) -> Dict[str, str]:
+    """
+    Parse a Cambodian address string into standard administrative components:
+    street, village, sangkat, khan, province, postal_code.
+    """
+    if not text:
+        return {"street": "", "village": "", "sangkat": "", "khan": "", "province": "", "postal_code": ""}
+
+    cleaned = text.strip()
+    result = {
+        "street": "",
+        "village": "",
+        "sangkat": "",
+        "khan": "",
+        "province": "",
+        "postal_code": "",
+    }
+
+    # Extract 5 or 6 digit postal code if at the end
+    post_match = re.search(r"(?:,\s*|\s+)(\b\d{5,6}\b)\s*$", cleaned)
+    if post_match:
+        result["postal_code"] = post_match.group(1)
+        cleaned = cleaned[:post_match.start()].strip().rstrip(",")
+
+    parts = [p.strip() for p in cleaned.split(",") if p.strip()]
+    remaining_street_parts: List[str] = []
+
+    for p in parts:
+        # Check province / capital
+        if any(prov in p for prov in ["រាជធានី", "ខេត្ត", "Phnom Penh", "Province", "Capital"]):
+            result["province"] = p
+        # Check Khan / District / Krong
+        elif any(d in p for d in ["ខណ្ឌ", "ស្រុក", "ក្រុង", "Khan", "District", "Krong"]):
+            result["khan"] = p
+        # Check Sangkat / Commune
+        elif any(s in p for s in ["សង្កាត់", "ឃុំ", "Sangkat", "Commune"]):
+            result["sangkat"] = p
+        # Check Village
+        elif any(v in p for v in ["ភូមិ", "Village"]):
+            result["village"] = p
+        else:
+            remaining_street_parts.append(p)
+
+    result["street"] = ", ".join(remaining_street_parts)
+    return result
+
+
+# --- 12. Khmer Noun Classifier & Counting Word Engine ---
+
+def format_khmer_count(
+    noun: str,
+    count: int,
+    classifier: Optional[str] = None,
+    use_khmer_digits: bool = False,
+) -> str:
+    """
+    Format a count with a noun and optional Khmer classifier (សង្ខយាសព្ទ).
+    Khmer word order: [Noun] [Count] [Classifier] (e.g. 'អ្នកប្រើប្រាស់ 3 នាក់').
+    """
+    cnt_str = to_khmer_digits(count) if use_khmer_digits else str(count)
+    if classifier and classifier.strip():
+        return f"{noun.strip()} {cnt_str} {classifier.strip()}"
+    return f"{noun.strip()} {cnt_str}"
+
+
 # --- CLI Interface ---
 
 def main() -> int:
@@ -1010,6 +1229,11 @@ def main() -> int:
     date_p.add_argument("iso_date", help="ISO date string (YYYY-MM-DD)")
     date_p.add_argument("--be", action="store_true", help="Include Buddhist Era")
 
+    # relative-time command
+    rel_p = subparsers.add_parser("relative-time", help="Format seconds as natural Khmer relative time (e.g. '5 នាទីមុន')")
+    rel_p.add_argument("seconds", type=int, help="Elapsed or difference in seconds (e.g. -300 for 5 min ago, 600 for in 10 min)")
+    rel_p.add_argument("--khmer-digits", action="store_true", help="Use Khmer numerals (០-៩)")
+
     # khqr-crc command
     crc_p = subparsers.add_parser("khqr-crc", help="Compute CRC16 for a KHQR payload")
     crc_p.add_argument("payload", help="Payload ending with '6304'")
@@ -1037,6 +1261,22 @@ def main() -> int:
     # break command
     break_p = subparsers.add_parser("break", help="Inject Zero-Width Space (ZWSP) at syllable boundaries for word wrapping")
     break_p.add_argument("text", help="Khmer string to break")
+
+    # address command
+    addr_p = subparsers.add_parser("address", help="Format or parse a 4-tier Cambodian address")
+    addr_p.add_argument("text", nargs="?", default="", help="Address string to parse")
+    addr_p.add_argument("--street", help="Street & building")
+    addr_p.add_argument("--sangkat", help="Sangkat / commune")
+    addr_p.add_argument("--khan", help="Khan / district")
+    addr_p.add_argument("--province", help="Capital / province")
+    addr_p.add_argument("--postal-code", help="Postal code")
+    addr_p.add_argument("--lang", default="km", choices=["km", "en"], help="Output language (km or en)")
+
+    # fix command
+    fix_p = subparsers.add_parser("fix", help="Auto-correct common Khmer localization and translation defects")
+    fix_p.add_argument("text", nargs="?", default="", help="Text to auto-fix")
+    fix_p.add_argument("--file", help="Path to JSON translation file to batch-fix")
+    fix_p.add_argument("--write", action="store_true", help="Write changes directly back to file")
 
     # install-rules command
     rules_p = subparsers.add_parser("install-rules", help="Install token-efficient Khmer localization guardrails into AI agent configs")
@@ -1070,6 +1310,10 @@ def main() -> int:
     if args.command == "date":
         d = datetime.date.fromisoformat(args.iso_date)
         print(format_khmer_date(d, include_be=args.be))
+        return 0
+
+    if args.command == "relative-time":
+        print(format_khmer_relative_time(args.seconds, use_khmer_digits=args.khmer_digits))
         return 0
 
     if args.command == "khqr-crc":
@@ -1106,6 +1350,47 @@ def main() -> int:
 
     if args.command == "break":
         print(insert_khmer_word_breaks(args.text))
+        return 0
+
+    if args.command == "address":
+        if args.street or args.sangkat or args.khan or args.province:
+            comps = {
+                "street": args.street or "",
+                "sangkat": args.sangkat or "",
+                "khan": args.khan or "",
+                "province": args.province or "",
+                "postal_code": args.postal_code or "",
+            }
+            print(format_cambodian_address(comps, lang=args.lang))
+            return 0
+        parsed = parse_cambodian_address(args.text)
+        print(json.dumps(parsed, indent=2, ensure_ascii=False))
+        return 0
+
+    if args.command == "fix":
+        if args.file:
+            with open(args.file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            total_fixed = 0
+            if isinstance(data, dict):
+                fixed_data = {}
+                for k, v in data.items():
+                    if isinstance(v, str):
+                        res = fix_khmer_text(v)
+                        fixed_data[k] = res["fixed"]
+                        if res["changes"]:
+                            total_fixed += 1
+                    else:
+                        fixed_data[k] = v
+                if args.write:
+                    with open(args.file, "w", encoding="utf-8") as f:
+                        json.dump(fixed_data, f, indent=2, ensure_ascii=False)
+                    print(f"Fixed {total_fixed} strings in {args.file}")
+                else:
+                    print(json.dumps(fixed_data, indent=2, ensure_ascii=False))
+            return 0
+        res = fix_khmer_text(args.text)
+        print(json.dumps(res, indent=2, ensure_ascii=False))
         return 0
 
     if args.command == "install-rules":
