@@ -1,0 +1,93 @@
+[
+  {
+    "code": "1411",
+    "name_en": "Krong Prey Veng",
+    "name_km": "ក្រុងព្រៃវែង",
+    "type": "Municipality",
+    "sangkats": 3
+  },
+  {
+    "code": "1401",
+    "name_en": "Ba Phnum",
+    "name_km": "ស្រុកបាភ្នំ",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "1402",
+    "name_en": "Kamchay Mear",
+    "name_km": "ស្រុកកំចាយមារ",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1403",
+    "name_en": "Kampong Trabaek",
+    "name_km": "ស្រុកកំពង់ត្របែក",
+    "type": "District",
+    "communes": 13
+  },
+  {
+    "code": "1404",
+    "name_en": "Kanhchriech",
+    "name_km": "ស្រុកកញ្ច្រៀច",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1405",
+    "name_en": "Me Sang",
+    "name_km": "ស្រុកមេសាង",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1406",
+    "name_en": "Peam Chor",
+    "name_km": "ស្រុកពាមជរ",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "1407",
+    "name_en": "Peam Ro",
+    "name_km": "ស្រុកពាមរអ៍",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1408",
+    "name_en": "Pea Reang",
+    "name_km": "ស្រុកពារាំង",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "1409",
+    "name_en": "Preah Sdach",
+    "name_km": "ស្រុកព្រះស្តេច",
+    "type": "District",
+    "communes": 11
+  },
+  {
+    "code": "1410",
+    "name_en": "Prey Veng",
+    "name_km": "ស្រុកព្រៃវែង",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "1412",
+    "name_en": "Pur Rieng",
+    "name_km": "ស្រុកពោធិ៍រៀង",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "1413",
+    "name_en": "Sithor Kandal",
+    "name_km": "ស្រុកស៊ីធរកណ្តាល",
+    "type": "District",
+    "communes": 11
+  }
+]

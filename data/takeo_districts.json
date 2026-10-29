@@ -1,0 +1,72 @@
+[
+  {
+    "code": "2108",
+    "name_en": "Krong Doun Kaev",
+    "name_km": "ក្រុងដូនកែវ",
+    "type": "Municipality",
+    "sangkats": 3
+  },
+  {
+    "code": "2101",
+    "name_en": "Angkor Borei",
+    "name_km": "ស្រុកអង្គរបុរី",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "2102",
+    "name_en": "Bati",
+    "name_km": "ស្រុកបាទី",
+    "type": "District",
+    "communes": 15
+  },
+  {
+    "code": "2103",
+    "name_en": "Borei Cholsar",
+    "name_km": "ស្រុកបូរីជលសារ",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "2104",
+    "name_en": "Kiri Vong",
+    "name_km": "ស្រុកគិរីវង់",
+    "type": "District",
+    "communes": 12
+  },
+  {
+    "code": "2105",
+    "name_en": "Koh Andaet",
+    "name_km": "ស្រុកកោះអណ្តែត",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "2106",
+    "name_en": "Prey Kabbas",
+    "name_km": "ស្រុកព្រៃកប្បាស",
+    "type": "District",
+    "communes": 13
+  },
+  {
+    "code": "2107",
+    "name_en": "Samraong",
+    "name_km": "ស្រុកសំរោង",
+    "type": "District",
+    "communes": 11
+  },
+  {
+    "code": "2109",
+    "name_en": "Tram Kak",
+    "name_km": "ស្រុកត្រាំកក់",
+    "type": "District",
+    "communes": 15
+  },
+  {
+    "code": "2110",
+    "name_en": "Treang",
+    "name_km": "ស្រុកទ្រាំង",
+    "type": "District",
+    "communes": 14
+  }
+]
