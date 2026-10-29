@@ -370,6 +370,38 @@ export function formatKhmerRelativeTime(diffSeconds: number): string {
 | **Payment Status: Pending** | ស្ថានភាព៖ កំពុងដំណើរការ | In-flight authorization badge |
 | **Payment Status: Failed** | ស្ថានភាព៖ មិនជោគជ័យ | Terminal decline badge |
 
+---
+
+## 6. National Identification & Vehicle Registration Standards
+
+### 6.1 Cambodian National ID Cards (អត្តសញ្ញាណប័ណ្ណសញ្ជាតិខ្មែរ)
+- **Authority:** General Department of Identification (GDI), Ministry of Interior ([https://gdi.gov.kh](https://gdi.gov.kh)).
+- **Format Architecture:**
+  - **9-Digit Format (Legacy):** Issued prior to nationwide smart biometric rollouts. Still legal tender throughout Cambodia.
+  - **10-Digit Format (Smart Biometric):** Standard chip card format featuring electronic fingerprint data.
+  - **Province Encoding:** The first 2 digits correspond to the birth/registration provincial code (e.g. `01` Banteay Meanchey, `12` Phnom Penh).
+  - **Script Support:** User inputs frequently contain Khmer digits (`០-៩`), ASCII digits (`0-9`), hyphens, or whitespace. All e-KYC forms must normalize inputs before database storage.
+
+```python
+from scripts.khmer_utils import validate_cambodian_id
+
+# Normalizes both Khmer and Arabic digits seamlessly
+res = validate_cambodian_id("១២-០១២៣-៤៥៦៧")
+# returns: {'is_valid': True, 'id_type': 'smart_id', 'normalized': '1201234567', 'province_code': '12'}
+```
+
+### 6.2 Cambodian Vehicle License Plates (ក្រសួងសាធារណការ និងដឹកជញ្ជូន - MPWT)
+- **Authority:** Ministry of Public Works and Transport ([https://mpwt.gov.kh](https://mpwt.gov.kh)).
+- **Numbering Architecture:**
+  - **Automobiles / Passenger Cars (Class 2):** `[City/Province] 2[A-Z]{1-3}-[0-9]{4}` (e.g., `ភ្នំពេញ 2BC-1234` or `Phnom Penh 2BC-1234`).
+  - **Motorcycles (Class 1):** `[City/Province] 1[A-Z]{1-3}-[0-9]{4}` (e.g., `1FD-5678`).
+  - **Commercial Freight (Class 3 & 4):** `[City/Province] 3A-1234` or `4A-1234`.
+  - **Official State (រដ្ឋ):** `រដ្ឋ [Dept] [Series]-[Number]`.
+  - **National Police (ន.ប):** `ន.ប [Series]-[Number]`.
+  - **Royal Cambodian Armed Forces (ខ.ម):** `ខ.ម [Unit] [Series]-[Number]`.
+
+---
+
 > [!TIP]
 > **Deep-Dive Specialized References:**
 > - For full EMVCo TLV tag mappings, payload structure, and CRC16 checksum algorithms, see [Khmer Fintech & Bakong KHQR](./khmer-fintech-and-khqr.md).
