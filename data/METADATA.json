@@ -1,19 +1,19 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Cambodian Data Catalogs Provenance and Maintenance Registry",
-  "description": "Authoritative metadata, regulatory provenance, update procedures, and validation schemas for all 21 offline datasets.",
-  "last_audit_date": "2026-10-26",
+  "description": "Authoritative metadata, regulatory provenance, update procedures, and validation schemas for all 25 offline datasets.",
+  "last_audit_date": "2026-10-29",
   "maintainer": "khmer-localization open-source project",
   "datasets": [
     {
       "id": "ui_terms",
       "file": "data/ui_terms.json",
       "title": "Standard Digital Software Engineering UI Localization Dictionary",
-      "records": 107,
+      "records": 131,
       "source_authority": "Digital Economy and Telecommunication Localization Standards & Field Industry Practices",
       "source_url": "https://github.com/Chhunsour/khmer-localization",
-      "last_verified": "2026-10-26",
-      "version": "1.1.0",
+      "last_verified": "2026-10-29",
+      "version": "1.2.0",
       "license": "MIT",
       "known_gaps": "Focuses on high-frequency mobile and web UI; specialized medical or military jargon is out of scope.",
       "update_procedure": "Propose additions via pull request; must include en, km, category, and prohibited hallucination terms; tested via tests/test_ui_terms.py.",
@@ -298,6 +298,62 @@
       "known_gaps": "Excludes archaic ligature forms deprecated in modern spelling.",
       "update_procedure": "Verify with Unicode Consortium updates.",
       "validation_rules": "Exact 14 records; codepoints in U+17A3..U+17B3."
+    },
+    {
+      "id": "koh_kong_districts",
+      "file": "data/koh_kong_districts.json",
+      "title": "Koh Kong Province Districts and Municipalities",
+      "records": 7,
+      "source_authority": "Koh Kong Provincial Administration / NCDD",
+      "source_url": "https://kohkong.ncdd.gov.kh/",
+      "last_verified": "2026-10-29",
+      "version": "2024.1",
+      "license": "Public Domain",
+      "known_gaps": "Special economic zone boundary overlays are not included.",
+      "update_procedure": "Cross-reference official Royal Kram decrees on administrative adjustments with NCDD gazette.",
+      "validation_rules": "Exact 7 districts; code prefix 09xx; valid Khmer and English names."
+    },
+    {
+      "id": "pursat_districts",
+      "file": "data/pursat_districts.json",
+      "title": "Pursat Province Districts and Municipalities",
+      "records": 7,
+      "source_authority": "Pursat Provincial Administration / NCDD",
+      "source_url": "https://pursat.ncdd.gov.kh/",
+      "last_verified": "2026-10-29",
+      "version": "2024.1",
+      "license": "Public Domain",
+      "known_gaps": "Tonle Sap conservation zoning boundaries are not modeled.",
+      "update_procedure": "Cross-reference official Royal Kram decrees on administrative adjustments with NCDD gazette.",
+      "validation_rules": "Exact 7 districts; code prefix 15xx; valid Khmer and English names."
+    },
+    {
+      "id": "takeo_districts",
+      "file": "data/takeo_districts.json",
+      "title": "Takeo Province Districts and Municipalities",
+      "records": 10,
+      "source_authority": "Takeo Provincial Administration / NCDD",
+      "source_url": "https://takeo.ncdd.gov.kh/",
+      "last_verified": "2026-10-29",
+      "version": "2024.1",
+      "license": "Public Domain",
+      "known_gaps": "Archaeological boundary reserves are not included.",
+      "update_procedure": "Cross-reference official Royal Kram decrees on administrative adjustments with NCDD gazette.",
+      "validation_rules": "Exact 10 districts; code prefix 21xx; valid Khmer and English names."
+    },
+    {
+      "id": "prey_veng_districts",
+      "file": "data/prey_veng_districts.json",
+      "title": "Prey Veng Province Districts and Municipalities",
+      "records": 13,
+      "source_authority": "Prey Veng Provincial Administration / NCDD",
+      "source_url": "https://preyveng.ncdd.gov.kh/",
+      "last_verified": "2026-10-29",
+      "version": "2024.1",
+      "license": "Public Domain",
+      "known_gaps": "Seasonal flood plain zoning is omitted.",
+      "update_procedure": "Cross-reference official Royal Kram decrees on administrative adjustments with NCDD gazette.",
+      "validation_rules": "Exact 13 districts; code prefix 14xx; valid Khmer and English names."
     }
   ]
 }

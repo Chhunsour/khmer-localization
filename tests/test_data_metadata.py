@@ -28,7 +28,7 @@ class TestDataMetadataRegistry(unittest.TestCase):
         """Registry must contain schema, title, last_audit_date, maintainer, and datasets."""
         self.assertIn("datasets", self.registry)
         self.assertIsInstance(self.registry["datasets"], list)
-        self.assertEqual(len(self.registry["datasets"]), 21)
+        self.assertEqual(len(self.registry["datasets"]), 25)
 
     def test_all_data_files_registered(self):
         """Every JSON file in data/ (except METADATA.json) must be cataloged in registry."""
