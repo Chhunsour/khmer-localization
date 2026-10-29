@@ -859,5 +859,61 @@
     "km": "កាលបរិច្ឆេទប៉ាន់ស្មាននៃការដឹកជញ្ជូន",
     "category": "commerce_payments",
     "avoid": "ពេលវេលាប៉ាន់ស្មានទទួល"
+  },
+  {
+    "key": "auth.session_expired",
+    "en": "Session Expired",
+    "km": "សម័យប្រើប្រាស់បានផុតកំណត់",
+    "category": "authentication",
+    "avoid": "ការប្រជុំផុតកំណត់"
+  },
+  {
+    "key": "auth.two_factor_backup",
+    "en": "Two-Factor Backup Code",
+    "km": "កូដបម្រុងទុកសម្រាប់ការផ្ទៀងផ្ទាត់ពីរជំហាន",
+    "category": "authentication",
+    "avoid": "កូដពីរជំហានបម្រុង"
+  },
+  {
+    "key": "auth.single_sign_on",
+    "en": "Single Sign-On (SSO)",
+    "km": "ការចូលប្រើប្រព័ន្ធរួមតែមួយ (SSO)",
+    "category": "authentication",
+    "avoid": "ការចូលទោល"
+  },
+  {
+    "key": "auth.api_key",
+    "en": "API Key",
+    "km": "សោសម្ងាត់ API",
+    "category": "authentication",
+    "avoid": "កូនសោ API"
+  },
+  {
+    "key": "feedback.rate_limit_exceeded",
+    "en": "Rate Limit Exceeded",
+    "km": "លើសកម្រិតកំណត់នៃការស្នើសុំ",
+    "category": "status_feedback",
+    "avoid": "លើសដែនកំណត់អត្រា"
+  },
+  {
+    "key": "feedback.service_unavailable",
+    "en": "Service Temporarily Unavailable",
+    "km": "សេវាកម្មមិនអាចដំណើរការបានជាបណ្តោះអាសន្ន",
+    "category": "status_feedback",
+    "avoid": "សេវាមិនទំនេរ"
+  },
+  {
+    "key": "privacy.data_consent",
+    "en": "Consent to Data Processing",
+    "km": "ការយល់ព្រមលើការដំណើរការទិន្នន័យ",
+    "category": "privacy_terms",
+    "avoid": "ការយល់ព្រមដំណើរការ"
+  },
+  {
+    "key": "privacy.download_my_data",
+    "en": "Download My Data",
+    "km": "ទាញយកទិន្នន័យផ្ទាល់ខ្លួនរបស់ខ្ញុំ",
+    "category": "privacy_terms",
+    "avoid": "ទាញយកទិន្នន័យខ្ញុំ"
   }
 ]
