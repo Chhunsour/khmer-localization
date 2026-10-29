@@ -18,8 +18,10 @@ Categorizes findings across 4 governance layers:
 - [VISUAL_INSPECTION_REQUIRED]: Layout clearance, line-height, and clipping risks.
 - [EXTERNAL_VERIFICATION_REQUIRED]: Live banking, KHQR, and regulatory merchant auth.
 
-Zero external dependencies. Compatible with Python 3.10+.
+Zero external dependencies. Compatible with Python 3.9+.
 """
+
+from __future__ import annotations
 
 import argparse
 import json

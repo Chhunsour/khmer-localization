@@ -7,9 +7,11 @@ workflows. Inspects source and translation files for UTF-8 integrity, corrupted
 characters (e.g. U+FFFD), suspicious control characters, orphaned combining marks,
 and reports Khmer typography statistics.
 
-Standard Library only: Compatible with Python 3.10+.
+Standard Library only: Compatible with Python 3.9+.
 Does NOT modify or overwrite files.
 """
+
+from __future__ import annotations
 
 import argparse
 import json

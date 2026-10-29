@@ -11,8 +11,10 @@ A zero-dependency Python 3.10+ reference module providing core algorithms for:
 - Bakong KHQR EMVCo CRC16 checksum calculation, verification, and full TLV parsing.
 - Deterministic pure-Python Khmer alphabetical collation (Chuon Nath dictionary order).
 
-Standard Library only. Compatible with Python 3.10+.
+Standard Library only. Compatible with Python 3.9+.
 """
+
+from __future__ import annotations
 
 import argparse
 import datetime
