@@ -755,6 +755,24 @@ function parseKhqr(khqrString) {
  * @param {string} [params.mcc="5999"]
  * @returns {string}
  */
+/**
+ * Sanitize and format EMVCo Tag 59 (Merchant Name) for Bakong KHQR.
+ * @param {string} name
+ * @returns {string}
+ */
+function formatKhqrMerchantName(name) {
+  if (!name || typeof name !== "string") {
+    return "MERCHANT";
+  }
+  let sanitized = name.replace(/[\r\n\t]+/g, " ");
+  sanitized = sanitized.replace(/[\"';<>\\`]+/g, "");
+  sanitized = sanitized.replace(/\s+/g, " ").trim();
+  if (!sanitized) {
+    return "MERCHANT";
+  }
+  return sanitized.slice(0, 25);
+}
+
 function generateKhqr({
   bakongAccountId,
   merchantName,
@@ -790,7 +808,7 @@ function generateKhqr({
   parts.push(formatTlv("54", amountStr));
 
   parts.push(formatTlv("58", "KH"));
-  parts.push(formatTlv("59", (merchantName || "").slice(0, 25)));
+  parts.push(formatTlv("59", formatKhqrMerchantName(merchantName)));
   parts.push(formatTlv("60", (merchantCity || "Phnom Penh").slice(0, 15)));
 
   let sub62 = "";
@@ -1038,6 +1056,7 @@ const khmerUtils = {
   getKhmerCharacterStats,
   validateCambodianId,
   parseKhmerLicensePlate,
+  formatKhqrMerchantName,
 };
 
 if (typeof module !== "undefined" && module.exports) {

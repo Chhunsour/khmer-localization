@@ -590,6 +590,28 @@ def parse_khqr(khqr_string: str) -> Dict[str, Any]:
     return result
 
 
+def format_khqr_merchant_name(name: str) -> str:
+    """
+    Sanitize and format EMVCo Tag 59 (Merchant Name) for Bakong KHQR.
+
+    Rules:
+    - Strips invalid ASCII control characters, newlines, and quotes.
+    - Limits length to maximum 25 characters (EMVCo Tag 59 specification).
+    - Falls back to 'MERCHANT' if empty or invalid.
+    """
+    if not name or not isinstance(name, str):
+        return "MERCHANT"
+
+    sanitized = re.sub(r"[\r\n\t]+", " ", name)
+    sanitized = re.sub(r'[\"\';<>\\`]+', "", sanitized)
+    sanitized = re.sub(r"\s+", " ", sanitized).strip()
+
+    if not sanitized:
+        return "MERCHANT"
+
+    return sanitized[:25]
+
+
 def generate_khqr(
     bakong_account_id: str,
     merchant_name: str,
@@ -635,7 +657,7 @@ def generate_khqr(
     parts.append(_format_tlv("58", "KH"))
 
     # Tag 59: Merchant Name
-    parts.append(_format_tlv("59", merchant_name[:25]))
+    parts.append(_format_tlv("59", format_khqr_merchant_name(merchant_name)))
 
     # Tag 60: Merchant City
     parts.append(_format_tlv("60", merchant_city[:15]))
