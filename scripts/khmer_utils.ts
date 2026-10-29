@@ -273,15 +273,25 @@ export function formatUSD(amount: number): string {
  * to prevent IEEE 754 floating-point precision drift.
  */
 export function calculateMoneyTotal(
-  items: MoneyItem[],
+  items: MoneyItem[] | { items: MoneyItem[]; currency?: string; taxRatePercent?: number; roundingMode?: "half_up" | "half_even" },
   currency: string = "KHR",
   taxRatePercent: number = 0.0,
   roundingMode: "half_up" | "half_even" = "half_up"
 ): MoneyTotalResult {
+  let itemList: MoneyItem[] = [];
+  if (items && !Array.isArray(items) && Array.isArray((items as any).items)) {
+    const opts = items as any;
+    itemList = opts.items;
+    currency = opts.currency || currency;
+    taxRatePercent = opts.taxRatePercent !== undefined ? opts.taxRatePercent : taxRatePercent;
+    roundingMode = opts.roundingMode || roundingMode;
+  } else if (Array.isArray(items)) {
+    itemList = items;
+  }
   const isKhr = currency.toUpperCase() === "KHR";
   let subtotalMinor = 0;
 
-  for (const item of items) {
+  for (const item of itemList) {
     const price = item.price || 0;
     const qty = item.quantity !== undefined ? item.quantity : 1;
     if (isKhr) {
@@ -900,4 +910,171 @@ export function getKhmerCharacterStats(text: string): KhmerCharacterStats {
   }
 
   return stats;
+}
+
+export interface CambodianIdValidationResult {
+  raw: string;
+  normalized: string;
+  khmer_digits: string;
+  is_valid: boolean;
+  id_type: "smart_id" | "legacy_id" | null;
+  province_code: string | null;
+  error: string | null;
+}
+
+/**
+ * Validate and normalize a Cambodian National Identification Card (អត្តសញ្ញាណប័ណ្ណសញ្ជាតិខ្មែរ).
+ */
+export function validateCambodianId(idVal: string | number): CambodianIdValidationResult {
+  if (idVal === null || idVal === undefined) idVal = "";
+  const raw = String(idVal);
+
+  const normalized = raw.replace(/[\u17E0-\u17E9]/g, (ch) => String(ch.charCodeAt(0) - 0x17E0));
+  const cleanDigits = normalized.replace(/[\s\-\./,]+/g, "");
+
+  if (!/^\d+$/.test(cleanDigits)) {
+    return {
+      raw,
+      normalized: cleanDigits,
+      khmer_digits: "",
+      is_valid: false,
+      id_type: null,
+      province_code: null,
+      error: "National ID contains non-numeric characters",
+    };
+  }
+
+  const len = cleanDigits.length;
+  if (len !== 9 && len !== 10) {
+    return {
+      raw,
+      normalized: cleanDigits,
+      khmer_digits: "",
+      is_valid: false,
+      id_type: null,
+      province_code: null,
+      error: `Invalid ID length (${len} digits). Expected 9 or 10 digits.`,
+    };
+  }
+
+  const idType = len === 10 ? "smart_id" : "legacy_id";
+  const provinceCode = cleanDigits.slice(0, 2);
+  const khmerDigits = Array.from(cleanDigits).map((c) => String.fromCharCode(0x17E0 + parseInt(c, 10))).join("");
+
+  return {
+    raw,
+    normalized: cleanDigits,
+    khmer_digits: khmerDigits,
+    is_valid: true,
+    id_type: idType,
+    province_code: provinceCode,
+    error: null,
+  };
+}
+
+export interface KhmerLicensePlateResult {
+  raw: string;
+  normalized: string;
+  is_valid_format: boolean;
+  plate_type: "civilian_car" | "motorcycle" | "commercial" | "special" | "state" | "police" | "military" | "unknown";
+  category: string | null;
+  province: string | null;
+  series: string | null;
+  number: string | null;
+  error: string | null;
+}
+
+/**
+ * Parse and validate Cambodian vehicle license plates (MPWT).
+ */
+export function parseKhmerLicensePlate(plateStr: string): KhmerLicensePlateResult {
+  if (plateStr === null || plateStr === undefined) plateStr = "";
+  const raw = String(plateStr).trim();
+  const normalized = raw.replace(/[\u17E0-\u17E9]/g, (ch) => String(ch.charCodeAt(0) - 0x17E0));
+
+  const result: KhmerLicensePlateResult = {
+    raw,
+    normalized,
+    is_valid_format: false,
+    plate_type: "unknown",
+    category: null,
+    province: null,
+    series: null,
+    number: null,
+    error: null,
+  };
+
+  if (!normalized) {
+    result.error = "Empty license plate string";
+    return result;
+  }
+
+  if (raw.includes("រដ្ឋ") || normalized.toUpperCase().startsWith("STATE")) {
+    result.is_valid_format = true;
+    result.plate_type = "state";
+    result.category = "Government / State Official";
+    return result;
+  }
+
+  if (raw.includes("ន.ប") || raw.includes("នប")) {
+    result.is_valid_format = true;
+    result.plate_type = "police";
+    result.category = "National Police (នគរបាលជាតិ)";
+    return result;
+  }
+
+  if (raw.includes("ខ.ម") || raw.includes("ខម")) {
+    result.is_valid_format = true;
+    result.plate_type = "military";
+    result.category = "Royal Cambodian Armed Forces (កងយោធពលខេមរភូមិន្ទ)";
+    return result;
+  }
+
+  const pattern = /^(?:(.+?)\s+)?([1-9][A-Za-z]{1,3})[\s\-]+(\d{3,5})$/;
+  const match = normalized.match(pattern);
+  if (match) {
+    const prov = match[1];
+    const series = match[2].toUpperCase();
+    const num = match[3];
+    const classDigit = parseInt(series[0], 10);
+
+    result.is_valid_format = true;
+    result.province = prov ? prov.trim() : null;
+    result.series = series;
+    result.number = num;
+
+    if (classDigit === 1) {
+      result.plate_type = "motorcycle";
+      result.category = "Motorcycle (ទោចក្រយានយន្ត)";
+    } else if (classDigit === 2) {
+      result.plate_type = "civilian_car";
+      result.category = "Automobile / Passenger Vehicle (រថយន្តទេសចរណ៍)";
+    } else if (classDigit === 3 || classDigit === 4) {
+      result.plate_type = "commercial";
+      result.category = "Commercial / Freight Vehicle (រថយន្តដឹកទំនិញ)";
+    } else {
+      result.plate_type = "special";
+      result.category = "Special Heavy Equipment (គ្រឿងចក្រពិសេស)";
+    }
+    return result;
+  }
+
+  result.error = "Unrecognized Cambodian license plate structure";
+  return result;
+}
+
+/**
+ * Sanitize and format EMVCo Tag 59 (Merchant Name) for Bakong KHQR.
+ */
+export function formatKhqrMerchantName(name: string): string {
+  if (!name || typeof name !== "string") {
+    return "MERCHANT";
+  }
+  let sanitized = name.replace(/[\r\n\t]+/g, " ");
+  sanitized = sanitized.replace(/[\"';<>\\`]+/g, "");
+  sanitized = sanitized.replace(/\s+/g, " ").trim();
+  if (!sanitized) {
+    return "MERCHANT";
+  }
+  return sanitized.slice(0, 25);
 }

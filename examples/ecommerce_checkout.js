@@ -23,6 +23,7 @@ const {
   parseKhqr,
   formatKhmerDate,
   safeTruncateKhmer,
+  validateCambodianId,
 } = require("../scripts/khmer_utils");
 
 function runCheckoutFlow() {
@@ -33,10 +34,13 @@ function runCheckoutFlow() {
   // 1. Customer Details & Phone Validation
   const customerNameKm = "សុខា ម៉េង (Sokha Meng)";
   const customerPhoneRaw = "012 889 977";
+  const customerIdRaw = "១២-០១២៣-៤៥៦៧";
   const deliveryAddress = "ផ្ទះលេខ 42, ផ្លូវ 310, សង្កាត់បឹងកេងកងទី១, ខណ្ឌបឹងកេងកង, រាជធានីភ្នំពេញ";
 
   const phone = normalizeCambodianPhone(customerPhoneRaw);
+  const custId = validateCambodianId(customerIdRaw);
   console.log(`Customer Name   : ${customerNameKm}`);
+  console.log(`Customer ID     : ${custId.normalized} (${custId.id_type}, Province: ${custId.province_code})`);
   console.log(`Raw Phone       : ${customerPhoneRaw}`);
   console.log(`Canonical E.164 : ${phone.normalized_e164}`);
   console.log(`Domestic Trunk  : ${phone.normalized_domestic}`);

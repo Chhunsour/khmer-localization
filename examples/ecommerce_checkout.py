@@ -30,6 +30,7 @@ from scripts.khmer_utils import (
     parse_khqr,
     format_khmer_date,
     safe_truncate_khmer,
+    validate_cambodian_id,
 )
 
 
@@ -41,10 +42,13 @@ def run_checkout_flow():
     # 1. Customer Details & Phone Validation
     customer_name_km = "សុខា ម៉េង (Sokha Meng)"
     customer_phone_raw = "012 889 977"
+    customer_id_raw = "១២-០១២៣-៤៥៦៧"
     delivery_address = "ផ្ទះលេខ 42, ផ្លូវ 310, សង្កាត់បឹងកេងកងទី១, ខណ្ឌបឹងកេងកង, រាជធានីភ្នំពេញ"
 
     phone = normalize_cambodian_phone(customer_phone_raw)
+    cust_id = validate_cambodian_id(customer_id_raw)
     print(f"Customer Name   : {customer_name_km}")
+    print(f"Customer ID     : {cust_id['normalized']} ({cust_id['id_type']}, Province: {cust_id['province_code']})")
     print(f"Raw Phone       : {customer_phone_raw}")
     print(f"Canonical E.164 : {phone['normalized_e164']}")
     print(f"Domestic Trunk  : {phone['normalized_domestic']}")
