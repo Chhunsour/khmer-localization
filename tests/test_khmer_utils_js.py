@@ -238,6 +238,24 @@ class TestKhmerUtilsJs(unittest.TestCase):
         self.assertEqual(out["r2"]["normalized"], "1201234567")
         self.assertFalse(out["r3"]["is_valid"])
 
+    def test_cambodian_license_plate_parsing_js(self):
+        """Test License Plate parsing parity in JS runtime."""
+        code = """
+        const p1 = u.parseKhmerLicensePlate("Phnom Penh 2BC-1234");
+        const p2 = u.parseKhmerLicensePlate("1FD-5678");
+        const p3 = u.parseKhmerLicensePlate("រដ្ឋ 01 2-1234");
+        console.log(JSON.stringify({ p1, p2, p3 }));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertTrue(out["p1"]["is_valid_format"])
+        self.assertEqual(out["p1"]["plate_type"], "civilian_car")
+        self.assertEqual(out["p1"]["province"], "Phnom Penh")
+        self.assertEqual(out["p1"]["series"], "2BC")
+        self.assertTrue(out["p2"]["is_valid_format"])
+        self.assertEqual(out["p2"]["plate_type"], "motorcycle")
+        self.assertTrue(out["p3"]["is_valid_format"])
+        self.assertEqual(out["p3"]["plate_type"], "state")
+
 
 if __name__ == "__main__":
     unittest.main()

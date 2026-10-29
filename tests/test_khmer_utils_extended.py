@@ -23,6 +23,7 @@ from scripts.khmer_utils import (
     khmer_sort_key,
     normalize_cambodian_phone,
     parse_khqr,
+    parse_khmer_license_plate,
     sort_khmer_words,
     validate_cambodian_id,
 )
@@ -158,6 +159,46 @@ class TestKhmerUtilsExtended(unittest.TestCase):
         id_alpha = validate_cambodian_id("120123456A")
         self.assertFalse(id_alpha["is_valid"])
         self.assertIn("non-numeric", id_alpha["error"])
+
+    def test_cambodian_license_plate_parsing(self):
+        """Test parsing of Cambodian civilian, motorcycle, and state license plates."""
+        # 1. Civilian automobile
+        p1 = parse_khmer_license_plate("ភ្នំពេញ 2BC-1234")
+        self.assertTrue(p1["is_valid_format"])
+        self.assertEqual(p1["plate_type"], "civilian_car")
+        self.assertEqual(p1["province"], "ភ្នំពេញ")
+        self.assertEqual(p1["series"], "2BC")
+        self.assertEqual(p1["number"], "1234")
+
+        # 2. Motorcycle with Khmer numbers
+        p2 = parse_khmer_license_plate("1FD-៥៦៧៨")
+        self.assertTrue(p2["is_valid_format"])
+        self.assertEqual(p2["plate_type"], "motorcycle")
+        self.assertEqual(p2["series"], "1FD")
+        self.assertEqual(p2["number"], "5678")
+
+        # 3. Commercial truck
+        p3 = parse_khmer_license_plate("3A-9999")
+        self.assertTrue(p3["is_valid_format"])
+        self.assertEqual(p3["plate_type"], "commercial")
+
+        # 4. State / Police / Military
+        p_state = parse_khmer_license_plate("រដ្ឋ 01 2-1234")
+        self.assertTrue(p_state["is_valid_format"])
+        self.assertEqual(p_state["plate_type"], "state")
+
+        p_police = parse_khmer_license_plate("ន.ប 1-2345")
+        self.assertTrue(p_police["is_valid_format"])
+        self.assertEqual(p_police["plate_type"], "police")
+
+        p_mil = parse_khmer_license_plate("ខ.ម 02 1-2345")
+        self.assertTrue(p_mil["is_valid_format"])
+        self.assertEqual(p_mil["plate_type"], "military")
+
+        # 5. Invalid
+        p_inv = parse_khmer_license_plate("XYZ-ABC")
+        self.assertFalse(p_inv["is_valid_format"])
+        self.assertIsNotNone(p_inv["error"])
 
 
 if __name__ == "__main__":
