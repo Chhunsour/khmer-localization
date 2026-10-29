@@ -23,8 +23,41 @@ class TestUiTermsJson(unittest.TestCase):
             self.terms = json.load(f)
 
     def test_term_count(self):
-        """Must contain at least 100 high-frequency UI terms."""
-        self.assertGreaterEqual(len(self.terms), 100, f"Expected >= 100 terms, got {len(self.terms)}")
+        """Must contain at least 130 high-frequency UI terms."""
+        self.assertGreaterEqual(len(self.terms), 130, f"Expected >= 130 terms, got {len(self.terms)}")
+
+    def test_key_naming_convention(self):
+        """Keys must follow standard namespaced dot-notation format."""
+        for item in self.terms:
+            key = item["key"]
+            parts = key.split(".")
+            self.assertGreaterEqual(len(parts), 2, f"Key '{key}' must contain at least one namespace dot")
+            for p in parts:
+                self.assertTrue(p.islower(), f"Key segment '{p}' in '{key}' must be lowercase")
+
+    def test_fintech_and_cloud_coverage(self):
+        """Verify presence of modern fintech, ecommerce, and cloud security terminology."""
+        key_map = {item["key"]: item for item in self.terms}
+        required_keys = [
+            "commerce.scan_qr",
+            "commerce.daily_limit",
+            "commerce.fixed_deposit",
+            "commerce.cash_on_delivery",
+            "commerce.tracking_number",
+            "auth.session_expired",
+            "auth.api_key",
+            "feedback.rate_limit_exceeded",
+        ]
+        for rk in required_keys:
+            self.assertIn(rk, key_map, f"Missing critical vocabulary key: {rk}")
+            self.assertTrue(len(key_map[rk]["km"]) > 0)
+
+    def test_no_trailing_whitespace_in_strings(self):
+        """String fields must be clean without accidental leading or trailing whitespace."""
+        for item in self.terms:
+            for field in ["key", "en", "km", "category", "avoid"]:
+                val = item[field]
+                self.assertEqual(val, val.strip(), f"Field '{field}' in '{item['key']}' has extra whitespace: '{val}'")
 
     def test_schema_conformance(self):
         """Every entry must contain key, en, km, category, avoid."""
