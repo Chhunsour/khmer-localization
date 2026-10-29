@@ -850,6 +850,95 @@ def validate_cambodian_id(id_val: str) -> Dict[str, Any]:
     }
 
 
+# --- 9. Cambodian Vehicle License Plate Parser ---
+
+def parse_khmer_license_plate(plate_str: str) -> Dict[str, Any]:
+    """
+    Parse and validate Cambodian vehicle license plates (ក្រសួងសាធារណការ និងដឹកជញ្ជូន - MPWT).
+
+    Supports:
+    - Standard civilian cars: '2A-1234', '2BC-5678', 'ភ្នំពេញ 2BC-1234', 'Phnom Penh 2BC-1234'.
+    - Motorcycles: '1A-1234', '1AB-5678', 'ភ្នំពេញ 1FD-1234'.
+    - Official state plates: 'រដ្ឋ 01 2-1234', 'STATE'.
+    - National police: 'ន.ប 1-2345'.
+    - Royal Cambodian Armed Forces: 'ខ.ម 02 1-2345'.
+    """
+    if not isinstance(plate_str, str):
+        plate_str = str(plate_str) if plate_str is not None else ""
+
+    raw = plate_str.strip()
+    normalized = re.sub(
+        r"[\u17E0-\u17E9]",
+        lambda m: str(ord(m.group(0)) - 0x17E0),
+        raw,
+    )
+
+    result: Dict[str, Any] = {
+        "raw": raw,
+        "normalized": normalized,
+        "is_valid_format": False,
+        "plate_type": "unknown",
+        "category": None,
+        "province": None,
+        "series": None,
+        "number": None,
+        "error": None,
+    }
+
+    if not normalized:
+        result["error"] = "Empty license plate string"
+        return result
+
+    # Check State / Official plates
+    if "រដ្ឋ" in raw or normalized.upper().startswith("STATE"):
+        result["is_valid_format"] = True
+        result["plate_type"] = "state"
+        result["category"] = "Government / State Official"
+        return result
+
+    if "ន.ប" in raw or "នប" in raw:
+        result["is_valid_format"] = True
+        result["plate_type"] = "police"
+        result["category"] = "National Police (នគរបាលជាតិ)"
+        return result
+
+    if "ខ.ម" in raw or "ខម" in raw:
+        result["is_valid_format"] = True
+        result["plate_type"] = "military"
+        result["category"] = "Royal Cambodian Armed Forces (កងយោធពលខេមរភូមិន្ទ)"
+        return result
+
+    pattern = r"^(?:(.+?)\s+)?([1-9][A-Za-z]{1,3})[\s\-]+(\d{3,5})$"
+    m = re.match(pattern, normalized)
+    if m:
+        prov, series, num = m.groups()
+        series_upper = series.upper()
+        class_digit = int(series_upper[0])
+
+        result["is_valid_format"] = True
+        result["province"] = prov.strip() if prov else None
+        result["series"] = series_upper
+        result["number"] = num
+
+        if class_digit == 1:
+            result["plate_type"] = "motorcycle"
+            result["category"] = "Motorcycle (ទោចក្រយានយន្ត)"
+        elif class_digit == 2:
+            result["plate_type"] = "civilian_car"
+            result["category"] = "Automobile / Passenger Vehicle (រថយន្តទេសចរណ៍)"
+        elif class_digit in (3, 4):
+            result["plate_type"] = "commercial"
+            result["category"] = "Commercial / Freight Vehicle (រថយន្តដឹកទំនិញ)"
+        else:
+            result["plate_type"] = "special"
+            result["category"] = "Special Heavy Equipment (គ្រឿងចក្រពិសេស)"
+
+        return result
+
+    result["error"] = "Unrecognized Cambodian license plate structure"
+    return result
+
+
 # --- CLI Interface ---
 
 def main() -> int:
