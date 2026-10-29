@@ -68,6 +68,23 @@ class TestKhmerI18nAudit(unittest.TestCase):
         # 3. Destructive whitespace regex
         self.assertIn("DESTRUCTIVE_WHITESPACE_REGEX", rules)
 
+    def test_font_stack_and_line_height_audit(self):
+        """Test detection of missing Khmer font fallbacks and restrictive line-heights."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_css = os.path.join(tmpdir, "styles.css")
+            with open(bad_css, "w", encoding="utf-8") as f:
+                f.write("""
+                .khmer-header {
+                    font-family: Inter, Roboto, sans-serif;
+                    line-height: 1.1;
+                }
+                """)
+            findings = audit_source_code(tmpdir)
+            rules = {f["rule"] for f in findings}
+            self.assertIn("MISSING_KHMER_FONT_FALLBACK", rules)
+            self.assertIn("RESTRICTIVE_LINE_HEIGHT_CLIPPING", rules)
+
     def test_run_full_audit_aggregation(self):
         """Test full audit aggregation and status reporting."""
         report = run_full_audit(FIXTURE_DIR, locales_dir=LOCALES_DIR, src_dir=SRC_DIR)

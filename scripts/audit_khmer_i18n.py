@@ -242,6 +242,9 @@ def audit_source_code(src_dir: str) -> List[Dict[str, Any]]:
             except Exception:
                 continue
 
+            file_text = "".join(lines)
+            file_has_khmer = any(0x1780 <= ord(c) <= 0x17FF for c in file_text) or ("khmer" in file_text.lower())
+
             for line_no, line in enumerate(lines, start=1):
                 # 1. Hardcoded Khmer string in JSX / HTML / code outside translation calls
                 # Detect lines with Khmer characters (U+1780 to U+17FF)
@@ -301,7 +304,7 @@ def audit_source_code(src_dir: str) -> List[Dict[str, Any]]:
 
                 # 6. Restricted line-height risk for Khmer typography (clipping stacked vowels and Coeng)
                 if re.search(r"line-height:\s*(?:1|1\.0|1\.1|1\.2|1\.3)\b", line) or re.search(r"\b(leading-none|leading-tight)\b", line):
-                    if khmer_chars or "khmer" in line.lower() or "kh-" in line.lower():
+                    if file_has_khmer or khmer_chars:
                         findings.append({
                             "layer": "VISUAL_INSPECTION_REQUIRED",
                             "file": filepath,
@@ -313,7 +316,7 @@ def audit_source_code(src_dir: str) -> List[Dict[str, Any]]:
                 # 7. Missing recommended Khmer font fallback in font-family declaration
                 if re.search(r"font-family:\s*[^;]+", line, re.IGNORECASE):
                     val = line.lower()
-                    if ("khmer" in val or khmer_chars) and not any(f in val for f in ["kantumruy", "hanuman", "battambang", "siemreap", "noto sans khmer"]):
+                    if file_has_khmer and not any(f in val for f in ["kantumruy", "hanuman", "battambang", "siemreap", "noto sans khmer"]):
                         findings.append({
                             "layer": "VISUAL_INSPECTION_REQUIRED",
                             "file": filepath,
