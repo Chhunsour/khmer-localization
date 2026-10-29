@@ -747,5 +747,61 @@
     "km": "ថ្ងៃស្អែក",
     "category": "status_feedback",
     "avoid": "ស្អែកនេះ"
+  },
+  {
+    "key": "commerce.scan_qr",
+    "en": "Scan QR Code",
+    "km": "ស្កេន QR កូដ",
+    "category": "commerce_payments",
+    "avoid": "ស្កេនកូដឆ្លើយតបរហ័ស"
+  },
+  {
+    "key": "commerce.daily_limit",
+    "en": "Daily Transfer Limit",
+    "km": "កម្រិតផ្ទេរប្រាក់ប្រចាំថ្ងៃ",
+    "category": "commerce_payments",
+    "avoid": "ដែនកំណត់ផ្ទេរ"
+  },
+  {
+    "key": "commerce.account_statement",
+    "en": "Account Statement",
+    "km": "របាយការណ៍គណនី",
+    "category": "commerce_payments",
+    "avoid": "សេចក្ដីថ្លែងការណ៍ធនាគារ"
+  },
+  {
+    "key": "commerce.exchange_rate_buy",
+    "en": "Buying Rate",
+    "km": "អត្រាទិញចូល",
+    "category": "commerce_payments",
+    "avoid": "តម្លៃទិញ"
+  },
+  {
+    "key": "commerce.exchange_rate_sell",
+    "en": "Selling Rate",
+    "km": "អត្រាលក់ចេញ",
+    "category": "commerce_payments",
+    "avoid": "តម្លៃលក់"
+  },
+  {
+    "key": "commerce.fixed_deposit",
+    "en": "Fixed Deposit",
+    "km": "ប្រាក់បញ្ញើសន្សំមានកាលកំណត់",
+    "category": "commerce_payments",
+    "avoid": "ការដាក់ប្រាក់ថេរ"
+  },
+  {
+    "key": "commerce.loan_repayment",
+    "en": "Loan Repayment",
+    "km": "ការសងប្រាក់កម្ចី",
+    "category": "commerce_payments",
+    "avoid": "ការសងបំណុល"
+  },
+  {
+    "key": "commerce.beneficiary",
+    "en": "Beneficiary",
+    "km": "អ្នកទទួលប្រាក់",
+    "category": "commerce_payments",
+    "avoid": "អ្នកទទួលផល"
   }
 ]
