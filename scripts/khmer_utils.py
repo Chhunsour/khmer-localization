@@ -785,6 +785,71 @@ def get_khmer_character_stats(text: str) -> dict:
     return stats
 
 
+# --- 8. Cambodian National Identification (ID) Validation ---
+
+def validate_cambodian_id(id_val: str) -> Dict[str, Any]:
+    """
+    Validate and normalize a Cambodian National Identification Card (អត្តសញ្ញាណប័ណ្ណសញ្ជាតិខ្មែរ).
+
+    Supports:
+    - 9-digit legacy laminated national IDs.
+    - 10-digit smart biometric ID cards (GDI / Ministry of Interior).
+    - Khmer numerals (០-៩) and Arabic digits (0-9).
+    - Permissive formatting (strips whitespace, dashes, and periods).
+
+    Returns a structured dictionary with normalized formats and validity status.
+    """
+    if not isinstance(id_val, str):
+        id_val = str(id_val) if id_val is not None else ""
+
+    raw = id_val
+    # Convert Khmer digits to Arabic digits
+    normalized = re.sub(
+        r"[\u17E0-\u17E9]",
+        lambda m: str(ord(m.group(0)) - 0x17E0),
+        raw,
+    )
+    # Strip whitespace, hyphens, and delimiters
+    clean_digits = re.sub(r"[\s\-\./,]+", "", normalized)
+
+    if not clean_digits.isdigit():
+        return {
+            "raw": raw,
+            "normalized": clean_digits,
+            "khmer_digits": "",
+            "is_valid": False,
+            "id_type": None,
+            "province_code": None,
+            "error": "National ID contains non-numeric characters",
+        }
+
+    length = len(clean_digits)
+    if length not in (9, 10):
+        return {
+            "raw": raw,
+            "normalized": clean_digits,
+            "khmer_digits": "",
+            "is_valid": False,
+            "id_type": None,
+            "province_code": None,
+            "error": f"Invalid ID length ({length} digits). Expected 9 or 10 digits.",
+        }
+
+    id_type = "smart_id" if length == 10 else "legacy_id"
+    province_code = clean_digits[:2]
+    khmer_digits = "".join(chr(0x17E0 + int(c)) for c in clean_digits)
+
+    return {
+        "raw": raw,
+        "normalized": clean_digits,
+        "khmer_digits": khmer_digits,
+        "is_valid": True,
+        "id_type": id_type,
+        "province_code": province_code,
+        "error": None,
+    }
+
+
 # --- CLI Interface ---
 
 def main() -> int:

@@ -880,6 +880,59 @@ function getKhmerCharacterStats(text) {
   return stats;
 }
 
+/**
+ * Validate and normalize a Cambodian National Identification Card (អត្តសញ្ញាណប័ណ្ណសញ្ជាតិខ្មែរ).
+ * @param {string} idVal
+ * @returns {object}
+ */
+function validateCambodianId(idVal) {
+  if (idVal === null || idVal === undefined) idVal = "";
+  const raw = String(idVal);
+
+  // Convert Khmer digits to Arabic digits
+  const normalized = raw.replace(/[\u17E0-\u17E9]/g, (ch) => String(ch.charCodeAt(0) - 0x17E0));
+  const cleanDigits = normalized.replace(/[\s\-\./,]+/g, "");
+
+  if (!/^\d+$/.test(cleanDigits)) {
+    return {
+      raw,
+      normalized: cleanDigits,
+      khmer_digits: "",
+      is_valid: false,
+      id_type: null,
+      province_code: null,
+      error: "National ID contains non-numeric characters",
+    };
+  }
+
+  const len = cleanDigits.length;
+  if (len !== 9 && len !== 10) {
+    return {
+      raw,
+      normalized: cleanDigits,
+      khmer_digits: "",
+      is_valid: false,
+      id_type: null,
+      province_code: null,
+      error: `Invalid ID length (${len} digits). Expected 9 or 10 digits.`,
+    };
+  }
+
+  const idType = len === 10 ? "smart_id" : "legacy_id";
+  const provinceCode = cleanDigits.slice(0, 2);
+  const khmerDigits = Array.from(cleanDigits).map((c) => String.fromCharCode(0x17E0 + parseInt(c, 10))).join("");
+
+  return {
+    raw,
+    normalized: cleanDigits,
+    khmer_digits: khmerDigits,
+    is_valid: true,
+    id_type: idType,
+    province_code: provinceCode,
+    error: null,
+  };
+}
+
 // --- Module Exports & CLI Handling ---
 
 const khmerUtils = {
@@ -902,6 +955,7 @@ const khmerUtils = {
   sortKhmerWords,
   isKhmerText,
   getKhmerCharacterStats,
+  validateCambodianId,
 };
 
 if (typeof module !== "undefined" && module.exports) {
