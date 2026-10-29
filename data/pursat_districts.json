@@ -1,0 +1,51 @@
+[
+  {
+    "code": "1505",
+    "name_en": "Krong Pursat",
+    "name_km": "ក្រុងពោធិ៍សាត់",
+    "type": "Municipality",
+    "sangkats": 7
+  },
+  {
+    "code": "1501",
+    "name_en": "Bakan",
+    "name_km": "ស្រុកបាកាន",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "1502",
+    "name_en": "Kandieng",
+    "name_km": "ស្រុកកណ្តៀង",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "1503",
+    "name_en": "Krakor",
+    "name_km": "ស្រុកក្រគរ",
+    "type": "District",
+    "communes": 11
+  },
+  {
+    "code": "1504",
+    "name_en": "Phnum Kravanh",
+    "name_km": "ស្រុកភ្នំក្រវាញ",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "1506",
+    "name_en": "Veal Veang",
+    "name_km": "ស្រុកវាលវែង",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "1507",
+    "name_en": "Ta Lou Sen Chey",
+    "name_km": "ស្រុកតាលោសែនជ័យ",
+    "type": "District",
+    "communes": 2
+  }
+]

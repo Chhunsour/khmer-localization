@@ -1,0 +1,51 @@
+[
+  {
+    "code": "0904",
+    "name_en": "Krong Khemara Phoumin",
+    "name_km": "ក្រុងខេមរភូមិន្ទ",
+    "type": "Municipality",
+    "sangkats": 3
+  },
+  {
+    "code": "0901",
+    "name_en": "Botum Sakor",
+    "name_km": "ស្រុកបទុមសាគរ",
+    "type": "District",
+    "communes": 4
+  },
+  {
+    "code": "0902",
+    "name_en": "Kiri Sakor",
+    "name_km": "ស្រុកគិរីសាគរ",
+    "type": "District",
+    "communes": 3
+  },
+  {
+    "code": "0903",
+    "name_en": "Koh Kong",
+    "name_km": "ស្រុកកោះកុង",
+    "type": "District",
+    "communes": 4
+  },
+  {
+    "code": "0905",
+    "name_en": "Mondol Seima",
+    "name_km": "ស្រុកមណ្ឌលសីមា",
+    "type": "District",
+    "communes": 3
+  },
+  {
+    "code": "0906",
+    "name_en": "Srae Ambel",
+    "name_km": "ស្រុកស្រែអំបិល",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "0907",
+    "name_en": "Thma Bang",
+    "name_km": "ស្រុកថ្មបាំង",
+    "type": "District",
+    "communes": 6
+  }
+]
