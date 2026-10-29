@@ -7,12 +7,12 @@
 
 [![Author: Seng Chhunsour](https://img.shields.io/badge/Author-Seng%20Chhunsour-FF5A1F?style=flat-square&logo=github&logoColor=white)](https://github.com/Chhunsour)
 [![Tests](https://github.com/Chhunsour/khmer-localization/actions/workflows/tests.yml/badge.svg)](https://github.com/Chhunsour/khmer-localization/actions)
-[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-120%20Passed-brightgreen.svg)](#-test-suite--quality-assurance-matrix)
+[![Unit Tests](https://img.shields.io/badge/Unit%20Tests-133%20Passed-brightgreen.svg)](#-test-suite--quality-assurance-matrix)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Dependencies: 0](https://img.shields.io/badge/Dependencies-Zero%20External-success.svg)](#-zero-dependency-isomorphic-api-reference)
 [![Unicode: 15.1](https://img.shields.io/badge/Unicode-Khmer%20U%2B1780--U%2B17FF-informational.svg)](https://unicode.org/charts/PDF/U1780.pdf)
 [![Country: Cambodia](https://img.shields.io/badge/Country-Cambodia%20%28%2B855%29-red.svg)](https://trc.gov.kh)
-[![Runtime](https://img.shields.io/badge/Runtime-Node.js%20%7C%20TS%20%7C%20Python%20%7C%20Web-purple.svg)](#-zero-dependency-isomorphic-api-reference)
+[![Runtime](https://img.shields.io/badge/Runtime-Node.js%20%7C%20TS%20%7C%20Python%20%7C%20Bun%20%7C%20Web-purple.svg)](#-zero-dependency-isomorphic-api-reference)
 
 ---
 
@@ -20,14 +20,14 @@
 
 | Strategic Dimension | Engineering Metric | Verification Methodology | Production Benchmark Standard |
 | :--- | :---: | :--- | :--- |
-| **Deterministic Reliability** | **120 / 120 Passing** | 13 test suites in Python & Node.js | 100% deterministic CI coverage |
-| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 13,800+ Khmer characters |
+| **Deterministic Reliability** | **133 / 133 Passing** | 14 test suites in Python & Node.js/Bun | 100% deterministic CI coverage |
+| **Unicode & Script Safety** | **0 Errors, 0 Warnings** | `scripts/check_khmer_unicode.py --strict` | Scanned 14,500+ Khmer characters |
 | **Localization Quality Engine** | **4 Governance Layers** | `scripts/audit_khmer_i18n.py` CLI scanner | Automated, Human, Visual, External |
 | **Supply-Chain Security** | **0 (Zero External Deps)** | Pure standard library & native Web APIs | Zero CVE surface, zero npm install lag |
 | **AI Token Optimization** | **Up to 99.0% Reduction** | Modular 45t / 120t / 250t system prompts | Eradicates exploratory prompt loops |
-| **Curated Offline Data** | **21 JSON Catalogs** | Verified via `data/METADATA.json` | Official authorities, sources & licenses |
-| **UI Dictionary Coverage** | **107 Standard Terms** | Curated digital strings with hallucination traps | Auth, commerce, actions, navigation |
-| **Cross-Platform Parity** | **TypeScript, JS, Python** | Isomorphic dual implementation | Node 18+, Bun, Deno, iOS, Android, Web |
+| **Curated Offline Data** | **25 JSON Catalogs** | Verified via `data/METADATA.json` | Official authorities, sources & licenses |
+| **UI Dictionary Coverage** | **131 Standard Terms** | Curated digital strings with hallucination traps | Auth, commerce, actions, navigation, cloud |
+| **Cross-Platform Parity** | **TypeScript, JS, Python** | Isomorphic triple implementation | Node 18+, Bun, Deno, iOS, Android, Web |
 
 ---
 
@@ -233,16 +233,19 @@ python3 -m unittest discover -s tests -p "test_*.py" -v
  test_check_khmer_unicode.py      |  20   | U+FFFD, control characters, ZWSP, trailing Coeng
  test_khmer_utils.py              |  24   | Python library: phone, currency, words, dates
  test_data_catalog.py             |   6   | Provinces, banknotes, operators, holidays, Bakong
- test_extended_catalogs.py        |   4   | Districts (PP, SR, BB), independent vowels, postcodes
+ test_extended_catalogs.py        |   6   | Districts (PP, SR, BB, KK, PS, TK, PV), vowels, postcodes
  test_domain_catalogs.py          |   4   | Kandal, Kampong Cham, Kampot, couriers, ministries
  test_currency_formatting.py      |  12   | Whole-riel formatting, ICU defaults, rounding
  test_date_and_formatting.py      |  15   | Months, BE formula (CE+543), grapheme truncation
  test_phone_normalization.py      |   8   | 8/9-digit NSN lengths, E.164, OTP requirement flag
- test_audit_khmer_i18n.py         |   4   | Missing keys, placeholder mismatch, royal registers
- test_khmer_utils_extended.py     |   5   | Landlines, minor unit math, recursive words, KHQR
- test_data_metadata.py            |   3   | Complete data/METADATA.json verification of 21 files
+ test_audit_khmer_i18n.py         |   5   | Missing keys, royal register, font stacks, line-height
+ test_khmer_utils.py              |  26   | Core phone, currency, dates, words, KHQR, stats
+ test_khmer_utils_extended.py     |   7   | Landlines, minor unit math, National ID, plates, KHQR
+ test_khmer_utils_js.py           |  16   | Isomorphic JS/Node/Bun runtime parity validation
+ test_ui_terms.py                 |   7   | 131 UI terms schema, naming rules, anti-hallucination
+ test_data_metadata.py            |   3   | Complete data/METADATA.json verification of 25 files
 ----------------------------------+-------+---------------------------------------------
- TOTAL VERIFIED TESTS             |  120  | 100% Deterministic CI Compliance (0 Failures)
+ TOTAL VERIFIED TESTS             |  133  | 100% Deterministic CI Compliance (0 Failures)
 ========================================================================================
 ```
 

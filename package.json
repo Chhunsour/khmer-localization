@@ -1,6 +1,6 @@
 {
   "name": "khmer-localization",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Production-grade Khmer localization skill, utilities, dataset registry, and i18n quality audit engine.",
   "main": "scripts/khmer_utils.js",
   "module": "scripts/khmer_utils.js",
