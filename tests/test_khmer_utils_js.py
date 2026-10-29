@@ -18,14 +18,26 @@ if REPO_ROOT not in sys.path:
 JS_UTILS_PATH = os.path.join(REPO_ROOT, "scripts", "khmer_utils.js")
 
 
+import shutil
+
+def get_js_runtime():
+    for candidate in ["node", "bun", os.path.expanduser("~/.bun/bin/bun")]:
+        path = shutil.which(candidate) if not os.path.isabs(candidate) else (candidate if os.path.exists(candidate) else None)
+        if path:
+            return path
+    return None
+
+JS_RUNTIME = get_js_runtime()
+
+
 def run_node_eval(js_code: str) -> str:
-    """Execute a Node.js snippet that requires khmer_utils.js and returns stdout."""
+    """Execute a JS snippet that requires khmer_utils.js and returns stdout."""
     script = f"""
     const u = require({json.dumps(JS_UTILS_PATH)});
     {js_code}
     """
     proc = subprocess.run(
-        ["node", "-e", script],
+        [JS_RUNTIME, "-e", script],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -37,12 +49,13 @@ def run_node_eval(js_code: str) -> str:
 class TestKhmerUtilsJs(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        # Verify node is available
+        if not JS_RUNTIME:
+            raise unittest.SkipTest("Node.js or Bun is not available in environment")
         try:
-            res = subprocess.run(["node", "-v"], capture_output=True, text=True, check=True)
+            res = subprocess.run([JS_RUNTIME, "-v"], capture_output=True, text=True, check=True)
             cls.node_version = res.stdout.strip()
         except Exception as e:
-            raise unittest.SkipTest(f"Node.js is not available in environment: {e}")
+            raise unittest.SkipTest(f"JS runtime execution failed: {e}")
 
     def test_phone_normalization(self):
         """Test Cambodian phone number normalization across standard & international formats."""

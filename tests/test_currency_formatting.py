@@ -16,6 +16,7 @@ Verifies:
 
 import json
 import math
+import os
 import shutil
 import subprocess
 import sys
@@ -130,14 +131,21 @@ class TestIntlNumberFormatRuntime(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.node_available = shutil.which("node") is not None
+        candidates = ["node", "bun", os.path.expanduser("~/.bun/bin/bun")]
+        cls.js_binary = None
+        for cand in candidates:
+            path = shutil.which(cand) if not os.path.isabs(cand) else (cand if os.path.exists(cand) else None)
+            if path:
+                cls.js_binary = path
+                break
+        cls.node_available = cls.js_binary is not None
 
     def _run_node_script(self, js_code: str) -> dict:
         if not self.node_available:
-            self.skipTest("Node.js runtime not installed in environment")
-        cmd = ["node", "-e", js_code]
+            self.skipTest("Node.js or Bun runtime not installed in environment")
+        cmd = [self.js_binary, "-e", js_code]
         proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-        self.assertEqual(proc.returncode, 0, f"Node script failed: {proc.stderr}")
+        self.assertEqual(proc.returncode, 0, f"JS script failed: {proc.stderr}")
         return json.loads(proc.stdout)
 
     def test_intl_khr_default_has_two_decimals(self):

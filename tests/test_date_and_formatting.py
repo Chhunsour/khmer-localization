@@ -12,6 +12,7 @@ Verifies:
 
 import datetime
 import json
+import os
 import shutil
 import subprocess
 import unicodedata
@@ -177,15 +178,22 @@ class TestSafeTextTruncation(unittest.TestCase):
 
 
 class TestNodeIntlDateTimeFormatRuntime(unittest.TestCase):
-    """Verifies live Node.js Intl.DateTimeFormat and Intl.Segmenter."""
+    """Verifies live Node.js / Bun Intl.DateTimeFormat and Intl.Segmenter."""
 
     @classmethod
     def setUpClass(cls):
-        cls.node_available = shutil.which("node") is not None
+        candidates = ["node", "bun", os.path.expanduser("~/.bun/bin/bun")]
+        cls.js_binary = None
+        for cand in candidates:
+            path = shutil.which(cand) if not os.path.isabs(cand) else (cand if os.path.exists(cand) else None)
+            if path:
+                cls.js_binary = path
+                break
+        cls.node_available = cls.js_binary is not None
 
     def _run_node_script(self, js_code: str) -> dict:
         proc = subprocess.run(
-            ["node", "-e", js_code],
+            [self.js_binary, "-e", js_code],
             capture_output=True,
             text=True,
             check=True,
@@ -194,7 +202,7 @@ class TestNodeIntlDateTimeFormatRuntime(unittest.TestCase):
 
     def test_intl_datetimeformat_km_kh(self):
         if not self.node_available:
-            self.skipTest("Node.js is not installed in the environment.")
+            self.skipTest("Node.js or Bun is not installed in the environment.")
 
         js_code = """
         const d = new Date(Date.UTC(2026, 9, 19)); // Month 9 is October (0-indexed)
