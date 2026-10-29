@@ -803,5 +803,61 @@
     "km": "អ្នកទទួលប្រាក់",
     "category": "commerce_payments",
     "avoid": "អ្នកទទួលផល"
+  },
+  {
+    "key": "commerce.cash_on_delivery",
+    "en": "Cash on Delivery (COD)",
+    "km": "ទូទាត់ប្រាក់ពេលទទួលទំនិញ (COD)",
+    "category": "commerce_payments",
+    "avoid": "ប្រាក់លើការចែកចាយ"
+  },
+  {
+    "key": "commerce.out_of_stock",
+    "en": "Out of Stock",
+    "km": "អស់ពីស្តុក",
+    "category": "commerce_payments",
+    "avoid": "គ្មានទំនិញក្នុងស្តុក"
+  },
+  {
+    "key": "commerce.in_stock",
+    "en": "In Stock",
+    "km": "មានក្នុងស្តុក",
+    "category": "commerce_payments",
+    "avoid": "មានទំនិញ"
+  },
+  {
+    "key": "commerce.tracking_number",
+    "en": "Tracking Number",
+    "km": "លេខតាមដានកញ្ចប់អីវ៉ាន់",
+    "category": "commerce_payments",
+    "avoid": "លេខតាមដានផ្លូវ"
+  },
+  {
+    "key": "commerce.order_cancelled",
+    "en": "Order Cancelled",
+    "km": "ការបញ្ជាទិញត្រូវបានបោះបង់",
+    "category": "commerce_payments",
+    "avoid": "ការបញ្ជាទិញបានស្លាប់"
+  },
+  {
+    "key": "commerce.return_policy",
+    "en": "Return Policy",
+    "km": "គោលការណ៍ប្តូរទំនិញត្រឡប់មកវិញ",
+    "category": "commerce_payments",
+    "avoid": "ច្បាប់ត្រឡប់"
+  },
+  {
+    "key": "commerce.discount_voucher",
+    "en": "Discount Voucher",
+    "km": "ប័ណ្ណបញ្ចុះតម្លៃ",
+    "category": "commerce_payments",
+    "avoid": "សំបុត្របញ្ចុះតម្លៃ"
+  },
+  {
+    "key": "commerce.estimated_delivery",
+    "en": "Estimated Delivery Date",
+    "km": "កាលបរិច្ឆេទប៉ាន់ស្មាននៃការដឹកជញ្ជូន",
+    "category": "commerce_payments",
+    "avoid": "ពេលវេលាប៉ាន់ស្មានទទួល"
   }
 ]
