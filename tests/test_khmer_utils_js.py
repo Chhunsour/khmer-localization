@@ -256,6 +256,25 @@ class TestKhmerUtilsJs(unittest.TestCase):
         self.assertTrue(out["p3"]["is_valid_format"])
         self.assertEqual(out["p3"]["plate_type"], "state")
 
+    def test_khqr_merchant_name_formatting_js(self):
+        """Test Tag 59 formatting and dynamic QR generation in JS."""
+        code = """
+        const formatted = u.formatKhqrMerchantName("  Starbucks \\t \\"Coffee\\" \\n Phnom Penh  ");
+        const emptyName = u.formatKhqrMerchantName("");
+        const qr = u.generateKhqr({
+          bakongAccountId: "merchant@abaa",
+          merchantName: "Brown Coffee Roasters",
+          amount: 15000,
+          currency: "KHR",
+        });
+        const verified = u.verifyKhqr(qr);
+        console.log(JSON.stringify({ formatted, emptyName, isValid: verified.isValid }));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertEqual(out["formatted"], "Starbucks Coffee Phnom Pe")
+        self.assertEqual(out["emptyName"], "MERCHANT")
+        self.assertTrue(out["isValid"])
+
 
 if __name__ == "__main__":
     unittest.main()

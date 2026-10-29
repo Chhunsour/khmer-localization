@@ -23,7 +23,9 @@ from scripts.khmer_utils import (
     format_khr,
     format_khmer_date,
     format_khmer_relative_time,
+    format_khqr_merchant_name,
     format_usd,
+    generate_khqr,
     get_khmer_character_stats,
     integer_to_khmer_words,
     is_khmer_text,
@@ -178,6 +180,40 @@ class TestBakongKhqrCrc16(unittest.TestCase):
         is_valid, err = verify_khqr(tampered)
         self.assertFalse(is_valid)
         self.assertIn("CRC mismatch", err)
+
+    def test_khqr_merchant_name_formatting(self):
+        """Test sanitization and truncation of EMVCo Tag 59 Merchant Name."""
+        # Clean standard name
+        self.assertEqual(format_khqr_merchant_name("Angkor Coffee"), "Angkor Coffee")
+
+        # Truncation to 25 chars
+        long_name = "Siem Reap Artisans Cooperative Society Limited"
+        formatted = format_khqr_merchant_name(long_name)
+        self.assertEqual(len(formatted), 25)
+        self.assertEqual(formatted, "Siem Reap Artisans Cooper")
+
+        # Stripping quotes, newlines, and tabs
+        dirty_name = "  Starbucks \t \"Coffee\" \n Phnom Penh  "
+        self.assertEqual(format_khqr_merchant_name(dirty_name), "Starbucks Coffee Phnom Pe")
+
+        # Fallback for empty or invalid
+        self.assertEqual(format_khqr_merchant_name(""), "MERCHANT")
+        self.assertEqual(format_khqr_merchant_name(None), "MERCHANT")
+        self.assertEqual(format_khqr_merchant_name("   "), "MERCHANT")
+
+    def test_generate_khqr_payload_verification(self):
+        """Test generating a dynamic KHQR and verifying its EMVCo checksum."""
+        qr = generate_khqr(
+            bakong_account_id="merchant@abaa",
+            merchant_name="Brown Coffee Roasters",
+            amount=15000,
+            currency="KHR",
+            merchant_city="Phnom Penh",
+            bill_number="INV-2026-001",
+        )
+        is_valid, err = verify_khqr(qr)
+        self.assertTrue(is_valid, f"Generated KHQR failed validation: {err}")
+        self.assertIn("5921Brown Coffee Roasters", qr)
 
 
 class TestKhmerTextDetection(unittest.TestCase):
