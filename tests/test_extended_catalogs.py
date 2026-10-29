@@ -54,3 +54,47 @@ class TestExtendedCatalogs(unittest.TestCase):
         mcc_nums = {m["mcc"] for m in mccs}
         self.assertIn("5812", mcc_nums)
 
+    def test_05_koh_kong_and_pursat_districts(self):
+        """Verify Koh Kong (7 districts) and Pursat (7 districts) catalogs."""
+        kk_path = os.path.join(DATA_DIR, "koh_kong_districts.json")
+        ps_path = os.path.join(DATA_DIR, "pursat_districts.json")
+        with open(kk_path, "r", encoding="utf-8") as f:
+            kk_districts = json.load(f)
+        with open(ps_path, "r", encoding="utf-8") as f:
+            ps_districts = json.load(f)
+
+        self.assertEqual(len(kk_districts), 7)
+        self.assertEqual(len(ps_districts), 7)
+
+        # Check prefixes
+        self.assertTrue(all(d["code"].startswith("09") for d in kk_districts))
+        self.assertTrue(all(d["code"].startswith("15") for d in ps_districts))
+
+        # Check municipality names
+        kk_muni = next(d for d in kk_districts if d["type"] == "Municipality")
+        self.assertEqual(kk_muni["name_km"], "ក្រុងខេមរភូមិន្ទ")
+
+        ps_muni = next(d for d in ps_districts if d["type"] == "Municipality")
+        self.assertEqual(ps_muni["name_km"], "ក្រុងពោធិ៍សាត់")
+
+    def test_06_takeo_and_prey_veng_districts(self):
+        """Verify Takeo (10 districts) and Prey Veng (13 districts) catalogs."""
+        tk_path = os.path.join(DATA_DIR, "takeo_districts.json")
+        pv_path = os.path.join(DATA_DIR, "prey_veng_districts.json")
+        with open(tk_path, "r", encoding="utf-8") as f:
+            tk_districts = json.load(f)
+        with open(pv_path, "r", encoding="utf-8") as f:
+            pv_districts = json.load(f)
+
+        self.assertEqual(len(tk_districts), 10)
+        self.assertEqual(len(pv_districts), 13)
+
+        self.assertTrue(all(d["code"].startswith("21") for d in tk_districts))
+        self.assertTrue(all(d["code"].startswith("14") for d in pv_districts))
+
+        tk_muni = next(d for d in tk_districts if d["type"] == "Municipality")
+        self.assertEqual(tk_muni["name_km"], "ក្រុងដូនកែវ")
+
+        pv_muni = next(d for d in pv_districts if d["type"] == "Municipality")
+        self.assertEqual(pv_muni["name_km"], "ក្រុងព្រៃវែង")
+
