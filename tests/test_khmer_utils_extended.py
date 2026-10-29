@@ -24,6 +24,7 @@ from scripts.khmer_utils import (
     normalize_cambodian_phone,
     parse_khqr,
     sort_khmer_words,
+    validate_cambodian_id,
 )
 
 
@@ -124,6 +125,39 @@ class TestKhmerUtilsExtended(unittest.TestCase):
         self.assertEqual(sorted_res[2], "គណនី")
         self.assertEqual(sorted_res[3], "ង៉ុក")
         self.assertEqual(sorted_res[4], "ចាកចេញ")
+
+    def test_cambodian_national_id_validation(self):
+        """Test Cambodian National ID card normalization (9-digit legacy & 10-digit smart ID)."""
+        # 1. 9-digit legacy ID
+        id9 = validate_cambodian_id("012345678")
+        self.assertTrue(id9["is_valid"])
+        self.assertEqual(id9["id_type"], "legacy_id")
+        self.assertEqual(id9["province_code"], "01")
+        self.assertEqual(id9["normalized"], "012345678")
+        self.assertEqual(id9["khmer_digits"], "០១២៣៤៥៦៧៨")
+
+        # 2. 10-digit smart biometric ID
+        id10 = validate_cambodian_id("1201234567")
+        self.assertTrue(id10["is_valid"])
+        self.assertEqual(id10["id_type"], "smart_id")
+        self.assertEqual(id10["province_code"], "12")
+        self.assertEqual(id10["normalized"], "1201234567")
+
+        # 3. Khmer numerals with dashes and spaces
+        id_km = validate_cambodian_id("១២-០១២៣-៤៥៦៧")
+        self.assertTrue(id_km["is_valid"])
+        self.assertEqual(id_km["normalized"], "1201234567")
+        self.assertEqual(id_km["id_type"], "smart_id")
+
+        # 4. Invalid length
+        id_inv_len = validate_cambodian_id("12345")
+        self.assertFalse(id_inv_len["is_valid"])
+        self.assertIn("Invalid ID length", id_inv_len["error"])
+
+        # 5. Non-numeric
+        id_alpha = validate_cambodian_id("120123456A")
+        self.assertFalse(id_alpha["is_valid"])
+        self.assertIn("non-numeric", id_alpha["error"])
 
 
 if __name__ == "__main__":

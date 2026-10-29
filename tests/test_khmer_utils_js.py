@@ -221,6 +221,23 @@ class TestKhmerUtilsJs(unittest.TestCase):
         self.assertEqual(out[1], "ខេត្ត")
         self.assertEqual(out[2], "ចាកចេញ")
 
+    def test_cambodian_national_id_validation_js(self):
+        """Test National ID validation parity in JS runtime."""
+        code = """
+        const r1 = u.validateCambodianId("012345678");
+        const r2 = u.validateCambodianId("១២-០១២៣-៤៥៦៧");
+        const r3 = u.validateCambodianId("invalid");
+        console.log(JSON.stringify({ r1, r2, r3 }));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertTrue(out["r1"]["is_valid"])
+        self.assertEqual(out["r1"]["id_type"], "legacy_id")
+        self.assertEqual(out["r1"]["khmer_digits"], "០១២៣៤៥៦៧៨")
+        self.assertTrue(out["r2"]["is_valid"])
+        self.assertEqual(out["r2"]["id_type"], "smart_id")
+        self.assertEqual(out["r2"]["normalized"], "1201234567")
+        self.assertFalse(out["r3"]["is_valid"])
+
 
 if __name__ == "__main__":
     unittest.main()
