@@ -225,7 +225,7 @@ def audit_source_code(src_dir: str) -> List[Dict[str, Any]]:
     if not os.path.isdir(src_dir):
         return findings
 
-    valid_exts = {".ts", ".tsx", ".js", ".jsx", ".vue", ".svelte", ".html", ".py"}
+    valid_exts = {".ts", ".tsx", ".js", ".jsx", ".vue", ".svelte", ".html", ".py", ".css", ".scss"}
     ignored_dirs = {"node_modules", ".git", "dist", "build", ".next", "venv", "__pycache__"}
 
     for root, dirs, files in os.walk(src_dir):
@@ -298,6 +298,29 @@ def audit_source_code(src_dir: str) -> List[Dict[str, Any]]:
                         "rule": "FIXED_WIDTH_BUTTON_OVERFLOW",
                         "message": f"Fixed-width button element containing Khmer script may clip or wrap awkwardly on mobile viewports.",
                     })
+
+                # 6. Restricted line-height risk for Khmer typography (clipping stacked vowels and Coeng)
+                if re.search(r"line-height:\s*(?:1|1\.0|1\.1|1\.2|1\.3)\b", line) or re.search(r"\b(leading-none|leading-tight)\b", line):
+                    if khmer_chars or "khmer" in line.lower() or "kh-" in line.lower():
+                        findings.append({
+                            "layer": "VISUAL_INSPECTION_REQUIRED",
+                            "file": filepath,
+                            "line": line_no,
+                            "rule": "RESTRICTIVE_LINE_HEIGHT_CLIPPING",
+                            "message": f"Restricted line-height detected: '{line.strip()[:60]}...'. Recommend line-height: 1.6-1.8 to prevent stacked vowel/subscript clipping.",
+                        })
+
+                # 7. Missing recommended Khmer font fallback in font-family declaration
+                if re.search(r"font-family:\s*[^;]+", line, re.IGNORECASE):
+                    val = line.lower()
+                    if ("khmer" in val or khmer_chars) and not any(f in val for f in ["kantumruy", "hanuman", "battambang", "siemreap", "noto sans khmer"]):
+                        findings.append({
+                            "layer": "VISUAL_INSPECTION_REQUIRED",
+                            "file": filepath,
+                            "line": line_no,
+                            "rule": "MISSING_KHMER_FONT_FALLBACK",
+                            "message": f"Font stack lacks recommended Khmer typeface fallback ('Kantumruy Pro', 'Hanuman', 'Noto Sans Khmer'): '{line.strip()[:60]}...'.",
+                        })
 
     return findings
 
