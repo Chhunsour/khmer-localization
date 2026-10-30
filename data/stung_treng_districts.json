@@ -1,0 +1,44 @@
+[
+  {
+    "code": "1904",
+    "name_en": "Krong Stung Treng",
+    "name_km": "ក្រុងស្ទឹងត្រែង",
+    "type": "Municipality",
+    "sangkats": 4
+  },
+  {
+    "code": "1901",
+    "name_en": "Sesan",
+    "name_km": "ស្រុកសេសាន",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "1902",
+    "name_en": "Siem Bouk",
+    "name_km": "ស្រុកសៀមបូក",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "1903",
+    "name_en": "Siem Pang",
+    "name_km": "ស្រុកសៀមប៉ាង",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "1905",
+    "name_en": "Thala Barivat",
+    "name_km": "ស្រុកថាឡាបារីវ៉ាត់",
+    "type": "District",
+    "communes": 11
+  },
+  {
+    "code": "1906",
+    "name_en": "Borei O'Svay Sen Chey",
+    "name_km": "ស្រុកបុរីអូរស្វាយសែនជ័យ",
+    "type": "District",
+    "communes": 3
+  }
+]
