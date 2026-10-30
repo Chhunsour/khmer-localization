@@ -787,3 +787,50 @@ export function sortCustomersAlphabetically(
 **Why this is better:**
 - Applies official Khmer dictionary ordering (`ក` before `ខ` before `គ`...).
 - Groups base consonants and subscript clusters in proper linguistic sequence.
+
+---
+
+## Example 15: Cambodian GDT Tax Invoice (វិក្កយបត្រអាករ) with TIN & KHQR
+
+### Problem
+An invoice generator used informal phrasing ("Bill of Sale"), accepted unvalidated TIN formats, omitted official exchange rate conversions, and lacked formal spelled-out Khmer words required by the General Department of Taxation.
+
+### After (Production GDT Fiscal Invoice)
+- **Python implementation:** `python3 examples/cambodia_tax_invoice.py`
+- **Node.js implementation:** `node examples/cambodia_tax_invoice.js`
+
+```typescript
+import {
+  validateCambodianTin,
+  calculateMoneyTotal,
+  formatCurrencyKhmerWords,
+  generateKhqr,
+  getKhmerYearEraInfo
+} from './scripts/khmer_utils';
+
+// 1. Validate Seller and Buyer TINs
+const sellerTin = validateCambodianTin("K001-987654321"); // Corporate branch
+const buyerTin = validateCambodianTin("123456789");       // Standard 9-digit
+
+// 2. Dual Currency & 10% VAT Math
+const totalsUsd = calculateMoneyTotal(items, { currency: "USD", taxRatePercent: 10.0 });
+const totalKhr = Math.round(totalsUsd.total * 4100);
+
+// 3. Mandatory In-Words Spellout (GDT Requirement)
+const inWords = formatCurrencyKhmerWords(totalKhr, "KHR");
+// => "មួយលានប្រាំបួនសែនប្រាំបីម៉ឺនបួនពាន់បួនរយរៀលគត់"
+
+// 4. Dynamic KHQR with CRC16 Checksum
+const khqr = generateKhqr({
+  bakongAccountId: "seller@nbc",
+  merchantName: "Cambodia Tech Alliance",
+  amount: totalKhr,
+  currency: "KHR",
+  billNumber: "INV-2026-0089",
+});
+```
+**Why this is better:**
+- Guarantees complete compliance with GDT Prakas No. 724 on e-invoicing.
+- Validates 9-digit TINs and branch prefixes.
+- Prevents float calculation drift using integer minor units.
+- Generates official spelled-out Khmer riels ending with `គត់`.
