@@ -107,6 +107,20 @@ class TestKhmerI18nAudit(unittest.TestCase):
             rules = {f["rule"] for f in findings}
             self.assertIn("INVALID_KHMER_TEXT_DIRECTION", rules)
 
+    def test_unlocalized_date_format_detection(self):
+        """Test detection of American MM/DD/YYYY date pattern in locale translations."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmpdir:
+            en_json = os.path.join(tmpdir, "en.json")
+            km_json = os.path.join(tmpdir, "km.json")
+            with open(en_json, "w", encoding="utf-8") as f:
+                json.dump({"date_hint": "Enter date (MM/DD/YYYY)"}, f)
+            with open(km_json, "w", encoding="utf-8") as f:
+                json.dump({"date_hint": "បញ្ចូលកាលបរិច្ឆេទ (MM/DD/YYYY)"}, f)
+            findings = audit_locale_files(tmpdir, base_locale="en", target_locale="km")
+            rules = {f["rule"] for f in findings}
+            self.assertIn("UNLOCALIZED_DATE_PATTERN", rules)
+
     def test_run_full_audit_aggregation(self):
         """Test full audit aggregation and status reporting."""
         report = run_full_audit(FIXTURE_DIR, locales_dir=LOCALES_DIR, src_dir=SRC_DIR)
