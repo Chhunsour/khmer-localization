@@ -1,0 +1,65 @@
+[
+  {
+    "code": "0106",
+    "name_en": "Krong Serei Saophoan",
+    "name_km": "ក្រុងសិរីសោភ័ណ",
+    "type": "Municipality",
+    "sangkats": 7
+  },
+  {
+    "code": "0109",
+    "name_en": "Krong Poipet",
+    "name_km": "ក្រុងប៉ោយប៉ែត",
+    "type": "Municipality",
+    "sangkats": 5
+  },
+  {
+    "code": "0102",
+    "name_en": "Mongkol Borei",
+    "name_km": "ស្រុកមង្គលបូរី",
+    "type": "District",
+    "communes": 13
+  },
+  {
+    "code": "0103",
+    "name_en": "Phnom Srok",
+    "name_km": "ស្រុកភ្នំស្រុក",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "0104",
+    "name_en": "Preah Netr Preah",
+    "name_km": "ស្រុកព្រះនេត្រព្រះ",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "0105",
+    "name_en": "Ou Chrov",
+    "name_km": "ស្រុកអូរជ្រៅ",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "0107",
+    "name_en": "Thma Puok",
+    "name_km": "ស្រុកថ្មពួក",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "0108",
+    "name_en": "Svay Chek",
+    "name_km": "ស្រុកស្វាយចេក",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "0101",
+    "name_en": "Malai",
+    "name_km": "ស្រុកម៉ាឡៃ",
+    "type": "District",
+    "communes": 6
+  }
+]
