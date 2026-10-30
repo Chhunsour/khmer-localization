@@ -1,0 +1,37 @@
+[
+  {
+    "code": "1105",
+    "name_en": "Krong Sen Monorom",
+    "name_km": "ក្រុងសែនមនោរម្យ",
+    "type": "Municipality",
+    "sangkats": 4
+  },
+  {
+    "code": "1101",
+    "name_en": "Kaev Seima",
+    "name_km": "ស្រុកកែវសីមា",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "1102",
+    "name_en": "Kaoh Nheaek",
+    "name_km": "ស្រុកកោះញែក",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "1103",
+    "name_en": "Ou Reang",
+    "name_km": "ស្រុកអូររាំង",
+    "type": "District",
+    "communes": 2
+  },
+  {
+    "code": "1104",
+    "name_en": "Pechr Chenda",
+    "name_km": "ស្រុកពេជ្រាដា",
+    "type": "District",
+    "communes": 4
+  }
+]
