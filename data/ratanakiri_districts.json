@@ -1,0 +1,65 @@
+[
+  {
+    "code": "1602",
+    "name_en": "Krong Banlung",
+    "name_km": "ក្រុងបានលុង",
+    "type": "Municipality",
+    "sangkats": 4
+  },
+  {
+    "code": "1601",
+    "name_en": "Andoung Meas",
+    "name_km": "ស្រុកអណ្តូងមាស",
+    "type": "District",
+    "communes": 4
+  },
+  {
+    "code": "1603",
+    "name_en": "Bar Kaev",
+    "name_km": "ស្រុកបរកែវ",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "1604",
+    "name_en": "Koun Mom",
+    "name_km": "ស្រុកកូនមុំ",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "1605",
+    "name_en": "Lumphat",
+    "name_km": "ស្រុកលំផាត់",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "1606",
+    "name_en": "Ou Chum",
+    "name_km": "ស្រុកអូរជុំ",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "1607",
+    "name_en": "Ou Ya Dav",
+    "name_km": "ស្រុកអូរយ៉ាដាវ",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "1608",
+    "name_en": "Ta Veaeng",
+    "name_km": "ស្រុកតាវែង",
+    "type": "District",
+    "communes": 2
+  },
+  {
+    "code": "1609",
+    "name_en": "Veun Sai",
+    "name_km": "ស្រុកវើនសៃ",
+    "type": "District",
+    "communes": 9
+  }
+]
