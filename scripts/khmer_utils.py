@@ -343,6 +343,62 @@ def get_khmer_lunar_zodiac(ce_year: int) -> Dict[str, str]:
     }
 
 
+KHMER_SAK_ERAS: List[Tuple[str, str]] = [
+    ("សំរឹទ្ធិស័ក", "10th Sak (Samriddhisak)"),
+    ("ឯកស័ក", "1st Sak (Ekasak)"),
+    ("ទោស័ក", "2nd Sak (Toasak)"),
+    ("ត្រីស័ក", "3rd Sak (Treisak)"),
+    ("ចត្វាស័ក", "4th Sak (Chatvasak)"),
+    ("បញ្ចស័ក", "5th Sak (Panjasak)"),
+    ("ឆស័ក", "6th Sak (Chhasak)"),
+    ("សប្តស័ក", "7th Sak (Saptasak)"),
+    ("អដ្ឋស័ក", "8th Sak (Atthasak)"),
+    ("នព្វស័ក", "9th Sak (Nopphasak)"),
+]
+
+
+def get_khmer_sak_era(ce_year: int) -> Dict[str, Any]:
+    """
+    Returns the Khmer Sak era (ស័កទាំង១០) for a Common Era year.
+    Formula: (BE - 2) % 10 where BE = CE + 543.
+    E.g. 2024 -> BE 2568 -> ឆស័ក (6th Sak), 2026 -> BE 2570 -> អដ្ឋស័ក (8th Sak).
+    """
+    be_year = ce_year + 543
+    sak_idx = (be_year - 2) % 10
+    km, en = KHMER_SAK_ERAS[sak_idx]
+    sak_num = 10 if sak_idx == 0 else sak_idx
+    return {
+        "ce_year": ce_year,
+        "be_year": be_year,
+        "sak_number": sak_num,
+        "sak_km": km,
+        "sak_en": en,
+    }
+
+
+def get_khmer_year_era_info(ce_year: int) -> Dict[str, Any]:
+    """
+    Returns complete combined traditional Cambodian year information:
+    Buddhist Era, Animal Zodiac (ឆ្នាំទាំង១២), and Sak era (ស័កទាំង១០).
+    E.g. 2026 -> 'ព.ស. ២៥៧០ ឆ្នាំមមី អដ្ឋស័ក'
+    """
+    zodiac = get_khmer_lunar_zodiac(ce_year)
+    sak = get_khmer_sak_era(ce_year)
+    be_str = str(sak["be_year"]).translate(str.maketrans("0123456789", "០១២៣៤៥៦៧៨៩"))
+    full_formal = f"ព.ស. {be_str} {zodiac['full_km']} {sak['sak_km']}"
+    return {
+        "ce_year": ce_year,
+        "be_year": sak["be_year"],
+        "be_year_km": be_str,
+        "zodiac_km": zodiac["zodiac_km"],
+        "zodiac_en": zodiac["zodiac_en"],
+        "sak_km": sak["sak_km"],
+        "sak_en": sak["sak_en"],
+        "sak_number": sak["sak_number"],
+        "formal_string_km": full_formal,
+    }
+
+
 # --- 4. Unicode Grapheme Truncation & Word Breaking ---
 
 def safe_truncate_khmer(text: str, max_chars: int) -> str:
