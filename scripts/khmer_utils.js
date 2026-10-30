@@ -398,6 +398,86 @@ function formatKhmerRelativeTime(diffSeconds) {
   return `${weeks} សប្តាហ៍មុន`;
 }
 
+const KHMER_ZODIAC_ANIMALS = [
+  ["ជូត", "Rat"],
+  ["ឆ្លូវ", "Ox"],
+  ["ខាល", "Tiger"],
+  ["ថោះ", "Rabbit"],
+  ["រោង", "Dragon"],
+  ["ម្សាញ់", "Snake"],
+  ["មមី", "Horse"],
+  ["មមែ", "Goat"],
+  ["វក", "Monkey"],
+  ["រកា", "Rooster"],
+  ["ច", "Dog"],
+  ["កុរ", "Pig"],
+];
+
+const KHMER_SAK_ERAS = [
+  ["សំរឹទ្ធិស័ក", "10th Sak (Samriddhisak)"],
+  ["ឯកស័ក", "1st Sak (Ekasak)"],
+  ["ទោស័ក", "2nd Sak (Toasak)"],
+  ["ត្រីស័ក", "3rd Sak (Treisak)"],
+  ["ចត្វាស័ក", "4th Sak (Chatvasak)"],
+  ["បញ្ចស័ក", "5th Sak (Panjasak)"],
+  ["ឆស័ក", "6th Sak (Chhasak)"],
+  ["សប្តស័ក", "7th Sak (Saptasak)"],
+  ["អដ្ឋស័ក", "8th Sak (Atthasak)"],
+  ["នព្វស័ក", "9th Sak (Nopphasak)"],
+];
+
+/**
+ * Returns Khmer 12-animal zodiac year (ឆ្នាំទាំង១២) for a Common Era year.
+ */
+function getKhmerLunarZodiac(ceYear) {
+  const idx = ((ceYear - 4) % 12 + 12) % 12;
+  const [km, en] = KHMER_ZODIAC_ANIMALS[idx];
+  return {
+    year: String(ceYear),
+    zodiac_km: km,
+    zodiac_en: en,
+    full_km: `ឆ្នាំ${km}`,
+  };
+}
+
+/**
+ * Returns the Khmer Sak era (ស័កទាំង១០) for a Common Era year.
+ */
+function getKhmerSakEra(ceYear) {
+  const beYear = toBuddhistEra(ceYear);
+  const sakIdx = ((ceYear + 2) % 10 + 10) % 10;
+  const [km, en] = KHMER_SAK_ERAS[sakIdx];
+  const sakNum = sakIdx === 0 ? 10 : sakIdx;
+  return {
+    ce_year: ceYear,
+    be_year: beYear,
+    sak_number: sakNum,
+    sak_km: km,
+    sak_en: en,
+  };
+}
+
+/**
+ * Returns combined traditional Cambodian year information.
+ */
+function getKhmerYearEraInfo(ceYear) {
+  const zodiac = getKhmerLunarZodiac(ceYear);
+  const sak = getKhmerSakEra(ceYear);
+  const beStr = toKhmerDigits(String(sak.be_year));
+  const fullFormal = `ព.ស. ${beStr} ${zodiac.full_km} ${sak.sak_km}`;
+  return {
+    ce_year: ceYear,
+    be_year: sak.be_year,
+    be_year_km: beStr,
+    zodiac_km: zodiac.zodiac_km,
+    zodiac_en: zodiac.zodiac_en,
+    sak_km: sak.sak_km,
+    sak_en: sak.sak_en,
+    sak_number: sak.sak_number,
+    formal_string_km: fullFormal,
+  };
+}
+
 // --- 4. Unicode Grapheme Truncation & Word Breaking ---
 
 /**
@@ -1130,6 +1210,9 @@ const khmerUtils = {
   parseKhmerLicensePlate,
   formatKhqrMerchantName,
   validateCambodianTin,
+  getKhmerLunarZodiac,
+  getKhmerSakEra,
+  getKhmerYearEraInfo,
 };
 
 if (typeof module !== "undefined" && module.exports) {
