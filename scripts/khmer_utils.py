@@ -709,18 +709,21 @@ def generate_khqr(
     bill_number: str = "",
     store_label: str = "",
     terminal_label: str = "",
+    purpose: str = "",
     mcc: str = "5999",
+    is_dynamic: bool = True,
 ) -> str:
     """
-    Generate an EMVCo compliant Bakong KHQR dynamic payment payload with CRC16 checksum.
+    Generate an EMVCo compliant Bakong KHQR payment payload with CRC16 checksum.
     Decouples payload generation from bank settlement or API authentication.
     """
     def _format_tlv(tag: str, value: str) -> str:
         return f"{tag}{len(value):02d}{value}"
 
     # Tag 00: Payload Format Indicator (01)
-    # Tag 01: Point of Initiation Method (12 = Dynamic)
-    parts = [_format_tlv("00", "01"), _format_tlv("01", "12")]
+    # Tag 01: Point of Initiation Method (12 = Dynamic, 11 = Static)
+    init_method = "12" if is_dynamic else "11"
+    parts = [_format_tlv("00", "01"), _format_tlv("01", init_method)]
 
     # Tag 29: Merchant Account Information
     sub_29 = _format_tlv("00", bakong_account_id)
@@ -758,6 +761,8 @@ def generate_khqr(
         sub_62 += _format_tlv("07", store_label)
     if terminal_label:
         sub_62 += _format_tlv("08", terminal_label)
+    if purpose:
+        sub_62 += _format_tlv("09", purpose[:25])
     if sub_62:
         parts.append(_format_tlv("62", sub_62))
 
