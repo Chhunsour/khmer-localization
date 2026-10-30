@@ -1,0 +1,44 @@
+[
+  {
+    "code": "1002",
+    "name_en": "Krong Kracheh",
+    "name_km": "ក្រុងក្រចេះ",
+    "type": "Municipality",
+    "sangkats": 5
+  },
+  {
+    "code": "1001",
+    "name_en": "Chhloung",
+    "name_km": "ស្រុកឆ្លូង",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1003",
+    "name_en": "Prek Prasab",
+    "name_km": "ស្រុកព្រែកប្រសព្វ",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1004",
+    "name_en": "Sambour",
+    "name_km": "ស្រុកសំបូរ",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "1005",
+    "name_en": "Snuol",
+    "name_km": "ស្រុកស្នួល",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "1006",
+    "name_en": "Chetr Borei",
+    "name_km": "ស្រុកចិត្របុរី",
+    "type": "District",
+    "communes": 10
+  }
+]
