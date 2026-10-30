@@ -210,10 +210,25 @@ class TestBakongKhqrCrc16(unittest.TestCase):
             currency="KHR",
             merchant_city="Phnom Penh",
             bill_number="INV-2026-001",
+            purpose="Coffee purchase",
+            is_dynamic=True,
         )
         is_valid, err = verify_khqr(qr)
         self.assertTrue(is_valid, f"Generated KHQR failed validation: {err}")
+        self.assertIn("010212", qr)  # Tag 01 length 02 value 12 (Dynamic)
         self.assertIn("5921Brown Coffee Roasters", qr)
+
+        # Static KHQR test
+        qr_static = generate_khqr(
+            bakong_account_id="merchant@abaa",
+            merchant_name="Brown Coffee Roasters",
+            amount=0,
+            currency="USD",
+            is_dynamic=False,
+        )
+        is_valid_s, _ = verify_khqr(qr_static)
+        self.assertTrue(is_valid_s)
+        self.assertIn("010211", qr_static)  # Tag 01 length 02 value 11 (Static)
 
 
 class TestKhmerTextDetection(unittest.TestCase):
