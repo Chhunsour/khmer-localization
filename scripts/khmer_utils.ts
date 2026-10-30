@@ -822,11 +822,13 @@ export interface GenerateKhqrParams {
   billNumber?: string;
   storeLabel?: string;
   terminalLabel?: string;
+  purpose?: string;
   mcc?: string;
+  isDynamic?: boolean;
 }
 
 /**
- * Generate an EMVCo compliant Bakong KHQR dynamic payment payload with CRC16 checksum.
+ * Generate an EMVCo compliant Bakong KHQR dynamic or static payment payload with CRC16 checksum.
  * Decouples payload generation from bank settlement or API authentication.
  */
 export function generateKhqr({
@@ -838,7 +840,9 @@ export function generateKhqr({
   billNumber = "",
   storeLabel = "",
   terminalLabel = "",
+  purpose = "",
   mcc = "5999",
+  isDynamic = true,
 }: GenerateKhqrParams): string {
   function formatTlv(tag: string, val: string | number): string {
     const s = String(val);
@@ -846,7 +850,8 @@ export function generateKhqr({
     return `${tag}${len}${s}`;
   }
 
-  const parts = [formatTlv("00", "01"), formatTlv("01", "12")];
+  const initMethod = isDynamic ? "12" : "11";
+  const parts = [formatTlv("00", "01"), formatTlv("01", initMethod)];
   const sub29 = formatTlv("00", bakongAccountId);
   parts.push(formatTlv("29", sub29));
   parts.push(formatTlv("52", mcc));
@@ -871,6 +876,7 @@ export function generateKhqr({
   if (billNumber) sub62 += formatTlv("01", billNumber);
   if (storeLabel) sub62 += formatTlv("07", storeLabel);
   if (terminalLabel) sub62 += formatTlv("08", terminalLabel);
+  if (purpose) sub62 += formatTlv("09", purpose.slice(0, 25));
   if (sub62) parts.push(formatTlv("62", sub62));
 
   const rawWithoutCrc = parts.join("") + "6304";
