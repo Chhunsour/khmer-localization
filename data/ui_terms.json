@@ -915,5 +915,75 @@
     "km": "ទាញយកទិន្នន័យផ្ទាល់ខ្លួនរបស់ខ្ញុំ",
     "category": "privacy_terms",
     "avoid": "ទាញយកទិន្នន័យខ្ញុំ"
+  },
+  {
+    "key": "auth.mfa",
+    "en": "Multi-Factor Authentication",
+    "km": "ការផ្ទៀងផ្ទាត់ពហុកត្តា",
+    "category": "authentication",
+    "avoid": "ការបញ្ជាក់ពហុកត្តា"
+  },
+  {
+    "key": "auth.two_step",
+    "en": "Two-Step Verification",
+    "km": "ការផ្ទៀងផ្ទាត់ពីរជំហាន",
+    "category": "authentication",
+    "avoid": "ការពិនិត្យពីរជំហាន"
+  },
+  {
+    "key": "auth.biometrics",
+    "en": "Biometric Authentication",
+    "km": "ការផ្ទៀងផ្ទាត់ជីវមាត្រ",
+    "category": "authentication",
+    "avoid": "ការផ្ទៀងផ្ទាត់ជីវសាស្រ្ត"
+  },
+  {
+    "key": "auth.face_id",
+    "en": "Face Recognition",
+    "km": "ការសម្គាល់ផ្ទៃមុខ",
+    "category": "authentication",
+    "avoid": "ការស្គាល់មុខ"
+  },
+  {
+    "key": "auth.fingerprint",
+    "en": "Fingerprint Scan",
+    "km": "ស្នាមម្រាមដៃ",
+    "category": "authentication",
+    "avoid": "ស្នាមដៃ"
+  },
+  {
+    "key": "auth.security_question",
+    "en": "Security Question",
+    "km": "សំណួរសុវត្ថិភាព",
+    "category": "authentication",
+    "avoid": "សំណួរការពារ"
+  },
+  {
+    "key": "auth.passkey",
+    "en": "Passkey",
+    "km": "កូនសោសម្ងាត់",
+    "category": "authentication",
+    "avoid": "គន្លឹះឆ្លងកាត់"
+  },
+  {
+    "key": "auth.magic_link",
+    "en": "Magic Link",
+    "km": "តំណភ្ជាប់ចូលដោយផ្ទាល់",
+    "category": "authentication",
+    "avoid": "តំណវេទមន្ត"
+  },
+  {
+    "key": "auth.trusted_device",
+    "en": "Trusted Device",
+    "km": "ឧបករណ៍ដែលទុកចិត្ត",
+    "category": "authentication",
+    "avoid": "ឧបករណ៍ជឿជាក់"
+  },
+  {
+    "key": "auth.revoke_access",
+    "en": "Revoke Access",
+    "km": "ដកសិទ្ធិចូលប្រើ",
+    "category": "authentication",
+    "avoid": "បោះបង់ការចូល"
   }
 ]
