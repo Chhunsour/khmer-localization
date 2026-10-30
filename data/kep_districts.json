@@ -1,0 +1,16 @@
+[
+  {
+    "code": "2301",
+    "name_en": "Krong Kep",
+    "name_km": "ក្រុងកែប",
+    "type": "Municipality",
+    "sangkats": 2
+  },
+  {
+    "code": "2302",
+    "name_en": "Damnak Chang'aeur",
+    "name_km": "ស្រុកដំណាក់ចង្អើរ",
+    "type": "District",
+    "communes": 3
+  }
+]
