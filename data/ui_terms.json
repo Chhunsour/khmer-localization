@@ -1055,5 +1055,68 @@
     "km": "គោលការណ៍ឃុកឃី",
     "category": "privacy_terms",
     "avoid": "គោលការណ៍នំ"
+  },
+  {
+    "key": "forms_inputs.required_field",
+    "en": "Required Field",
+    "km": "ប្រអប់ចាំបាច់បំពេញ",
+    "category": "forms_inputs",
+    "avoid": "ប្រអប់ចាំបាច់"
+  },
+  {
+    "key": "forms_inputs.optional_field",
+    "en": "Optional Field",
+    "km": "ប្រអប់មិនទាមទារ",
+    "category": "forms_inputs",
+    "avoid": "ប្រអប់តាមចិត្ត"
+  },
+  {
+    "key": "actions.archive",
+    "en": "Archive",
+    "km": "ទុកក្នុងប័ណ្ណសារ",
+    "category": "actions",
+    "avoid": "ផ្ញើទុក"
+  },
+  {
+    "key": "actions.restore",
+    "en": "Restore",
+    "km": "ស្តារឡើងវិញ",
+    "category": "actions",
+    "avoid": "ធ្វើឲ្យដូចដើម"
+  },
+  {
+    "key": "navigation.trash",
+    "en": "Trash / Recycle Bin",
+    "km": "ធុងសំរាម",
+    "category": "navigation",
+    "avoid": "កន្លែងចោល"
+  },
+  {
+    "key": "commerce_payments.invoice_number",
+    "en": "Invoice Number",
+    "km": "លេខវិក្កយបត្រ",
+    "category": "commerce_payments",
+    "avoid": "វិក្កយបត្រលេខ (inverted word order)"
+  },
+  {
+    "key": "commerce_payments.tax_identification",
+    "en": "Tax Identification Number (TIN)",
+    "km": "លេខអត្តសញ្ញាណកម្មសារពើពន្ធ",
+    "category": "commerce_payments",
+    "avoid": "លេខពន្ធ"
+  },
+  {
+    "key": "actions.bulk_delete",
+    "en": "Bulk Delete",
+    "km": "លុបជាក្រុម",
+    "category": "actions",
+    "avoid": "លុបច្រើន"
+  },
+  {
+    "key": "status_feedback.read_receipt",
+    "en": "Read Receipt",
+    "km": "ការជូនដំណឹងបានអាន",
+    "category": "status_feedback",
+    "avoid": "វិក្កយបត្រអាន"
   }
 ]
