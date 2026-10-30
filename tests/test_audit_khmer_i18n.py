@@ -96,6 +96,17 @@ class TestKhmerI18nAudit(unittest.TestCase):
             rules = {f["rule"] for f in findings}
             self.assertIn("INVALID_TIN_FORMAT", rules)
 
+    def test_html_root_attributes_audit(self):
+        """Test detection of invalid dir='rtl' on Khmer HTML elements."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_html = os.path.join(tmpdir, "index.html")
+            with open(bad_html, "w", encoding="utf-8") as f:
+                f.write('<html lang="km" dir="rtl"><body>សួស្តី</body></html>\n')
+            findings = audit_source_code(tmpdir)
+            rules = {f["rule"] for f in findings}
+            self.assertIn("INVALID_KHMER_TEXT_DIRECTION", rules)
+
     def test_run_full_audit_aggregation(self):
         """Test full audit aggregation and status reporting."""
         report = run_full_audit(FIXTURE_DIR, locales_dir=LOCALES_DIR, src_dir=SRC_DIR)
