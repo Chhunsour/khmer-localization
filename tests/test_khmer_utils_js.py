@@ -297,6 +297,23 @@ class TestKhmerUtilsJs(unittest.TestCase):
         self.assertEqual(out["t4"]["entity_type"], "sole_proprietorship")
         self.assertFalse(out["t_inv"]["is_valid_syntax"])
 
+    def test_lunar_zodiac_and_sak_js(self):
+        """Test Khmer Lunar Zodiac and Sak era calculation parity in JS runtime."""
+        code = """
+        const z2024 = u.getKhmerLunarZodiac(2024);
+        const s2024 = u.getKhmerSakEra(2024);
+        const info2026 = u.getKhmerYearEraInfo(2026);
+        console.log(JSON.stringify({ z2024, s2024, info2026 }));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertEqual(out["z2024"]["zodiac_km"], "រោង")
+        self.assertEqual(out["z2024"]["zodiac_en"], "Dragon")
+        self.assertEqual(out["s2024"]["sak_km"], "ឆស័ក")
+        self.assertEqual(out["s2024"]["sak_number"], 6)
+        self.assertEqual(out["info2026"]["zodiac_km"], "មមី")
+        self.assertEqual(out["info2026"]["sak_km"], "អដ្ឋស័ក")
+        self.assertEqual(out["info2026"]["formal_string_km"], "ព.ស. ២៥៦៩ ឆ្នាំមមី អដ្ឋស័ក")
+
 
 if __name__ == "__main__":
     unittest.main()
