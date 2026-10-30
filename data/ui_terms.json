@@ -985,5 +985,75 @@
     "km": "ដកសិទ្ធិចូលប្រើ",
     "category": "authentication",
     "avoid": "បោះបង់ការចូល"
+  },
+  {
+    "key": "auth.audit_log",
+    "en": "Audit Log",
+    "km": "កំណត់ត្រាប្រតិបត្តិការ",
+    "category": "authentication",
+    "avoid": "កំណត់ហេតុសវនកម្ម"
+  },
+  {
+    "key": "navigation.dark_mode",
+    "en": "Dark Mode",
+    "km": "ផ្ទៃងងឹត",
+    "category": "navigation",
+    "avoid": "របៀបងងឹត or ម៉ូដងងឹត"
+  },
+  {
+    "key": "navigation.light_mode",
+    "en": "Light Mode",
+    "km": "ផ្ទៃភ្លឺ",
+    "category": "navigation",
+    "avoid": "របៀបភ្លឺ or ម៉ូដភ្លឺ"
+  },
+  {
+    "key": "actions.export_data",
+    "en": "Export Data",
+    "km": "នាំចេញទិន្នន័យ",
+    "category": "actions",
+    "avoid": "ផ្ទេរទិន្នន័យក្រៅ"
+  },
+  {
+    "key": "actions.import_data",
+    "en": "Import Data",
+    "km": "នាំចូលទិន្នន័យ",
+    "category": "actions",
+    "avoid": "ទាញយកទិន្នន័យចូល"
+  },
+  {
+    "key": "status_feedback.offline_mode",
+    "en": "Offline Mode",
+    "km": "ដំណើរការក្រៅបណ្ដាញ",
+    "category": "status_feedback",
+    "avoid": "របៀបអត់អ៊ីនធឺណិត"
+  },
+  {
+    "key": "status_feedback.online_status",
+    "en": "Online",
+    "km": "លើបណ្ដាញ",
+    "category": "status_feedback",
+    "avoid": "កំពុងអនឡាញ"
+  },
+  {
+    "key": "status_feedback.synced",
+    "en": "Synchronized",
+    "km": "បានធ្វើសមកាលកម្ម",
+    "category": "status_feedback",
+    "avoid": "ធ្វើស៊ីសង្វាក់"
+  },
+  {
+    "key": "privacy_terms.data_retention",
+    "en": "Data Retention",
+    "km": "ការរក្សាទុកទិន្នន័យ",
+    "category": "privacy_terms",
+    "avoid": "ការឃាត់ទិន្នន័យ"
+  },
+  {
+    "key": "privacy_terms.cookie_policy",
+    "en": "Cookie Policy",
+    "km": "គោលការណ៍ឃុកឃី",
+    "category": "privacy_terms",
+    "avoid": "គោលការណ៍នំ"
   }
 ]
