@@ -18,6 +18,17 @@ import subprocess
 import unicodedata
 import unittest
 from typing import Optional
+import sys
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if REPO_ROOT not in sys.path:
+    sys.path.insert(0, REPO_ROOT)
+
+from scripts.khmer_utils import (
+    get_khmer_lunar_zodiac,
+    get_khmer_sak_era,
+    get_khmer_year_era_info,
+)
 
 
 # --- Python Reference Implementation of Helpers ---
@@ -246,6 +257,31 @@ class TestNodeIntlDateTimeFormatRuntime(unittest.TestCase):
         # ICU dictionary segments into words: ["សួស្តី", "កម្ពុជា"]
         self.assertIn("សួស្តី", output["words"])
         self.assertIn("កម្ពុជា", output["words"])
+
+    def test_khmer_lunar_zodiac_and_sak(self):
+        """Test Khmer 12-animal zodiac and 10 Sak era calculation."""
+        # 2024: ឆ្នាំរោង (Dragon), BE 2568, ឆស័ក (6th Sak)
+        z2024 = get_khmer_lunar_zodiac(2024)
+        self.assertEqual(z2024["zodiac_km"], "រោង")
+        self.assertEqual(z2024["zodiac_en"], "Dragon")
+        s2024 = get_khmer_sak_era(2024)
+        self.assertEqual(s2024["sak_km"], "ឆស័ក")
+        self.assertEqual(s2024["sak_number"], 6)
+
+        # 2025: ឆ្នាំម្សាញ់ (Snake), BE 2569, សប្តស័ក (7th Sak)
+        z2025 = get_khmer_lunar_zodiac(2025)
+        self.assertEqual(z2025["zodiac_km"], "ម្សាញ់")
+        s2025 = get_khmer_sak_era(2025)
+        self.assertEqual(s2025["sak_km"], "សប្តស័ក")
+        self.assertEqual(s2025["sak_number"], 7)
+
+        # 2026: ឆ្នាំមមី (Horse), BE 2569, អដ្ឋស័ក (8th Sak)
+        info2026 = get_khmer_year_era_info(2026)
+        self.assertEqual(info2026["zodiac_km"], "មមី")
+        self.assertEqual(info2026["zodiac_en"], "Horse")
+        self.assertEqual(info2026["sak_km"], "អដ្ឋស័ក")
+        self.assertEqual(info2026["be_year"], 2569)
+        self.assertEqual(info2026["formal_string_km"], "ព.ស. ២៥៦៩ ឆ្នាំមមី អដ្ឋស័ក")
 
 
 if __name__ == "__main__":

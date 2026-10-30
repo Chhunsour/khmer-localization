@@ -360,11 +360,11 @@ KHMER_SAK_ERAS: List[Tuple[str, str]] = [
 def get_khmer_sak_era(ce_year: int) -> Dict[str, Any]:
     """
     Returns the Khmer Sak era (ស័កទាំង១០) for a Common Era year.
-    Formula: (BE - 2) % 10 where BE = CE + 543.
-    E.g. 2024 -> BE 2568 -> ឆស័ក (6th Sak), 2026 -> BE 2570 -> អដ្ឋស័ក (8th Sak).
+    Calculation: (ce_year + 2) % 10.
+    E.g. 2024 -> ឆស័ក (6th Sak), 2025 -> សប្តស័ក (7th Sak), 2026 -> អដ្ឋស័ក (8th Sak).
     """
-    be_year = ce_year + 543
-    sak_idx = (be_year - 2) % 10
+    be_year = to_buddhist_era(ce_year)
+    sak_idx = (ce_year + 2) % 10
     km, en = KHMER_SAK_ERAS[sak_idx]
     sak_num = 10 if sak_idx == 0 else sak_idx
     return {
