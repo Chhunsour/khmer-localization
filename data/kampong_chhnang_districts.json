@@ -1,0 +1,58 @@
+[
+  {
+    "code": "0403",
+    "name_en": "Krong Kampong Chhnang",
+    "name_km": "ក្រុងកំពង់ឆ្នាំង",
+    "type": "Municipality",
+    "sangkats": 4
+  },
+  {
+    "code": "0401",
+    "name_en": "Baribour",
+    "name_km": "ស្រុកបរិបូណ៌",
+    "type": "District",
+    "communes": 11
+  },
+  {
+    "code": "0402",
+    "name_en": "Chol Kiri",
+    "name_km": "ស្រុកជលគិរី",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "0404",
+    "name_en": "Kampong Leaeng",
+    "name_km": "ស្រុកកំពង់លែង",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "0405",
+    "name_en": "Kampong Tralach",
+    "name_km": "ស្រុកកំពង់ត្រឡាច",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "0406",
+    "name_en": "Rolea B'ier",
+    "name_km": "ស្រុករលាប្អៀរ",
+    "type": "District",
+    "communes": 13
+  },
+  {
+    "code": "0407",
+    "name_en": "Sameakki Mean Chey",
+    "name_km": "ស្រុកសាមគ្គីមានជ័យ",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "0408",
+    "name_en": "Tuek Phos",
+    "name_km": "ស្រុកទឹកផុស",
+    "type": "District",
+    "communes": 8
+  }
+]
