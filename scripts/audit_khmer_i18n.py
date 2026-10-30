@@ -339,6 +339,26 @@ def audit_source_code(src_dir: str) -> List[Dict[str, Any]]:
                             "message": f"Font stack lacks recommended Khmer typeface fallback ('Kantumruy Pro', 'Hanuman', 'Noto Sans Khmer'): '{line.strip()[:60]}...'.",
                         })
 
+                # 8. HTML root attribute check (lang="km" and dir="ltr")
+                if "<html" in line.lower():
+                    if 'dir="rtl"' in line.lower() or "dir='rtl'" in line.lower():
+                        if "km" in line.lower() or file_has_khmer:
+                            findings.append({
+                                "layer": "AUTOMATED_ERROR",
+                                "file": filepath,
+                                "line": line_no,
+                                "rule": "INVALID_KHMER_TEXT_DIRECTION",
+                                "message": f"Khmer language root declared with dir='rtl': '{line.strip()[:60]}...'. Khmer is strictly Left-To-Right (LTR).",
+                            })
+                    elif ("lang=" not in line.lower()) and file_has_khmer:
+                        findings.append({
+                            "layer": "AUTOMATED_WARNING",
+                            "file": filepath,
+                            "line": line_no,
+                            "rule": "MISSING_HTML_LANG_ATTRIBUTE",
+                            "message": f"HTML root element missing lang attribute in Khmer document: '{line.strip()[:60]}...'. Use lang='km'.",
+                        })
+
     return findings
 
 
