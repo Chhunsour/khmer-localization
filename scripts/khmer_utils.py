@@ -961,6 +961,74 @@ def parse_khmer_license_plate(plate_str: str) -> Dict[str, Any]:
     return result
 
 
+# --- 9. Cambodian Tax Identification Number (TIN) Validator ---
+
+def validate_cambodian_tin(input_str: str) -> Dict[str, Any]:
+    """
+    Validates a Cambodian Tax Identification Number (TIN / VATTIN) issued by GDT.
+    Accepts:
+    - 9-digit standard corporate TIN (e.g. '123456789' or '000123456')
+    - Entity-prefixed TIN (e.g. 'K001-123456789', 'B001-123456789', 'L123456789')
+    - Khmer numerals (e.g. '១២៣៤៥៦៧៨៩')
+    """
+    result: Dict[str, Any] = {
+        "raw": input_str,
+        "clean": None,
+        "is_valid_syntax": False,
+        "tin_type": "invalid",
+        "entity_type": "unknown",
+        "branch_code": None,
+        "digits": None,
+        "error": None,
+    }
+    if not input_str or not isinstance(input_str, str):
+        result["error"] = "Input TIN is empty or invalid"
+        return result
+
+    raw = input_str.strip()
+    # Normalize Khmer numerals to ASCII
+    normalized = re.sub(
+        r"[\u17E0-\u17E9]",
+        lambda m: str(ord(m.group(0)) - 0x17E0),
+        raw,
+    )
+    # Strip spaces and punctuation except dashes
+    clean_str = re.sub(r"[\s\.\,]+", "", normalized)
+
+    # 1. Check prefixed branch format: e.g. K001-123456789 or B001-123456789 or K-123456789
+    branch_match = re.match(r"^([KBLEkble])(\d{3})?[\-]?(\d{9})$", clean_str)
+    if branch_match:
+        prefix, branch, digits = branch_match.groups()
+        prefix_upper = prefix.upper()
+        result["clean"] = f"{prefix_upper}{branch or '001'}-{digits}"
+        result["is_valid_syntax"] = True
+        result["digits"] = digits
+        result["branch_code"] = branch or "001"
+        result["tin_type"] = "branch_tin" if branch else "vat_tin"
+        if prefix_upper == "K":
+            result["entity_type"] = "corporate"
+        elif prefix_upper == "B":
+            result["entity_type"] = "branch"
+        elif prefix_upper == "L":
+            result["entity_type"] = "sole_proprietorship"
+        else:
+            result["entity_type"] = "general"
+        return result
+
+    # 2. Check pure 9-digit format
+    digits_only = re.sub(r"[\-]", "", clean_str)
+    if re.match(r"^\d{9}$", digits_only):
+        result["clean"] = digits_only
+        result["is_valid_syntax"] = True
+        result["digits"] = digits_only
+        result["tin_type"] = "standard_tin"
+        result["entity_type"] = "general"
+        return result
+
+    result["error"] = "TIN must consist of 9 digits, optionally prefixed by entity code (e.g. K001-123456789)"
+    return result
+
+
 # --- CLI Interface ---
 
 def main() -> int:
