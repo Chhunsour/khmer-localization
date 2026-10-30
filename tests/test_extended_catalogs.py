@@ -98,3 +98,30 @@ class TestExtendedCatalogs(unittest.TestCase):
         pv_muni = next(d for d in pv_districts if d["type"] == "Municipality")
         self.assertEqual(pv_muni["name_km"], "ក្រុងព្រៃវែង")
 
+    def test_07_remaining_provincial_district_catalogs(self):
+        """Verify district catalogs for Kampong Speu, Kampong Thom, Svay Rieng, Banteay Meanchey, etc."""
+        provinces = [
+            ("kampong_speu_districts.json", 9, "05"),
+            ("kampong_thom_districts.json", 9, "06"),
+            ("svay_rieng_districts.json", 8, "20"),
+            ("banteay_meanchey_districts.json", 9, "01"),
+            ("kratie_districts.json", 6, "10"),
+            ("kampong_chhnang_districts.json", 8, "04"),
+            ("tbong_khmum_districts.json", 7, "25"),
+            ("preah_vihear_districts.json", 8, "13"),
+            ("oddar_meanchey_districts.json", 5, "22"),
+            ("kep_districts.json", 2, "23"),
+            ("pailin_districts.json", 2, "24"),
+            ("stung_treng_districts.json", 6, "19"),
+            ("ratanakiri_districts.json", 9, "16"),
+            ("mondulkiri_districts.json", 5, "11"),
+        ]
+        for filename, expected_count, prefix in provinces:
+            path = os.path.join(DATA_DIR, filename)
+            self.assertTrue(os.path.exists(path), f"{filename} should exist")
+            with open(path, "r", encoding="utf-8") as f:
+                districts = json.load(f)
+            self.assertEqual(len(districts), expected_count, f"{filename} record count mismatch")
+            self.assertTrue(all(d["code"].startswith(prefix) for d in districts))
+            self.assertTrue(all("name_en" in d and "name_km" in d and "type" in d for d in districts))
+
