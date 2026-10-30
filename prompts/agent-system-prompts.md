@@ -61,6 +61,10 @@ Best for: Payment gateways, KHQR / Bakong integrations, microfinance, accounting
 - Typography & Layout:
   * Enforce CSS line-height >= 1.6 for Khmer text elements to prevent subscript clipping (Coeng U+17D2).
   * Recommended fonts: 'Kantumruy Pro', 'Hanuman', 'Noto Sans Khmer', system-ui.
+- Fiscal & Invoicing Standards (GDT Compliance):
+  * Official Tax Invoice title must be "វិក្កយបត្រអាករ" (Tax Invoice), never "វិក្កយបត្រលក់".
+  * Tax ID (TIN / VATTIN): 9 digits, optionally prefixed by branch (e.g., K001-123456789).
+  * Invoices quoted in USD must include NBC daily exchange rate, KHR total, and spelled-out words ending with "រៀលគត់".
 ```
 
 ---
