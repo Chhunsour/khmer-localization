@@ -1,0 +1,58 @@
+[
+  {
+    "code": "2006",
+    "name_en": "Krong Svay Rieng",
+    "name_km": "ក្រុងស្វាយរៀង",
+    "type": "Municipality",
+    "sangkats": 7
+  },
+  {
+    "code": "2008",
+    "name_en": "Krong Bavet",
+    "name_km": "ក្រុងបាវិត",
+    "type": "Municipality",
+    "sangkats": 5
+  },
+  {
+    "code": "2001",
+    "name_en": "Chantrea",
+    "name_km": "ស្រុកចន្ទ្រា",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "2002",
+    "name_en": "Kampong Rou",
+    "name_km": "ស្រុកកំពង់រោទិ៍",
+    "type": "District",
+    "communes": 11
+  },
+  {
+    "code": "2003",
+    "name_en": "Romdoul",
+    "name_km": "ស្រុករំដួល",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "2004",
+    "name_en": "Romeas Haek",
+    "name_km": "ស្រុករមាសហែក",
+    "type": "District",
+    "communes": 16
+  },
+  {
+    "code": "2005",
+    "name_en": "Svay Chrum",
+    "name_km": "ស្រុកស្វាយជ្រំ",
+    "type": "District",
+    "communes": 16
+  },
+  {
+    "code": "2007",
+    "name_en": "Svay Teap",
+    "name_km": "ស្រុកស្វាយទាប",
+    "type": "District",
+    "communes": 9
+  }
+]
