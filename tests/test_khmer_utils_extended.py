@@ -114,6 +114,28 @@ class TestKhmerUtilsExtended(unittest.TestCase):
         self.assertEqual(parsed["merchant_city"], "Phnom Penh")
         self.assertEqual(parsed["country_code"], "KH")
         self.assertEqual(parsed["bakong_account_id"], "sokha@devb")
+        self.assertEqual(parsed["point_of_initiation"], "static")
+
+        # Test with Tag 62 (bill number and purpose)
+        from scripts.khmer_utils import generate_khqr
+        qr_with_tag62 = generate_khqr(
+            bakong_account_id="merchant@abaa",
+            merchant_name="Brown Coffee",
+            amount=12000,
+            currency="KHR",
+            bill_number="BILL-998",
+            store_label="BKK1",
+            terminal_label="POS-01",
+            purpose="Breakfast Combo",
+            is_dynamic=True,
+        )
+        parsed62 = parse_khqr(qr_with_tag62)
+        self.assertEqual(parsed62["point_of_initiation"], "dynamic")
+        self.assertEqual(parsed62["mcc"], "5999")
+        self.assertEqual(parsed62["bill_number"], "BILL-998")
+        self.assertEqual(parsed62["store_label"], "BKK1")
+        self.assertEqual(parsed62["terminal_label"], "POS-01")
+        self.assertEqual(parsed62["purpose_of_transaction"], "Breakfast Combo")
 
     def test_pure_python_khmer_collation(self):
         """Test Chuon Nath dictionary order sorting in pure Python standard library."""
