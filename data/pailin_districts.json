@@ -1,0 +1,16 @@
+[
+  {
+    "code": "2401",
+    "name_en": "Krong Pailin",
+    "name_km": "ក្រុងប៉ៃលិន",
+    "type": "Municipality",
+    "sangkats": 4
+  },
+  {
+    "code": "2402",
+    "name_en": "Sala Krau",
+    "name_km": "ស្រុកសាលាក្រៅ",
+    "type": "District",
+    "communes": 4
+  }
+]
