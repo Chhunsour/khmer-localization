@@ -292,6 +292,20 @@ def audit_source_code(src_dir: str) -> List[Dict[str, Any]]:
                         "message": f"Naive string slicing detected on text variable: '{line.strip()[:60]}...'. Use safeTruncateKhmer or Intl.Segmenter.",
                     })
 
+                # 4b. Invalid or suspicious Cambodian Tax Identification Number (TIN)
+                tin_match = re.search(r"\b(tin|vattin|tax_id)\s*[:=]\s*['\"]([^'\"]+)['\"]", line, re.IGNORECASE)
+                if tin_match:
+                    candidate_tin = tin_match.group(2).strip()
+                    clean_tin = re.sub(r"[\s\.\-]+", "", candidate_tin)
+                    if not re.match(r"^[KBLEkble]?\d{3}?\d{9}$", clean_tin) and len(clean_tin) > 0 and not clean_tin.startswith(("{", "$", "<")):
+                        findings.append({
+                            "layer": "AUTOMATED_WARNING",
+                            "file": filepath,
+                            "line": line_no,
+                            "rule": "INVALID_TIN_FORMAT",
+                            "message": f"Suspicious or invalid Cambodian TIN format: '{candidate_tin}'. GDT standard requires 9 digits (e.g. K001-123456789 or 123456789).",
+                        })
+
                 # 5. Mobile Visual Text Overflow Risk: Hardcoded button width with Khmer
                 if re.search(r"(w-\[|width:\s*\d+px).*?(Button|<button)", line, re.IGNORECASE) and khmer_chars:
                     findings.append({
