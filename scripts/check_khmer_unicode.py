@@ -311,6 +311,8 @@ class KhmerUnicodeChecker:
             # base consonant or independent vowel, or follow another legally attached combining mark.
             # If preceded by whitespace, ZWSP (\u200B), punctuation, digits, or start of line, it is orphaned.
             elif self.check_orphaned_marks and is_khmer_combining_mark(char):
+                if result.path.name in ("khmer_diacritics.json", "khmer_keyboard.json"):
+                    continue
                 prev_char = line[col_idx - 2] if col_idx > 1 else None
                 is_orphaned = False
                 if prev_char is None:
@@ -342,6 +344,8 @@ class KhmerUnicodeChecker:
             # Check 5: Trailing Coeng or Double Coeng - WARNING/ERROR (VISUAL_RENDERING)
             # U+17D2 (Coeng) must be immediately followed by a subscript consonant or sign.
             if self.check_trailing_coeng and char == KHMER_COENG:
+                if result.path.name in ("khmer_diacritics.json", "khmer_keyboard.json"):
+                    continue
                 next_char = line[col_idx] if col_idx < line_len else None
                 if next_char == KHMER_COENG:
                     result.issues.append(

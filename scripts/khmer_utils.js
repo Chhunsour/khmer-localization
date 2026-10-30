@@ -228,6 +228,12 @@ function calculateMoneyTotal(
     taxRatePercent = opts.taxRatePercent !== undefined ? opts.taxRatePercent : taxRatePercent;
     roundingMode = opts.roundingMode || roundingMode;
   }
+  if (typeof currency === "object" && currency !== null) {
+    const opts = currency;
+    currency = opts.currency || "KHR";
+    taxRatePercent = opts.taxRatePercent !== undefined ? opts.taxRatePercent : 0.0;
+    roundingMode = opts.roundingMode || "half_up";
+  }
   const isKhr = currency.toUpperCase() === "KHR";
   let subtotalMinor = 0;
 

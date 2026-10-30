@@ -184,6 +184,8 @@ Consult `data/METADATA.json` for verified source authorities, update procedures,
 | **QR Payments / Fintech (KHQR)** | Generate & parse EMVCo TLV payloads, validate CRC16, extract Bakong account. | [Khmer Fintech & KHQR](./references/khmer-fintech-and-khqr.md) |
 | **Addresses & delivery forms** | Model 4-tier hierarchy: Province (`រាជធានី/ខេត្ត`) $\rightarrow$ District $\rightarrow$ Sangkat $\rightarrow$ Village. | [Administrative Divisions](./references/cambodia-administrative-divisions.md) |
 | **Number to Khmer words (Invoices)** | Convert amounts to formal Khmer currency words (`ពីរម៉ឺនប្រាំពាន់រៀលគត់`) for GDT. | [Collation & Number Words](./references/khmer-collation-and-number-words.md) |
+| **Tax ID (TIN) & GDT E-Invoicing** | Validate 9-digit / branch TINs (`validate_cambodian_tin`), format official វិក្កយបត្រអាករ. | [Cambodia Tax & Invoicing](./references/cambodia-tax-and-invoicing.md) |
+| **Lunar Zodiac & Sak Eras** | Calculate 12 Animal Zodiac and 10 Sak eras (`get_khmer_year_era_info`, e.g. ឆ្នាំមមី អដ្ឋស័ក). | [Khmer Lunar Calendar](./references/khmer-lunar-calendar.md) |
 | **Khmer alphabetical sorting** | Use `sortKhmerWords` per Chuon Nath dictionary order (pure Python & JS `Intl.Collator`). | [Collation & Number Words](./references/khmer-collation-and-number-words.md) |
 | **Dates, Calendars & Buddhist Era** | Use solar months (មករា..ធ្នូ), day-first format `DD/MM/YYYY`, $\text{BE} = \text{CE} + 543$. | [Cambodia Formatting Guide](./references/cambodia-formatting.md) |
 | **Clipping diacritics / layout** | Apply `line-height: 1.6`–`1.8`, `min-h-[44px]`, `includeFontPadding: false` (Android). | [Unicode & Typography](./references/unicode-and-typography.md) |

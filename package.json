@@ -1,6 +1,6 @@
 {
   "name": "khmer-localization",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Production-grade Khmer localization skill, utilities, dataset registry, and i18n quality audit engine.",
   "main": "scripts/khmer_utils.js",
   "module": "scripts/khmer_utils.js",
@@ -13,7 +13,8 @@
     "audit": "python3 scripts/audit_khmer_i18n.py",
     "check-unicode": "python3 scripts/check_khmer_unicode.py --strict .",
     "example:checkout": "node examples/ecommerce_checkout.js",
-    "example:payroll": "node examples/hr_payroll.js"
+    "example:payroll": "node examples/hr_payroll.js",
+    "example:tax-invoice": "node examples/cambodia_tax_invoice.js"
   },
   "keywords": [
     "khmer",

@@ -332,6 +332,12 @@ export function calculateMoneyTotal(
   } else if (Array.isArray(items)) {
     itemList = items;
   }
+  if (typeof currency === "object" && currency !== null) {
+    const opts = currency as any;
+    currency = opts.currency || "KHR";
+    taxRatePercent = opts.taxRatePercent !== undefined ? opts.taxRatePercent : 0.0;
+    roundingMode = opts.roundingMode || "half_up";
+  }
   const isKhr = currency.toUpperCase() === "KHR";
   let subtotalMinor = 0;
 
