@@ -208,6 +208,25 @@ class TestKhmerUtilsJs(unittest.TestCase):
         self.assertEqual(out["amount"], 25000)
         self.assertEqual(out["merchant_name"], "AngkorCoffee")
         self.assertEqual(out["bakong_account_id"], "sokha@devb")
+        self.assertEqual(out["point_of_initiation"], "static")
+
+        code_tag62 = """
+        const qr = u.generateKhqr({
+          bakongAccountId: "merchant@abaa",
+          merchantName: "Brown Coffee",
+          amount: 12000,
+          currency: "KHR",
+          billNumber: "BILL-101",
+          purpose: "Mocha",
+          isDynamic: true,
+        });
+        const parsed = u.parseKhqr(qr);
+        console.log(JSON.stringify(parsed));
+        """
+        out62 = json.loads(run_node_eval(code_tag62))
+        self.assertEqual(out62["point_of_initiation"], "dynamic")
+        self.assertEqual(out62["bill_number"], "BILL-101")
+        self.assertEqual(out62["purpose_of_transaction"], "Mocha")
 
     def test_khmer_words_sorting_js(self):
         """Test Khmer word sorting with Intl.Collator in Node.js."""
