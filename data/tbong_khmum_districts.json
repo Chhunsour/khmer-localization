@@ -1,0 +1,51 @@
+[
+  {
+    "code": "2504",
+    "name_en": "Krong Suong",
+    "name_km": "ក្រុងសួង",
+    "type": "Municipality",
+    "sangkats": 2
+  },
+  {
+    "code": "2501",
+    "name_en": "Dambae",
+    "name_km": "ស្រុកដំបែ",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "2502",
+    "name_en": "Krouch Chhmar",
+    "name_km": "ស្រុកក្រូចឆ្មារ",
+    "type": "District",
+    "communes": 12
+  },
+  {
+    "code": "2503",
+    "name_en": "Memot",
+    "name_km": "ស្រុកមេមត់",
+    "type": "District",
+    "communes": 14
+  },
+  {
+    "code": "2505",
+    "name_en": "Ou Reang Ov",
+    "name_km": "ស្រុកអូររាំងឪ",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "2506",
+    "name_en": "Ponhea Kraek",
+    "name_km": "ស្រុកពញាក្រែក",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "2507",
+    "name_en": "Tboung Khmum",
+    "name_km": "ស្រុកត្បូងឃ្មុំ",
+    "type": "District",
+    "communes": 14
+  }
+]
