@@ -736,6 +736,12 @@ function parseKhqr(khqrString) {
     merchant_city: null,
     country_code: null,
     bakong_account_id: null,
+    point_of_initiation: null,
+    mcc: null,
+    bill_number: null,
+    store_label: null,
+    terminal_label: null,
+    purpose_of_transaction: null,
     tags: {},
     error: null,
   };
@@ -800,6 +806,20 @@ function parseKhqr(khqrString) {
     if (tags["59"]) result.merchant_name = tags["59"];
     if (tags["60"]) result.merchant_city = tags["60"];
     if (tags["58"]) result.country_code = tags["58"];
+
+    if (tags["01"]) {
+      result.point_of_initiation = tags["01"] === "12" ? "dynamic" : (tags["01"] === "11" ? "static" : tags["01"]);
+    }
+
+    if (tags["52"]) result.mcc = tags["52"];
+
+    if (tags["62"] && tags["62"].sub_tags) {
+      const s62 = tags["62"].sub_tags;
+      if (s62["01"]) result.bill_number = s62["01"];
+      if (s62["07"]) result.store_label = s62["07"];
+      if (s62["08"]) result.terminal_label = s62["08"];
+      if (s62["09"]) result.purpose_of_transaction = s62["09"];
+    }
 
     for (const mTag of ["29", "30"]) {
       if (tags[mTag] && tags[mTag].sub_tags && tags[mTag].sub_tags["00"]) {
