@@ -1,0 +1,58 @@
+[
+  {
+    "code": "1308",
+    "name_en": "Krong Preah Vihear",
+    "name_km": "ក្រុងព្រះវិហារ",
+    "type": "Municipality",
+    "sangkats": 2
+  },
+  {
+    "code": "1301",
+    "name_en": "Chey Saen",
+    "name_km": "ស្រុកជ័យសែន",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "1302",
+    "name_en": "Chhaeb",
+    "name_km": "ស្រុកឆែប",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1303",
+    "name_en": "Choam Khsant",
+    "name_km": "ស្រុកជាំក្សាន្ត",
+    "type": "District",
+    "communes": 8
+  },
+  {
+    "code": "1304",
+    "name_en": "Kuleaen",
+    "name_km": "ស្រុកគូលែន",
+    "type": "District",
+    "communes": 6
+  },
+  {
+    "code": "1305",
+    "name_en": "Rovieng",
+    "name_km": "ស្រុករវៀង",
+    "type": "District",
+    "communes": 12
+  },
+  {
+    "code": "1306",
+    "name_en": "Sangkum Thmei",
+    "name_km": "ស្រុកសង្គមថ្មី",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "1307",
+    "name_en": "Tbaeng Mean Chey",
+    "name_km": "ស្រុកត្បែងមានជ័យ",
+    "type": "District",
+    "communes": 4
+  }
+]
