@@ -26,6 +26,7 @@ from scripts.khmer_utils import (
     parse_khmer_license_plate,
     sort_khmer_words,
     validate_cambodian_id,
+    validate_cambodian_tin,
 )
 
 
@@ -199,6 +200,38 @@ class TestKhmerUtilsExtended(unittest.TestCase):
         p_inv = parse_khmer_license_plate("XYZ-ABC")
         self.assertFalse(p_inv["is_valid_format"])
         self.assertIsNotNone(p_inv["error"])
+
+    def test_cambodian_tin_validation(self):
+        """Test Cambodian GDT Tax Identification Number (TIN) validation."""
+        # 1. Standard 9-digit TIN
+        t1 = validate_cambodian_tin("123456789")
+        self.assertTrue(t1["is_valid_syntax"])
+        self.assertEqual(t1["tin_type"], "standard_tin")
+        self.assertEqual(t1["digits"], "123456789")
+
+        # 2. Corporate prefixed branch TIN (K001-123456789)
+        t2 = validate_cambodian_tin("K001-987654321")
+        self.assertTrue(t2["is_valid_syntax"])
+        self.assertEqual(t2["tin_type"], "branch_tin")
+        self.assertEqual(t2["entity_type"], "corporate")
+        self.assertEqual(t2["branch_code"], "001")
+        self.assertEqual(t2["digits"], "987654321")
+
+        # 3. Khmer numerals in TIN
+        t3 = validate_cambodian_tin("K002-១២៣៤៥៦៧៨៩")
+        self.assertTrue(t3["is_valid_syntax"])
+        self.assertEqual(t3["digits"], "123456789")
+        self.assertEqual(t3["branch_code"], "002")
+
+        # 4. Sole proprietorship TIN (L-123456789)
+        t4 = validate_cambodian_tin("L-123456789")
+        self.assertTrue(t4["is_valid_syntax"])
+        self.assertEqual(t4["entity_type"], "sole_proprietorship")
+
+        # 5. Invalid TIN
+        t_inv = validate_cambodian_tin("12345")
+        self.assertFalse(t_inv["is_valid_syntax"])
+        self.assertIsNotNone(t_inv["error"])
 
 
 if __name__ == "__main__":
