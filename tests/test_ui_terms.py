@@ -23,8 +23,8 @@ class TestUiTermsJson(unittest.TestCase):
             self.terms = json.load(f)
 
     def test_term_count(self):
-        """Must contain at least 130 high-frequency UI terms."""
-        self.assertGreaterEqual(len(self.terms), 130, f"Expected >= 130 terms, got {len(self.terms)}")
+        """Must contain at least 160 high-frequency UI terms."""
+        self.assertGreaterEqual(len(self.terms), 160, f"Expected >= 160 terms, got {len(self.terms)}")
 
     def test_key_naming_convention(self):
         """Keys must follow standard namespaced dot-notation format."""
@@ -47,6 +47,12 @@ class TestUiTermsJson(unittest.TestCase):
             "auth.session_expired",
             "auth.api_key",
             "feedback.rate_limit_exceeded",
+            "auth.mfa",
+            "auth.two_step",
+            "auth.biometrics",
+            "navigation.dark_mode",
+            "commerce_payments.tax_identification",
+            "commerce_payments.invoice_number",
         ]
         for rk in required_keys:
             self.assertIn(rk, key_map, f"Missing critical vocabulary key: {rk}")
