@@ -585,6 +585,12 @@ def parse_khqr(khqr_string: str) -> Dict[str, Any]:
         "merchant_city": None,
         "country_code": None,
         "bakong_account_id": None,
+        "point_of_initiation": None,
+        "mcc": None,
+        "bill_number": None,
+        "store_label": None,
+        "terminal_label": None,
+        "purpose_of_transaction": None,
         "tags": {},
         "error": None,
     }
@@ -659,6 +665,25 @@ def parse_khqr(khqr_string: str) -> Dict[str, Any]:
 
         if "58" in tags:
             result["country_code"] = tags["58"]
+
+        if "01" in tags:
+            val_01 = tags["01"]
+            result["point_of_initiation"] = "dynamic" if val_01 == "12" else ("static" if val_01 == "11" else val_01)
+
+        if "52" in tags:
+            result["mcc"] = tags["52"]
+
+        # Extract Tag 62 sub-tags
+        if "62" in tags and isinstance(tags["62"], dict):
+            sub_62 = tags["62"].get("sub_tags", {})
+            if "01" in sub_62:
+                result["bill_number"] = sub_62["01"]
+            if "07" in sub_62:
+                result["store_label"] = sub_62["07"]
+            if "08" in sub_62:
+                result["terminal_label"] = sub_62["08"]
+            if "09" in sub_62:
+                result["purpose_of_transaction"] = sub_62["09"]
 
         # Extract Bakong Account ID from Tag 29 or 30 sub-tag 00
         for merchant_tag in ("29", "30"):
