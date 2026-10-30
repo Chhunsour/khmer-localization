@@ -85,6 +85,17 @@ class TestKhmerI18nAudit(unittest.TestCase):
             self.assertIn("MISSING_KHMER_FONT_FALLBACK", rules)
             self.assertIn("RESTRICTIVE_LINE_HEIGHT_CLIPPING", rules)
 
+    def test_tin_format_audit(self):
+        """Test detection of invalid Cambodian TIN numbers in source files."""
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_file = os.path.join(tmpdir, "checkout.ts")
+            with open(bad_file, "w", encoding="utf-8") as f:
+                f.write('const config = { tin: "12345" };\n')
+            findings = audit_source_code(tmpdir)
+            rules = {f["rule"] for f in findings}
+            self.assertIn("INVALID_TIN_FORMAT", rules)
+
     def test_run_full_audit_aggregation(self):
         """Test full audit aggregation and status reporting."""
         report = run_full_audit(FIXTURE_DIR, locales_dir=LOCALES_DIR, src_dir=SRC_DIR)
