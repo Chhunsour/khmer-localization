@@ -266,14 +266,32 @@ class TestKhmerUtilsJs(unittest.TestCase):
           merchantName: "Brown Coffee Roasters",
           amount: 15000,
           currency: "KHR",
+          purpose: "Coffee",
+          isDynamic: true,
+        });
+        const qrStatic = u.generateKhqr({
+          bakongAccountId: "merchant@abaa",
+          merchantName: "Brown Coffee Roasters",
+          amount: 0,
+          currency: "USD",
+          isDynamic: false,
         });
         const verified = u.verifyKhqr(qr);
-        console.log(JSON.stringify({ formatted, emptyName, isValid: verified.isValid }));
+        const verifiedStatic = u.verifyKhqr(qrStatic);
+        console.log(JSON.stringify({
+          formatted,
+          emptyName,
+          isValid: verified.isValid,
+          isStaticValid: verifiedStatic.isValid,
+          hasStaticTag: qrStatic.includes("010211"),
+        }));
         """
         out = json.loads(run_node_eval(code))
         self.assertEqual(out["formatted"], "Starbucks Coffee Phnom Pe")
         self.assertEqual(out["emptyName"], "MERCHANT")
         self.assertTrue(out["isValid"])
+        self.assertTrue(out["isStaticValid"])
+        self.assertTrue(out["hasStaticTag"])
 
     def test_cambodian_tin_validation_js(self):
         """Test Cambodian GDT Tax Identification Number (TIN) validation in JS."""
