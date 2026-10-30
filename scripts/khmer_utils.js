@@ -862,7 +862,9 @@ function generateKhqr({
   billNumber = "",
   storeLabel = "",
   terminalLabel = "",
+  purpose = "",
   mcc = "5999",
+  isDynamic = true,
 }) {
   function formatTlv(tag, val) {
     const s = String(val);
@@ -870,7 +872,8 @@ function generateKhqr({
     return `${tag}${len}${s}`;
   }
 
-  const parts = [formatTlv("00", "01"), formatTlv("01", "12")];
+  const initMethod = isDynamic ? "12" : "11";
+  const parts = [formatTlv("00", "01"), formatTlv("01", initMethod)];
   const sub29 = formatTlv("00", bakongAccountId);
   parts.push(formatTlv("29", sub29));
   parts.push(formatTlv("52", mcc));
@@ -895,6 +898,7 @@ function generateKhqr({
   if (billNumber) sub62 += formatTlv("01", billNumber);
   if (storeLabel) sub62 += formatTlv("07", storeLabel);
   if (terminalLabel) sub62 += formatTlv("08", terminalLabel);
+  if (purpose) sub62 += formatTlv("09", String(purpose).slice(0, 25));
   if (sub62) parts.push(formatTlv("62", sub62));
 
   const rawWithoutCrc = parts.join("") + "6304";
