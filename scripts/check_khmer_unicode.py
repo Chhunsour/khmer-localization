@@ -339,11 +339,28 @@ class KhmerUnicodeChecker:
                         )
                     )
 
-            # Check 5: Trailing Coeng - WARNING (VISUAL_RENDERING)
+            # Check 5: Trailing Coeng or Double Coeng - WARNING/ERROR (VISUAL_RENDERING)
             # U+17D2 (Coeng) must be immediately followed by a subscript consonant or sign.
             if self.check_trailing_coeng and char == KHMER_COENG:
                 next_char = line[col_idx] if col_idx < line_len else None
-                if next_char is None or next_char in (" ", "\t", "\n", "\r", '"', "'", ",", ".", ";", ":", ZWSP):
+                if next_char == KHMER_COENG:
+                    result.issues.append(
+                        Issue(
+                            level="ERROR",
+                            category="VISUAL_RENDERING",
+                            line_number=line_number,
+                            column_number=col_idx,
+                            message=(
+                                "Illegal double Coeng sequence (U+17D2 U+17D2) detected. "
+                                "Khmer script cannot contain consecutive subscript markers; "
+                                "this causes broken rendering or crash in OpenType font engines."
+                            ),
+                            code_point=code_hex,
+                            character_name=char_name,
+                            line_snippet=stripped_line,
+                        )
+                    )
+                elif next_char is None or next_char in (" ", "\t", "\n", "\r", '"', "'", ",", ".", ";", ":", ZWSP):
                     result.issues.append(
                         Issue(
                             level="WARNING",
