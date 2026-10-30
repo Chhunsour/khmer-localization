@@ -1,0 +1,65 @@
+[
+  {
+    "code": "0603",
+    "name_en": "Krong Stueng Saen",
+    "name_km": "ក្រុងស្ទឹងសែន",
+    "type": "Municipality",
+    "sangkats": 8
+  },
+  {
+    "code": "0601",
+    "name_en": "Baray",
+    "name_km": "ស្រុកបារាយណ៍",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "0602",
+    "name_en": "Kampong Svay",
+    "name_km": "ស្រុកកំពង់ស្វាយ",
+    "type": "District",
+    "communes": 11
+  },
+  {
+    "code": "0604",
+    "name_en": "Prasat Balangk",
+    "name_km": "ស្រុកប្រាសាទបល្ល័ង្ក",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "0605",
+    "name_en": "Prasat Sambour",
+    "name_km": "ស្រុកប្រាសាទសំបូរ",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "0606",
+    "name_en": "Sandan",
+    "name_km": "ស្រុកសណ្តាន់",
+    "type": "District",
+    "communes": 9
+  },
+  {
+    "code": "0607",
+    "name_en": "Santuk",
+    "name_km": "ស្រុកសន្ទុក",
+    "type": "District",
+    "communes": 10
+  },
+  {
+    "code": "0608",
+    "name_en": "Stoung",
+    "name_km": "ស្រុកស្ទោង",
+    "type": "District",
+    "communes": 13
+  },
+  {
+    "code": "0609",
+    "name_en": "Taing Kouk",
+    "name_km": "ស្រុកតាំងគោក",
+    "type": "District",
+    "communes": 8
+  }
+]
