@@ -38,6 +38,33 @@ export interface CambodianTinResult {
   error: string | null;
 }
 
+export interface KhmerLunarZodiacResult {
+  year: string;
+  zodiac_km: string;
+  zodiac_en: string;
+  full_km: string;
+}
+
+export interface KhmerSakEraResult {
+  ce_year: number;
+  be_year: number;
+  sak_number: number;
+  sak_km: string;
+  sak_en: string;
+}
+
+export interface KhmerYearEraInfoResult {
+  ce_year: number;
+  be_year: number;
+  be_year_km: string;
+  zodiac_km: string;
+  zodiac_en: string;
+  sak_km: string;
+  sak_en: string;
+  sak_number: number;
+  formal_string_km: string;
+}
+
 export interface KhmerDateOptions {
   includeBE?: boolean;
   useKhmerDigits?: boolean;
@@ -1150,4 +1177,75 @@ export function validateCambodianTin(inputStr: string): CambodianTinResult {
 
   result.error = "TIN must consist of 9 digits, optionally prefixed by entity code (e.g. K001-123456789)";
   return result;
+}
+
+const KHMER_ZODIAC_ANIMALS_TS: [string, string][] = [
+  ["ជូត", "Rat"],
+  ["ឆ្លូវ", "Ox"],
+  ["ខាល", "Tiger"],
+  ["ថោះ", "Rabbit"],
+  ["រោង", "Dragon"],
+  ["ម្សាញ់", "Snake"],
+  ["មមី", "Horse"],
+  ["មមែ", "Goat"],
+  ["វក", "Monkey"],
+  ["រកា", "Rooster"],
+  ["ច", "Dog"],
+  ["កុរ", "Pig"],
+];
+
+const KHMER_SAK_ERAS_TS: [string, string][] = [
+  ["សំរឹទ្ធិស័ក", "10th Sak (Samriddhisak)"],
+  ["ឯកស័ក", "1st Sak (Ekasak)"],
+  ["ទោស័ក", "2nd Sak (Toasak)"],
+  ["ត្រីស័ក", "3rd Sak (Treisak)"],
+  ["ចត្វាស័ក", "4th Sak (Chatvasak)"],
+  ["បញ្ចស័ក", "5th Sak (Panjasak)"],
+  ["ឆស័ក", "6th Sak (Chhasak)"],
+  ["សប្តស័ក", "7th Sak (Saptasak)"],
+  ["អដ្ឋស័ក", "8th Sak (Atthasak)"],
+  ["នព្វស័ក", "9th Sak (Nopphasak)"],
+];
+
+export function getKhmerLunarZodiac(ceYear: number): KhmerLunarZodiacResult {
+  const idx = ((ceYear - 4) % 12 + 12) % 12;
+  const [km, en] = KHMER_ZODIAC_ANIMALS_TS[idx];
+  return {
+    year: String(ceYear),
+    zodiac_km: km,
+    zodiac_en: en,
+    full_km: `ឆ្នាំ${km}`,
+  };
+}
+
+export function getKhmerSakEra(ceYear: number): KhmerSakEraResult {
+  const beYear = toBuddhistEra(ceYear);
+  const sakIdx = ((ceYear + 2) % 10 + 10) % 10;
+  const [km, en] = KHMER_SAK_ERAS_TS[sakIdx];
+  const sakNum = sakIdx === 0 ? 10 : sakIdx;
+  return {
+    ce_year: ceYear,
+    be_year: beYear,
+    sak_number: sakNum,
+    sak_km: km,
+    sak_en: en,
+  };
+}
+
+export function getKhmerYearEraInfo(ceYear: number): KhmerYearEraInfoResult {
+  const zodiac = getKhmerLunarZodiac(ceYear);
+  const sak = getKhmerSakEra(ceYear);
+  const beStr = toKhmerDigits(String(sak.be_year));
+  const fullFormal = `ព.ស. ${beStr} ${zodiac.full_km} ${sak.sak_km}`;
+  return {
+    ce_year: ceYear,
+    be_year: sak.be_year,
+    be_year_km: beStr,
+    zodiac_km: zodiac.zodiac_km,
+    zodiac_en: zodiac.zodiac_en,
+    sak_km: sak.sak_km,
+    sak_en: sak.sak_en,
+    sak_number: sak.sak_number,
+    formal_string_km: fullFormal,
+  };
 }
