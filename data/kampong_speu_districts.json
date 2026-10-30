@@ -1,0 +1,65 @@
+[
+  {
+    "code": "0501",
+    "name_en": "Krong Chbar Mon",
+    "name_km": "ក្រុងច្បារមន",
+    "type": "Municipality",
+    "sangkats": 5
+  },
+  {
+    "code": "0502",
+    "name_en": "Basedth",
+    "name_km": "ស្រុកបរសេដ្ឋ",
+    "type": "District",
+    "communes": 15
+  },
+  {
+    "code": "0503",
+    "name_en": "Kong Pisei",
+    "name_km": "ស្រុកគងពិសី",
+    "type": "District",
+    "communes": 13
+  },
+  {
+    "code": "0504",
+    "name_en": "Aoral",
+    "name_km": "ស្រុកឱរ៉ាល់",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "0505",
+    "name_en": "Oudong",
+    "name_km": "ស្រុកឧដុង្គ",
+    "type": "District",
+    "communes": 15
+  },
+  {
+    "code": "0506",
+    "name_en": "Phnom Sruoch",
+    "name_km": "ស្រុកភ្នំស្រួច",
+    "type": "District",
+    "communes": 12
+  },
+  {
+    "code": "0507",
+    "name_en": "Samraong Tong",
+    "name_km": "ស្រុកសំរោងទង",
+    "type": "District",
+    "communes": 15
+  },
+  {
+    "code": "0508",
+    "name_en": "Thpong",
+    "name_km": "ស្រុកថ្ពង",
+    "type": "District",
+    "communes": 7
+  },
+  {
+    "code": "0509",
+    "name_en": "Samaki Meanchey",
+    "name_km": "ស្រុកសាមគ្គីមុនីជ័យ",
+    "type": "District",
+    "communes": 10
+  }
+]
