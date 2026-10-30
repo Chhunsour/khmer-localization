@@ -215,6 +215,16 @@ def audit_locale_files(
                 "message": f"Key '{common_k}' ends with trailing Coeng U+17D2, which triggers a broken dotted circle defect.",
             })
 
+        # Unlocalized American date pattern (MM/DD/YYYY)
+        if re.search(r"\bMM[\/\-]DD[\/\-]YYYY\b", km_val, re.IGNORECASE):
+            findings.append({
+                "layer": "AUTOMATED_WARNING",
+                "file": target_file,
+                "key": common_k,
+                "rule": "UNLOCALIZED_DATE_PATTERN",
+                "message": f"Key '{common_k}' contains American date format ('{km_val}'). Cambodian standard uses 'DD/MM/YYYY' or 'DD ខែ YYYY'.",
+            })
+
     return findings
 
 
