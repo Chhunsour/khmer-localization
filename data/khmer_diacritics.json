@@ -1,0 +1,114 @@
+[
+  {
+    "codepoint": "U+17C6",
+    "character": "ំ",
+    "name_km": "និគ្គហិត",
+    "name_en": "Khmer Sign Nikahit",
+    "category": "Sign / Vowel",
+    "description": "Anusvara-like sign producing an nasal '-om' / '-um' rhyme."
+  },
+  {
+    "codepoint": "U+17C7",
+    "character": "ះ",
+    "name_km": "រះមុខ",
+    "name_en": "Khmer Sign Reahmuk",
+    "category": "Sign / Visarga",
+    "description": "Visarga sign indicating a brief glottal stop or breathy '-ah' rhyme."
+  },
+  {
+    "codepoint": "U+17C8",
+    "character": "ៈ",
+    "name_km": "យុគលពិន្ទុ",
+    "name_en": "Khmer Sign Yuukaleaphouk",
+    "category": "Sign / Punctuation",
+    "description": "Shortens preceding vowel sound in loan words or serves as a colon."
+  },
+  {
+    "codepoint": "U+17C9",
+    "character": "៉",
+    "name_km": "មូសិកទន្ត",
+    "name_en": "Khmer Sign Muusikatoan",
+    "category": "Diacritic",
+    "description": "Mouse teeth mark; shifts O-series consonants to A-series sound register."
+  },
+  {
+    "codepoint": "U+17CA",
+    "character": "៊",
+    "name_km": "ត្រីស័ព្ទ",
+    "name_en": "Khmer Sign Triisap",
+    "category": "Diacritic",
+    "description": "Triisap mark; shifts A-series consonants (e.g. ស, ប) to O-series register."
+  },
+  {
+    "codepoint": "U+17CB",
+    "character": "់",
+    "name_km": "បន្តក់",
+    "name_en": "Khmer Sign Bantoc",
+    "category": "Diacritic",
+    "description": "Bantoc; shortens the inherent vowel of a final syllable consonant."
+  },
+  {
+    "codepoint": "U+17CC",
+    "character": "៌",
+    "name_km": "របាទ",
+    "name_en": "Khmer Sign Robat",
+    "category": "Diacritic",
+    "description": "Repha equivalent derived from Sanskrit 'r'; historically silent top mark."
+  },
+  {
+    "codepoint": "U+17CD",
+    "character": "៍",
+    "name_km": "ទណ្ឌឃាត",
+    "name_en": "Khmer Sign Toandakhiat",
+    "category": "Diacritic",
+    "description": "Killer mark indicating that the base consonant is completely silent."
+  },
+  {
+    "codepoint": "U+17CE",
+    "character": "៎",
+    "name_km": "កាកបាទ",
+    "name_en": "Khmer Sign Kakabat",
+    "category": "Diacritic",
+    "description": "Crow's foot sign indicating exclamation or emphatic tonal pitch."
+  },
+  {
+    "codepoint": "U+17CF",
+    "character": "៏",
+    "name_km": "អស្តា",
+    "name_en": "Khmer Sign Ahsda",
+    "category": "Diacritic",
+    "description": "Sign eight used on isolated pronouns like ក៏ (kor - also/too)."
+  },
+  {
+    "codepoint": "U+17D0",
+    "character": "័",
+    "name_km": "សំយោគសញ្ញា",
+    "name_en": "Khmer Sign Samyok Sannya",
+    "category": "Diacritic",
+    "description": "Combines with consonants to indicate explicit '-oa-' or short diphthongs."
+  },
+  {
+    "codepoint": "U+17D1",
+    "character": "៑",
+    "name_km": "វិរាម",
+    "name_en": "Khmer Sign Viriam",
+    "category": "Diacritic",
+    "description": "Virama suppressing inherent vowel; rare in modern standard Khmer script."
+  },
+  {
+    "codepoint": "U+17D2",
+    "character": "្",
+    "name_km": "ជើង",
+    "name_en": "Khmer Sign Coeng",
+    "category": "Subscript Marker",
+    "description": "Subscript consonant prefix control mark; transforms succeeding consonant into a foot."
+  },
+  {
+    "codepoint": "U+17D3",
+    "character": "៓",
+    "name_km": "អស័ទ",
+    "name_en": "Khmer Sign Bathamasat",
+    "category": "Diacritic",
+    "description": "Rare historical diacritic used in divinatory and Pali/Sanskrit orthography."
+  }
+]
