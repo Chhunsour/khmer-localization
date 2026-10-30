@@ -205,6 +205,16 @@ class TestKhmerUnicodeChecker(unittest.TestCase):
         self.assertEqual(warnings[0].category, "VISUAL_RENDERING")
         self.assertTrue(any("Trailing Khmer Coeng" in w.message for w in warnings))
 
+    def test_double_coeng_detection(self):
+        """Illegal consecutive Coeng markers (U+17D2 U+17D2) should trigger an ERROR."""
+        file_path = self._create_file("double_coeng.json", '{"text": "ក\u17D2\u17D2ម"}')
+        result = self.checker.check_file(file_path)
+        self.assertEqual(result.error_count, 1)
+        categories = [i.category for i in result.issues]
+        self.assertIn("VISUAL_RENDERING", categories)
+        messages = [i.message for i in result.issues]
+        self.assertTrue(any("double Coeng" in m for m in messages))
+
     def test_invalid_utf8_binary_bytes(self):
         """A file with invalid UTF-8 byte sequences must report an encoding ERROR."""
         # 0x80 is an invalid stand-alone byte in UTF-8
