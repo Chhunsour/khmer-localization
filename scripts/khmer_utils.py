@@ -311,6 +311,38 @@ def format_khmer_relative_time(diff_seconds: int) -> str:
     return f"{days // 7} សប្តាហ៍មុន"
 
 
+KHMER_ZODIAC_ANIMALS: List[Tuple[str, str]] = [
+    ("ជូត", "Rat"),
+    ("ឆ្លូវ", "Ox"),
+    ("ខាល", "Tiger"),
+    ("ថោះ", "Rabbit"),
+    ("រោង", "Dragon"),
+    ("ម្សាញ់", "Snake"),
+    ("មមី", "Horse"),
+    ("មមែ", "Goat"),
+    ("វក", "Monkey"),
+    ("រកា", "Rooster"),
+    ("ច", "Dog"),
+    ("កុរ", "Pig"),
+]
+
+
+def get_khmer_lunar_zodiac(ce_year: int) -> Dict[str, str]:
+    """
+    Returns the Khmer 12-animal zodiac year (ឆ្នាំទាំង១២) for a Common Era year.
+    Calculation: (ce_year - 4) % 12
+    E.g. 2024 -> ឆ្នាំរោង (Dragon), 2025 -> ឆ្នាំម្សាញ់ (Snake), 2026 -> ឆ្នាំមមី (Horse).
+    """
+    idx = (ce_year - 4) % 12
+    km, en = KHMER_ZODIAC_ANIMALS[idx]
+    return {
+        "year": str(ce_year),
+        "zodiac_km": km,
+        "zodiac_en": en,
+        "full_km": f"ឆ្នាំ{km}",
+    }
+
+
 # --- 4. Unicode Grapheme Truncation & Word Breaking ---
 
 def safe_truncate_khmer(text: str, max_chars: int) -> str:
