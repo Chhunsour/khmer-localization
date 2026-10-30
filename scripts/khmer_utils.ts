@@ -27,6 +27,17 @@ export interface CambodianPhoneResult {
   error: string | null;
 }
 
+export interface CambodianTinResult {
+  raw: string;
+  clean: string | null;
+  is_valid_syntax: boolean;
+  tin_type: "standard_tin" | "branch_tin" | "vat_tin" | "invalid";
+  entity_type: "corporate" | "branch" | "sole_proprietorship" | "general" | "unknown";
+  branch_code: string | null;
+  digits: string | null;
+  error: string | null;
+}
+
 export interface KhmerDateOptions {
   includeBE?: boolean;
   useKhmerDigits?: boolean;
@@ -1077,4 +1088,66 @@ export function formatKhqrMerchantName(name: string): string {
     return "MERCHANT";
   }
   return sanitized.slice(0, 25);
+}
+
+/**
+ * Validates a Cambodian Tax Identification Number (TIN / VATTIN) issued by GDT.
+ */
+export function validateCambodianTin(inputStr: string): CambodianTinResult {
+  const result: CambodianTinResult = {
+    raw: inputStr,
+    clean: null,
+    is_valid_syntax: false,
+    tin_type: "invalid",
+    entity_type: "unknown",
+    branch_code: null,
+    digits: null,
+    error: null,
+  };
+
+  if (!inputStr || typeof inputStr !== "string") {
+    result.error = "Input TIN is empty or invalid";
+    return result;
+  }
+
+  const raw = inputStr.trim();
+  const normalized = raw.replace(/[\u17E0-\u17E9]/g, (ch) => String(ch.charCodeAt(0) - 0x17E0));
+  const cleanStr = normalized.replace(/[\s\.\,]+/g, "");
+
+  const branchMatch = cleanStr.match(/^([KBLEkble])(\d{3})?[\-]?(\d{9})$/);
+  if (branchMatch) {
+    const prefix = branchMatch[1].toUpperCase();
+    const branch = branchMatch[2] || "001";
+    const digits = branchMatch[3];
+
+    result.clean = `${prefix}${branch}-${digits}`;
+    result.is_valid_syntax = true;
+    result.digits = digits;
+    result.branch_code = branch;
+    result.tin_type = branchMatch[2] ? "branch_tin" : "vat_tin";
+
+    if (prefix === "K") {
+      result.entity_type = "corporate";
+    } else if (prefix === "B") {
+      result.entity_type = "branch";
+    } else if (prefix === "L") {
+      result.entity_type = "sole_proprietorship";
+    } else {
+      result.entity_type = "general";
+    }
+    return result;
+  }
+
+  const digitsOnly = cleanStr.replace(/[\-]/g, "");
+  if (/^\d{9}$/.test(digitsOnly)) {
+    result.clean = digitsOnly;
+    result.is_valid_syntax = true;
+    result.digits = digitsOnly;
+    result.tin_type = "standard_tin";
+    result.entity_type = "general";
+    return result;
+  }
+
+  result.error = "TIN must consist of 9 digits, optionally prefixed by entity code (e.g. K001-123456789)";
+  return result;
 }
