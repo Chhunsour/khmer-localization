@@ -70,3 +70,17 @@ class TestDataCatalogIntegrity(unittest.TestCase):
         self.assertIn("ABA", codes)
         self.assertIn("ACLEDA", codes)
 
+    def test_07_khmer_diacritics_catalog(self):
+        """Verify 14 Khmer diacritics and signs (Nikahit, Coeng, Bantoc, etc.)."""
+        path = os.path.join(DATA_DIR, "khmer_diacritics.json")
+        self.assertTrue(os.path.exists(path))
+        with open(path, "r", encoding="utf-8") as f:
+            diacritics = json.load(f)
+        self.assertEqual(len(diacritics), 14)
+        codepoints = {d["codepoint"] for d in diacritics}
+        self.assertIn("U+17C6", codepoints)  # Nikahit
+        self.assertIn("U+17D2", codepoints)  # Coeng
+        self.assertIn("U+17CB", codepoints)  # Bantoc
+        self.assertIn("U+17CD", codepoints)  # Toandakhiat
+        self.assertTrue(all("character" in d and "name_km" in d and "name_en" in d for d in diacritics))
+
