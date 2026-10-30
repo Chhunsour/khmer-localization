@@ -275,6 +275,28 @@ class TestKhmerUtilsJs(unittest.TestCase):
         self.assertEqual(out["emptyName"], "MERCHANT")
         self.assertTrue(out["isValid"])
 
+    def test_cambodian_tin_validation_js(self):
+        """Test Cambodian GDT Tax Identification Number (TIN) validation in JS."""
+        code = """
+        const t1 = u.validateCambodianTin("123456789");
+        const t2 = u.validateCambodianTin("K001-987654321");
+        const t3 = u.validateCambodianTin("K002-១២៣៤៥៦៧៨៩");
+        const t4 = u.validateCambodianTin("L-123456789");
+        const t_inv = u.validateCambodianTin("12345");
+        console.log(JSON.stringify({ t1, t2, t3, t4, t_inv }));
+        """
+        out = json.loads(run_node_eval(code))
+        self.assertTrue(out["t1"]["is_valid_syntax"])
+        self.assertEqual(out["t1"]["tin_type"], "standard_tin")
+        self.assertTrue(out["t2"]["is_valid_syntax"])
+        self.assertEqual(out["t2"]["entity_type"], "corporate")
+        self.assertEqual(out["t2"]["branch_code"], "001")
+        self.assertTrue(out["t3"]["is_valid_syntax"])
+        self.assertEqual(out["t3"]["digits"], "123456789")
+        self.assertTrue(out["t4"]["is_valid_syntax"])
+        self.assertEqual(out["t4"]["entity_type"], "sole_proprietorship")
+        self.assertFalse(out["t_inv"]["is_valid_syntax"])
+
 
 if __name__ == "__main__":
     unittest.main()
