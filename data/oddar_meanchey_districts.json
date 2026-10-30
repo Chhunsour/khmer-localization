@@ -1,0 +1,37 @@
+[
+  {
+    "code": "2204",
+    "name_en": "Krong Samraong",
+    "name_km": "ក្រុងសំរោង",
+    "type": "Municipality",
+    "sangkats": 5
+  },
+  {
+    "code": "2201",
+    "name_en": "Anlong Veang",
+    "name_km": "ស្រុកអន្លង់វែង",
+    "type": "District",
+    "communes": 5
+  },
+  {
+    "code": "2202",
+    "name_en": "Banteay Ampil",
+    "name_km": "ស្រុកបន្ទាយអំពិល",
+    "type": "District",
+    "communes": 4
+  },
+  {
+    "code": "2203",
+    "name_en": "Chong Kal",
+    "name_km": "ស្រុកចុងកាល់",
+    "type": "District",
+    "communes": 4
+  },
+  {
+    "code": "2205",
+    "name_en": "Trapeang Prasat",
+    "name_km": "ស្រុកត្រពាំងប្រាសាទ",
+    "type": "District",
+    "communes": 6
+  }
+]
