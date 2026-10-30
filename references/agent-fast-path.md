@@ -130,6 +130,39 @@ export const toBuddhistEra = (ceYear: number) => ceYear + 543;
 
 ---
 
+### 1.7 Cambodian Tax ID (TIN / VATTIN) Validation
+```typescript
+// GDT standard 9-digit or branch format (e.g. K001-123456789)
+import { validateCambodianTin } from './scripts/khmer_utils';
+const res = validateCambodianTin("K001-123456789");
+// res.is_valid_syntax => true, res.entity_type => "corporate"
+```
+
+---
+
+### 1.8 Khmer Lunar Animal Zodiac & Sak Era
+```typescript
+import { getKhmerYearEraInfo } from './scripts/khmer_utils';
+const era = getKhmerYearEraInfo(2026);
+// era.formal_string_km => "ព.ស. ២៥៦៩ ឆ្នាំមមី អដ្ឋស័ក"
+```
+
+---
+
+### 1.9 Bakong KHQR Payload Generation
+```typescript
+import { generateKhqr } from './scripts/khmer_utils';
+const qr = generateKhqr({
+  bakongAccountId: "merchant@abaa",
+  merchantName: "Coffee House",
+  amount: 15000,
+  currency: "KHR",
+  purpose: "Breakfast",
+});
+```
+
+---
+
 ## 2. Immediate UI Phrasing Lookup (50 High-Frequency Terms)
 
 When translating UI microcopy, use this exact table to avoid hallucinating archaic or royal words:
